@@ -3,7 +3,7 @@
   <entry>
     <title>Linux网络内核源码分析|网络层之IP层处理</title>
     <url>/2020/02/25/Linux%E7%BD%91%E7%BB%9C%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%BD%91%E7%BB%9C%E5%B1%82%E4%B9%8BIP%E5%B1%82%E5%A4%84%E7%90%86/</url>
-    <content><![CDATA[<h1 id="关于IPv4"><a href="#关于IPv4" class="headerlink" title="关于IPv4"></a>关于IPv4</h1><h2 id="IP简述"><a href="#IP简述" class="headerlink" title="IP简述"></a>IP简述</h2><p>IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。</p><p>IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。</p><h2 id="IPv4数据包"><a href="#IPv4数据包" class="headerlink" title="IPv4数据包"></a>IPv4数据包</h2><p>一个数IPv4数据包由头部和数据构成，数据中记录了传输层信息内容。</p><a id="more"></a>
+    <content><![CDATA[<h1 id="关于IPv4"><a href="#关于IPv4" class="headerlink" title="关于IPv4"></a>关于IPv4</h1><h2 id="IP简述"><a href="#IP简述" class="headerlink" title="IP简述"></a>IP简述</h2><p>IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。</p><p>IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。</p><h2 id="IPv4数据包"><a href="#IPv4数据包" class="headerlink" title="IPv4数据包"></a>IPv4数据包</h2><img src="/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/ip数据包.PNG"><p>一个数IPv4数据包由头部和数据构成，数据中记录了传输层信息内容。</p><a id="more"></a>
 
 
 
@@ -23,9 +23,9 @@
 ]]></content>
       <tags>
         <tag>Linux</tag>
-        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -192,9 +192,9 @@
 ]]></content>
       <tags>
         <tag>Linux</tag>
-        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -515,9 +515,9 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 <img src="/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/udp-socket.png" title="UDP协议数据传输流程">]]></content>
       <tags>
         <tag>Linux</tag>
+        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>
@@ -668,9 +668,9 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 ]]></content>
       <tags>
         <tag>Linux</tag>
+        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>
