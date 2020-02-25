@@ -55,14 +55,15 @@
   };
 </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="KUN">
-<meta property="og:url" content="https://xingkunz.github.io/archives/2019/10/index.html">
+  <meta property="og:type" content="article">
+<meta property="og:title" content="Linux网络内核源码分析|网络层之IP层处理">
+<meta property="og:url" content="https://xingkunz.github.io/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/index.html">
 <meta property="og:site_name" content="KUN">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-02-25T07:57:22.747Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="KUN">
-  <link rel="canonical" href="https://xingkunz.github.io/archives/2019/10/">
+<meta name="twitter:title" content="Linux网络内核源码分析|网络层之IP层处理">
+  <link rel="canonical" href="https://xingkunz.github.io/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/">
 
 
 <script id="page-configurations">
@@ -70,13 +71,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false,
+    isPost: true,
     isPage: false,
-    isArchive: true
+    isArchive: false
   };
 </script>
 
-  <title>Archive | KUN</title>
+  <title>Linux网络内核源码分析|网络层之IP层处理 | KUN</title>
   
 
 
@@ -168,15 +169,6 @@
 
     
 
-  
-    
-    
-  
-    
-    
-  
-  
-
 </nav>
 </div>
     </header>
@@ -194,128 +186,122 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        
-        
-        
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="https://xingkunz.github.io/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="XingkunZ">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="KUN">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Linux网络内核源码分析|网络层之IP层处理
+
           
-        
-        <span class="collection-header">Um..! 15 posts in total. Keep on posting.</span>
-      </div>
-      
+        </h1>
 
-      
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
 
-  
-  
+              
+                
+              
 
+              <time title="Created: 2020-02-25 15:57:22" itemprop="dateCreated datePublished" datetime="2020-02-25T15:57:22+08:00">2020-02-25</time>
+            </span>
+          
+
+          
+            <span id="/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/" class="post-meta-item leancloud_visitors" data-flag-title="Linux网络内核源码分析|网络层之IP层处理" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+          
   
+  <span class="post-meta-item">
     
-    <div class="collection-year">
-      <h1 class="collection-header">2019</h1>
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        
     </div>
-  
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-04T21:20:39+08:00"
-              content="2019-10-04">
-          10-04
-        </time>
-      </div>
-
-      <h2 class="post-title">
+    
+    
+    
         
-          <a class="post-title-link" href="/2019/10/04/操作系统丨（1）概述/" itemprop="url">
-            <span itemprop="name">操作系统丨（1）概述</span>
-          </a>
+      
+
+      <footer class="post-footer">
+
         
-      </h2>
 
-    </header>
-  </article>
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2020/02/16/Linux网络内核源码分析-传输层之UDP处理过程/" rel="next" title="Linux网络内核源码分析|传输层之UDP处理过程">
+                  <i class="fa fa-chevron-left"></i> Linux网络内核源码分析|传输层之UDP处理过程
+                </a>
+              
+            </div>
 
+            <span class="post-nav-divider"></span>
 
-
-  
-  
-
-  
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-04T10:36:32+08:00"
-              content="2019-10-04">
-          10-04
-        </time>
-      </div>
-
-      <h2 class="post-title">
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
         
-          <a class="post-title-link" href="/2019/10/04/Python丨tkinter丨窗口与标签-label/" itemprop="url">
-            <span itemprop="name">Python丨tkinter丨窗口与标签(label)</span>
-          </a>
-        
-      </h2>
-
-    </header>
-  </article>
-
-
-
-  
-  
-
-  
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-02T22:32:50+08:00"
-              content="2019-10-02">
-          10-02
-        </time>
-      </div>
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/10/02/hexo-git丨个人博客搭建/" itemprop="url">
-            <span itemprop="name">hexo+git丨个人博客搭建</span>
-          </a>
-        
-      </h2>
-
-    </header>
-  </article>
-
-
-
-
-    </div>
+      </footer>
+    
   </div>
   
   
   
+  </article>
 
-  
-
+  </div>
 
 
           </div>
           
+    
+    <div class="comments" id="comments"></div>
+  
 
         </div>
           
@@ -328,6 +314,11 @@
 
   <aside class="sidebar">
     <div class="sidebar-inner">
+        
+        
+        
+        
+      
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">

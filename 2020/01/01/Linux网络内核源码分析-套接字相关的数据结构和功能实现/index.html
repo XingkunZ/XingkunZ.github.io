@@ -56,7 +56,7 @@
 </script>
 
   <meta name="description" content="管理套接字的数据类型套接字缓冲区类型 struct sk_buff, struct sk_buff_head skbuff.h struct sk_buff是套接字缓冲区类型，用来管理网络数据包，为发/收的网络数据提供存储区域和操作方法。sk_buff数据类型贯穿数据传输全过程，是十分重要的数据结构。">
-<meta name="keywords" content="Linux,网络,源码,套接字">
+<meta name="keywords" content="Linux,套接字,网络,源码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux网络内核源码分析|套接字相关的数据结构和功能实现">
 <meta property="og:url" content="https://xingkunz.github.io/2020/01/01/Linux网络内核源码分析-套接字相关的数据结构和功能实现/index.html">
@@ -246,6 +246,28 @@
           
 
           
+            <span id="/2020/01/01/Linux网络内核源码分析-套接字相关的数据结构和功能实现/" class="post-meta-item leancloud_visitors" data-flag-title="Linux网络内核源码分析|套接字相关的数据结构和功能实现" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2020/01/01/Linux网络内核源码分析-套接字相关的数据结构和功能实现/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2020/01/01/Linux网络内核源码分析-套接字相关的数据结构和功能实现/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
 
         </div>
       </header>
@@ -388,11 +410,11 @@
             
               <a href="/tags/Linux/" rel="tag"># Linux</a>
             
+              <a href="/tags/套接字/" rel="tag"># 套接字</a>
+            
               <a href="/tags/网络/" rel="tag"># 网络</a>
             
               <a href="/tags/源码/" rel="tag"># 源码</a>
-            
-              <a href="/tags/套接字/" rel="tag"># 套接字</a>
             
           </div>
         
@@ -432,6 +454,9 @@
 
           </div>
           
+    
+    <div class="comments" id="comments"></div>
+  
 
         </div>
           
@@ -477,7 +502,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -576,6 +601,33 @@
   
 
   
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'Pjstp83mhOuOGVRgfQH9Wy8d-gzGzoHsz',
+    appKey: 'kpMNCJPyBxzPPgGwUuPhpbY7',
+    placeholder: 'Bite me!',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: true,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
 
 </body>
 </html>

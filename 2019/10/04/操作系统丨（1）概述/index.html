@@ -56,7 +56,7 @@
 </script>
 
   <meta name="description" content="操作系统定义统一定义操作系统是控制和管理计算机系统的硬件和软件资源、合理地组织计算机工作流程及方便用户使用的程序和数据的集合。目的：提高计算机系统的效率、增强系统的处理能力、充分发挥系统资源利用率、方便用户使用。作为最基本的系统软件操作系统是计算机系统软件的重要组成部分，其物质基础是系统硬件。 计算机系统资源包括：系统硬件和系统软件">
-<meta name="keywords" content="笔记,操作系统">
+<meta name="keywords" content="操作系统,笔记">
 <meta property="og:type" content="article">
 <meta property="og:title" content="操作系统丨（1）概述">
 <meta property="og:url" content="https://xingkunz.github.io/2019/10/04/操作系统丨（1）概述/index.html">
@@ -233,6 +233,28 @@
           
 
           
+            <span id="/2019/10/04/操作系统丨（1）概述/" class="post-meta-item leancloud_visitors" data-flag-title="操作系统丨（1）概述" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2019/10/04/操作系统丨（1）概述/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2019/10/04/操作系统丨（1）概述/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
 
         </div>
       </header>
@@ -408,9 +430,9 @@
           
           <div class="post-tags">
             
-              <a href="/tags/笔记/" rel="tag"># 笔记</a>
-            
               <a href="/tags/操作系统/" rel="tag"># 操作系统</a>
+            
+              <a href="/tags/笔记/" rel="tag"># 笔记</a>
             
           </div>
         
@@ -450,6 +472,9 @@
 
           </div>
           
+    
+    <div class="comments" id="comments"></div>
+  
 
         </div>
           
@@ -495,7 +520,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -594,6 +619,33 @@
   
 
   
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'Pjstp83mhOuOGVRgfQH9Wy8d-gzGzoHsz',
+    appKey: 'kpMNCJPyBxzPPgGwUuPhpbY7',
+    placeholder: 'Bite me!',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: true,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
 
 </body>
 </html>

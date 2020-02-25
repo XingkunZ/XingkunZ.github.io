@@ -56,7 +56,7 @@
 </script>
 
   <meta name="description" content="INET套接字类型 SOCK_STREAM：采用TCP协议服务，提供可靠的双工顺序数据流。 SOCK_DGRAM：采用UDP协议服务，提供双工数据传送，不保证不丢失、不错序。 SOCK_RAW：未采用TCP/UDP协议，应用程序可通过该套接字与IP层交互数据。 关于套接字传输数据的流程见附页流程图。收发数据">
-<meta name="keywords" content="Linux,网络,源码,套接字">
+<meta name="keywords" content="Linux,套接字,网络,源码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux网络内核源码分析|套接字之收发数据、监听、连接、绑定">
 <meta property="og:url" content="https://xingkunz.github.io/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/index.html">
@@ -244,6 +244,28 @@
           
 
           
+            <span id="/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/" class="post-meta-item leancloud_visitors" data-flag-title="Linux网络内核源码分析|套接字之收发数据、监听、连接、绑定" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
 
         </div>
       </header>
@@ -348,11 +370,11 @@
             
               <a href="/tags/Linux/" rel="tag"># Linux</a>
             
+              <a href="/tags/套接字/" rel="tag"># 套接字</a>
+            
               <a href="/tags/网络/" rel="tag"># 网络</a>
             
               <a href="/tags/源码/" rel="tag"># 源码</a>
-            
-              <a href="/tags/套接字/" rel="tag"># 套接字</a>
             
           </div>
         
@@ -392,6 +414,9 @@
 
           </div>
           
+    
+    <div class="comments" id="comments"></div>
+  
 
         </div>
           
@@ -437,7 +462,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -536,6 +561,33 @@
   
 
   
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'Pjstp83mhOuOGVRgfQH9Wy8d-gzGzoHsz',
+    appKey: 'kpMNCJPyBxzPPgGwUuPhpbY7',
+    placeholder: 'Bite me!',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: true,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
 
 </body>
 </html>

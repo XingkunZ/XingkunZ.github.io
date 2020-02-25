@@ -56,7 +56,7 @@
 </script>
 
   <meta name="description" content="参考：B站-是落拓呀，视频ID：75077145，75755443。">
-<meta name="keywords" content="区块链,笔记,POW">
+<meta name="keywords" content="笔记,区块链,POW">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于区块链的笔记">
 <meta property="og:url" content="https://xingkunz.github.io/2019/12/24/关于区块链的笔记/index.html">
@@ -236,6 +236,28 @@
           
 
           
+            <span id="/2019/12/24/关于区块链的笔记/" class="post-meta-item leancloud_visitors" data-flag-title="关于区块链的笔记" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2019/12/24/关于区块链的笔记/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2019/12/24/关于区块链的笔记/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
 
         </div>
       </header>
@@ -266,9 +288,9 @@
           
           <div class="post-tags">
             
-              <a href="/tags/区块链/" rel="tag"># 区块链</a>
-            
               <a href="/tags/笔记/" rel="tag"># 笔记</a>
+            
+              <a href="/tags/区块链/" rel="tag"># 区块链</a>
             
               <a href="/tags/POW/" rel="tag"># POW</a>
             
@@ -310,6 +332,9 @@
 
           </div>
           
+    
+    <div class="comments" id="comments"></div>
+  
 
         </div>
           
@@ -353,7 +378,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -452,6 +477,33 @@
   
 
   
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'Pjstp83mhOuOGVRgfQH9Wy8d-gzGzoHsz',
+    appKey: 'kpMNCJPyBxzPPgGwUuPhpbY7',
+    placeholder: 'Bite me!',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: true,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
 
 </body>
 </html>
