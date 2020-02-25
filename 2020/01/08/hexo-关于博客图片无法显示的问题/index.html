@@ -55,18 +55,18 @@
   };
 </script>
 
-  <meta name="description" content="引用本地图片方式不对注意！markdown语法在这里是没有用的！1![](/images/image.jpg)markdown语法在本地编辑的过程中是有用的，图片可见，一旦部署，通过域名访问是看不到图片的。正确的方式：文章资源文件夹+asset首先要打开资源文件管理功能：将 config.yml 文件中的 post_asset_folder 选项设为 true 来打开。">
-<meta name="keywords" content="博客,hexo,教程">
+  <meta name="description" content="引用本地图片方式不对注意！markdown语法在这里是没有用的！1![](/images/image.jpg)markdown语法在本地编辑的过程中是有用的，图片可见，一旦部署，通过域名访问是看不到图片的。">
+<meta name="keywords" content="hexo,博客,教程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="hexo|关于博客图片无法显示的问题">
 <meta property="og:url" content="https://xingkunz.github.io/2020/01/08/hexo-关于博客图片无法显示的问题/index.html">
 <meta property="og:site_name" content="KUN">
-<meta property="og:description" content="引用本地图片方式不对注意！markdown语法在这里是没有用的！1![](/images/image.jpg)markdown语法在本地编辑的过程中是有用的，图片可见，一旦部署，通过域名访问是看不到图片的。正确的方式：文章资源文件夹+asset首先要打开资源文件管理功能：将 config.yml 文件中的 post_asset_folder 选项设为 true 来打开。">
+<meta property="og:description" content="引用本地图片方式不对注意！markdown语法在这里是没有用的！1![](/images/image.jpg)markdown语法在本地编辑的过程中是有用的，图片可见，一旦部署，通过域名访问是看不到图片的。">
 <meta property="og:locale" content="en">
 <meta property="og:updated_time" content="2020-01-13T06:57:35.747Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hexo|关于博客图片无法显示的问题">
-<meta name="twitter:description" content="引用本地图片方式不对注意！markdown语法在这里是没有用的！1![](/images/image.jpg)markdown语法在本地编辑的过程中是有用的，图片可见，一旦部署，通过域名访问是看不到图片的。正确的方式：文章资源文件夹+asset首先要打开资源文件管理功能：将 config.yml 文件中的 post_asset_folder 选项设为 true 来打开。">
+<meta name="twitter:description" content="引用本地图片方式不对注意！markdown语法在这里是没有用的！1![](/images/image.jpg)markdown语法在本地编辑的过程中是有用的，图片可见，一旦部署，通过域名访问是看不到图片的。">
   <link rel="canonical" href="https://xingkunz.github.io/2020/01/08/hexo-关于博客图片无法显示的问题/">
 
 
@@ -273,10 +273,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="引用本地图片方式不对"><a href="#引用本地图片方式不对" class="headerlink" title="引用本地图片方式不对"></a>引用本地图片方式不对</h2><p>注意！markdown语法在这里是没有用的！</p><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![](/images/image.jpg)</span><br></pre></td></tr></table></figure><p>markdown语法在本地编辑的过程中是有用的，图片可见，一旦部署，通过域名访问是看不到图片的。</p><h3 id="正确的方式：文章资源文件夹-asset"><a href="#正确的方式：文章资源文件夹-asset" class="headerlink" title="正确的方式：文章资源文件夹+asset"></a>正确的方式：文章资源文件夹+asset</h3><p>首先要打开资源文件管理功能：将 <code>config.yml</code> 文件中的 <code>post_asset_folder</code> 选项设为 <code>true</code> 来打开。</p><a id="more"></a>
+        <h2 id="引用本地图片方式不对"><a href="#引用本地图片方式不对" class="headerlink" title="引用本地图片方式不对"></a>引用本地图片方式不对</h2><p>注意！markdown语法在这里是没有用的！</p><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![](/images/image.jpg)</span><br></pre></td></tr></table></figure><p>markdown语法在本地编辑的过程中是有用的，图片可见，一旦部署，通过域名访问是看不到图片的。</p><a id="more"></a>
 
 
-
+<h3 id="正确的方式：文章资源文件夹-asset"><a href="#正确的方式：文章资源文件夹-asset" class="headerlink" title="正确的方式：文章资源文件夹+asset"></a>正确的方式：文章资源文件夹+asset</h3><p>首先要打开资源文件管理功能：将 <code>config.yml</code> 文件中的 <code>post_asset_folder</code> 选项设为 <code>true</code> 来打开。</p>
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">_config.yml</span></span><br><span class="line"><span class="attr">post_asset_folder:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
 <p>当资源文件管理功能打开后，Hexo将会在你每一次通过 <code>hexo new [layout]</code> 命令创建新文章时自动创建一个文件夹。这个资源文件夹将会有与这个文章文件一样的名字。例如：<code>hexo n &quot;一篇博客&quot;</code>，则会在source中产生一个<code>一篇博客.md</code>和<code>一篇博客</code>文件夹。</p>
 <p>当你在<code>一篇博客.md</code>插入一个图片时，在文件夹<code>一篇博客</code>中添加该图片文件<code>example.jpg</code>，使用asset语法：</p>
@@ -305,9 +305,9 @@
           
           <div class="post-tags">
             
-              <a href="/tags/博客/" rel="tag"># 博客</a>
-            
               <a href="/tags/hexo/" rel="tag"># hexo</a>
+            
+              <a href="/tags/博客/" rel="tag"># 博客</a>
             
               <a href="/tags/教程/" rel="tag"># 教程</a>
             

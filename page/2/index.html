@@ -273,7 +273,7 @@
 </blockquote><h2 id="重要概念"><a href="#重要概念" class="headerlink" title="重要概念"></a>重要概念</h2><p>c提供了许多不同的模型或<strong>存储类别</strong>在内存中存储数据。</p><ul>
 <li>对象（obect）：值占用的一块物理内存。一个对象可以存储一个/多个值。</li>
 <li>标识符（entity）：程序指定硬件内存中对象的方式，用于访问对象。</li>
-</ul><p>可以用<strong>存储期</strong>来描述对象，用<strong>作用域</strong>和<strong>链接</strong>描述标识符。</p>
+</ul>
           <!--noindex-->
           
             <div class="post-button">
@@ -386,7 +386,7 @@
       
           <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>内核版本：linux-2.6.8.1</p><h2 id="linux目录解析"><a href="#linux目录解析" class="headerlink" title="linux目录解析"></a>linux目录解析</h2><img src="/2019/12/20/Linux网络内核源码分析-重要数据结构/image-20191218002916745.png"><h2 id="网络内核布局"><a href="#网络内核布局" class="headerlink" title="网络内核布局"></a>网络内核布局</h2><img src="/2019/12/20/Linux网络内核源码分析-重要数据结构/image-20191220132906019.png"><img src="/2019/12/20/Linux网络内核源码分析-重要数据结构/image-20191220132646373.png"><h1 id="套接字"><a href="#套接字" class="headerlink" title="套接字"></a>套接字</h1><h2 id="struct-sk-buff-struct-sk-buff-head"><a href="#struct-sk-buff-struct-sk-buff-head" class="headerlink" title="struct sk_buff, struct sk_buff_head"></a>struct sk_buff, struct sk_buff_head</h2><blockquote>
 <p>skbuff.h</p>
-</blockquote><p>sk_buff是套接字缓冲区类型，用来管理网络数据包，为发/收的网络数据提供存储区域和操作方法。</p><p>sk_buff_head管理一个双向链表，来组织sk_buff。</p>
+</blockquote>
           <!--noindex-->
           
             <div class="post-button">
@@ -489,9 +489,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="操作系统定义"><a href="#操作系统定义" class="headerlink" title="操作系统定义"></a>操作系统定义</h2><h3 id="统一定义"><a href="#统一定义" class="headerlink" title="统一定义"></a>统一定义</h3><p>操作系统是控制和管理计算机系统的硬件和软件资源、合理地组织计算机工作流程及方便用户使用的程序和数据的集合。</p><p><strong>目的</strong>：提高计算机系统的效率、增强系统的处理能力、充分发挥系统资源利用率、方便用户使用。</p><h3 id="作为最基本的系统软件"><a href="#作为最基本的系统软件" class="headerlink" title="作为最基本的系统软件"></a>作为最基本的系统软件</h3><p>操作系统是计算机系统软件的重要组成部分，其物质基础是系统硬件。</p><blockquote>
-<p>计算机系统资源包括：系统硬件和系统软件</p>
-</blockquote>
+          <h2 id="操作系统定义"><a href="#操作系统定义" class="headerlink" title="操作系统定义"></a>操作系统定义</h2><h3 id="统一定义"><a href="#统一定义" class="headerlink" title="统一定义"></a>统一定义</h3><p>操作系统是控制和管理计算机系统的硬件和软件资源、合理地组织计算机工作流程及方便用户使用的程序和数据的集合。</p><p><strong>目的</strong>：提高计算机系统的效率、增强系统的处理能力、充分发挥系统资源利用率、方便用户使用。</p>
           <!--noindex-->
           
             <div class="post-button">
@@ -610,7 +608,7 @@
 </li>
 <li>创建控件、摆放控件</li>
 <li>进入消息循环</li>
-</ul><h2 id="初始化窗口"><a href="#初始化窗口" class="headerlink" title="初始化窗口"></a>初始化窗口</h2><p>导入包后，即可创建tk实例（一个窗口），指定窗口名称、大小及背景色等属性。</p>
+</ul>
           <!--noindex-->
           
             <div class="post-button">

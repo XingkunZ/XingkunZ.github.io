@@ -55,20 +55,20 @@
   };
 </script>
 
-  <meta name="description" content="关于IPv4IP简述IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。IPv4数据包一个数IPv4数据包由头部和数据构成，数据中记录了传输层信息内容。">
-<meta name="keywords" content="Linux,网络,源码,UDP">
+  <meta name="description" content="关于IPv4IP简述IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。">
+<meta name="keywords" content="Linux,UDP,网络,源码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux网络内核源码分析|网络层之IP层处理">
 <meta property="og:url" content="https://xingkunz.github.io/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/index.html">
 <meta property="og:site_name" content="KUN">
-<meta property="og:description" content="关于IPv4IP简述IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。IPv4数据包一个数IPv4数据包由头部和数据构成，数据中记录了传输层信息内容。">
+<meta property="og:description" content="关于IPv4IP简述IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://xingkunz.github.io/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/ip数据包.PNG">
 <meta property="og:image" content="https://xingkunz.github.io/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/ip模块处理流程.PNG">
 <meta property="og:updated_time" content="2020-02-25T09:43:55.341Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux网络内核源码分析|网络层之IP层处理">
-<meta name="twitter:description" content="关于IPv4IP简述IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。IPv4数据包一个数IPv4数据包由头部和数据构成，数据中记录了传输层信息内容。">
+<meta name="twitter:description" content="关于IPv4IP简述IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。">
 <meta name="twitter:image" content="https://xingkunz.github.io/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/ip数据包.PNG">
   <link rel="canonical" href="https://xingkunz.github.io/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/">
 
@@ -268,10 +268,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="关于IPv4"><a href="#关于IPv4" class="headerlink" title="关于IPv4"></a>关于IPv4</h1><h2 id="IP简述"><a href="#IP简述" class="headerlink" title="IP简述"></a>IP简述</h2><p>IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。</p><p>IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。</p><h2 id="IPv4数据包"><a href="#IPv4数据包" class="headerlink" title="IPv4数据包"></a>IPv4数据包</h2><img src="/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/ip数据包.PNG"><p>一个数IPv4数据包由头部和数据构成，数据中记录了传输层信息内容。</p><a id="more"></a>
+        <h1 id="关于IPv4"><a href="#关于IPv4" class="headerlink" title="关于IPv4"></a>关于IPv4</h1><h2 id="IP简述"><a href="#IP简述" class="headerlink" title="IP简述"></a>IP简述</h2><p>IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。</p><p>IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。</p><a id="more"></a>
 
-
-
+<h2 id="IPv4数据包"><a href="#IPv4数据包" class="headerlink" title="IPv4数据包"></a>IPv4数据包</h2><img src="/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/ip数据包.PNG">
+<p>一个数IPv4数据包由头部和数据构成，数据中记录了传输层信息内容。</p>
 <h1 id="IP模块处理流程"><a href="#IP模块处理流程" class="headerlink" title="IP模块处理流程"></a>IP模块处理流程</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>从传输层到IP层发送数据包：</strong></p>
 <ul>
 <li>UDP模块调用函数<code>ip_push_pending_frames()</code>进入IP层。</li>
@@ -302,11 +302,11 @@
             
               <a href="/tags/Linux/" rel="tag"># Linux</a>
             
+              <a href="/tags/UDP/" rel="tag"># UDP</a>
+            
               <a href="/tags/网络/" rel="tag"># 网络</a>
             
               <a href="/tags/源码/" rel="tag"># 源码</a>
-            
-              <a href="/tags/UDP/" rel="tag"># UDP</a>
             
           </div>
         

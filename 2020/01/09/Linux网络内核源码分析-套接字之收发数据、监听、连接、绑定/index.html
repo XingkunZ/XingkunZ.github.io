@@ -55,20 +55,20 @@
   };
 </script>
 
-  <meta name="description" content="INET套接字类型 SOCK_STREAM：采用TCP协议服务，提供可靠的双工顺序数据流。 SOCK_DGRAM：采用UDP协议服务，提供双工数据传送，不保证不丢失、不错序。 SOCK_RAW：未采用TCP/UDP协议，应用程序可通过该套接字与IP层交互数据。 关于套接字传输数据的流程见附页流程图。收发数据">
-<meta name="keywords" content="Linux,套接字,网络,源码">
+  <meta name="description" content="INET套接字类型 SOCK_STREAM：采用TCP协议服务，提供可靠的双工顺序数据流。 SOCK_DGRAM：采用UDP协议服务，提供双工数据传送，不保证不丢失、不错序。 SOCK_RAW：未采用TCP/UDP协议，应用程序可通过该套接字与IP层交互数据。">
+<meta name="keywords" content="Linux,网络,源码,套接字">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux网络内核源码分析|套接字之收发数据、监听、连接、绑定">
 <meta property="og:url" content="https://xingkunz.github.io/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/index.html">
 <meta property="og:site_name" content="KUN">
-<meta property="og:description" content="INET套接字类型 SOCK_STREAM：采用TCP协议服务，提供可靠的双工顺序数据流。 SOCK_DGRAM：采用UDP协议服务，提供双工数据传送，不保证不丢失、不错序。 SOCK_RAW：未采用TCP/UDP协议，应用程序可通过该套接字与IP层交互数据。 关于套接字传输数据的流程见附页流程图。收发数据">
+<meta property="og:description" content="INET套接字类型 SOCK_STREAM：采用TCP协议服务，提供可靠的双工顺序数据流。 SOCK_DGRAM：采用UDP协议服务，提供双工数据传送，不保证不丢失、不错序。 SOCK_RAW：未采用TCP/UDP协议，应用程序可通过该套接字与IP层交互数据。">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://xingkunz.github.io/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/tcp-socket.png">
 <meta property="og:image" content="https://xingkunz.github.io/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/udp-socket.png">
 <meta property="og:updated_time" content="2020-02-16T08:12:58.444Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux网络内核源码分析|套接字之收发数据、监听、连接、绑定">
-<meta name="twitter:description" content="INET套接字类型 SOCK_STREAM：采用TCP协议服务，提供可靠的双工顺序数据流。 SOCK_DGRAM：采用UDP协议服务，提供双工数据传送，不保证不丢失、不错序。 SOCK_RAW：未采用TCP/UDP协议，应用程序可通过该套接字与IP层交互数据。 关于套接字传输数据的流程见附页流程图。收发数据">
+<meta name="twitter:description" content="INET套接字类型 SOCK_STREAM：采用TCP协议服务，提供可靠的双工顺序数据流。 SOCK_DGRAM：采用UDP协议服务，提供双工数据传送，不保证不丢失、不错序。 SOCK_RAW：未采用TCP/UDP协议，应用程序可通过该套接字与IP层交互数据。">
 <meta name="twitter:image" content="https://xingkunz.github.io/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/tcp-socket.png">
   <link rel="canonical" href="https://xingkunz.github.io/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/">
 
@@ -280,9 +280,9 @@
 <li>SOCK_STREAM：采用TCP协议服务，提供可靠的双工顺序数据流。</li>
 <li>SOCK_DGRAM：采用UDP协议服务，提供双工数据传送，不保证不丢失、不错序。</li>
 <li>SOCK_RAW：未采用TCP/UDP协议，应用程序可通过该套接字与IP层交互数据。</li>
-</ul><p>关于套接字传输数据的流程见附页流程图。</p><h1 id="收发数据"><a href="#收发数据" class="headerlink" title="收发数据"></a>收发数据</h1><a id="more"></a>
-
-<h2 id="发送数据"><a href="#发送数据" class="headerlink" title="发送数据"></a>发送数据</h2><h3 id="调用过程"><a href="#调用过程" class="headerlink" title="调用过程"></a>调用过程</h3><p>当通信双方需要想对方发送/写数据时，可以调用send()、sendto()、write()函数。</p>
+</ul><a id="more"></a>
+<p>关于套接字传输数据的流程见附页流程图。</p>
+<h1 id="收发数据"><a href="#收发数据" class="headerlink" title="收发数据"></a>收发数据</h1><h2 id="发送数据"><a href="#发送数据" class="headerlink" title="发送数据"></a>发送数据</h2><h3 id="调用过程"><a href="#调用过程" class="headerlink" title="调用过程"></a>调用过程</h3><p>当通信双方需要想对方发送/写数据时，可以调用send()、sendto()、write()函数。</p>
 <p><code>send()|write()|sendto() → sys_send() → sys_sendto() → sock_sendmsg() → __sock_sendmsg() → sock-&gt;prot-&gt;sendmsg() → sk-&gt;sk_prot-&gt;sendmsg()</code></p>
 <p>如果是SOCK_STREAM套接字，则最后两步是<code>→ inet_sendmsg() → tcp_sendmsg()</code></p>
 <blockquote>
@@ -370,11 +370,11 @@
             
               <a href="/tags/Linux/" rel="tag"># Linux</a>
             
-              <a href="/tags/套接字/" rel="tag"># 套接字</a>
-            
               <a href="/tags/网络/" rel="tag"># 网络</a>
             
               <a href="/tags/源码/" rel="tag"># 源码</a>
+            
+              <a href="/tags/套接字/" rel="tag"># 套接字</a>
             
           </div>
         
