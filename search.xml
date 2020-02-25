@@ -3,7 +3,30 @@
   <entry>
     <title>Linux网络内核源码分析|网络层之IP层处理</title>
     <url>/2020/02/25/Linux%E7%BD%91%E7%BB%9C%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%BD%91%E7%BB%9C%E5%B1%82%E4%B9%8BIP%E5%B1%82%E5%A4%84%E7%90%86/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<h1 id="关于IPv4"><a href="#关于IPv4" class="headerlink" title="关于IPv4"></a>关于IPv4</h1><h2 id="IP简述"><a href="#IP简述" class="headerlink" title="IP简述"></a>IP简述</h2><p>IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。</p><p>IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。</p><h2 id="IPv4数据包"><a href="#IPv4数据包" class="headerlink" title="IPv4数据包"></a>IPv4数据包</h2><p>一个数IPv4数据包由头部和数据构成，数据中记录了传输层信息内容。</p><a id="more"></a>
+
+
+
+<h1 id="IP模块处理流程"><a href="#IP模块处理流程" class="headerlink" title="IP模块处理流程"></a>IP模块处理流程</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>从传输层到IP层发送数据包：</strong></p>
+<ul>
+<li>UDP模块调用函数<code>ip_push_pending_frames()</code>进入IP层。</li>
+<li>TCP模块调用函数<code>ip_queue_xmit()</code>进入IP层。</li>
+</ul>
+<p>这两个函数都为数据包封装了IP协议信息，把对应的头部加到套接字缓冲区内。</p>
+<img src="/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/ip模块处理流程.PNG">
+<p><code>ip_queue_xmit()</code>会调用<code>ip_route_output_flow()</code>查找路由表：为套接字缓冲区设置路由出口信息。如果已有TCP连接，则套接字缓冲区保存了路由信息，则不需要这一步。</p>
+<p><strong>两条路下来，都调用<code>dst_output()</code>进入IP层发送流程：</strong></p>
+<p><code>dst_output()→ip_output()→ip_finish_output()→ip_finish_output2()→邻居子系统调用接口函数dev_queue_xmit()→底层网络设备驱动程序</code></p>
+<blockquote>
+<p>参考：《Linux网络内核分析与开发》，肖宇峰、李昕、时岩编著。</p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>UDP</tag>
+        <tag>网络</tag>
+        <tag>源码</tag>
+      </tags>
   </entry>
   <entry>
     <title>Linux网络内核源码分析|传输层之UDP处理过程</title>
@@ -14,7 +37,7 @@
 
 
 <p>内核还提供了UDP传输层操作集：<code>struct proto udp_prot{...}</code>，用<code>proto_register()</code>注册。</p>
-<h1 id="UDP协议模块处理流程"><a href="#UDP协议模块处理流程" class="headerlink" title="UDP协议模块处理流程"></a>UDP协议模块处理流程</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>回顾套接字发送数据的流程，见<a href="https://xingkunz.github.io/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/#more">套接字之收发数据、监听、连接、绑定</a>：</p>
+<h1 id="UDP模块处理流程"><a href="#UDP模块处理流程" class="headerlink" title="UDP模块处理流程"></a>UDP模块处理流程</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>回顾套接字发送数据的流程，见<a href="https://xingkunz.github.io/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/#more">套接字之收发数据、监听、连接、绑定</a>：</p>
 <p><code>send()|write()|sendto() → sys_send() → sys_sendto() → sock_sendmsg() → __sock_sendmsg() → sock-&gt;prot-&gt;sendmsg() → sk-&gt;sk_prot-&gt;sendmsg()</code></p>
 <p>UDP采用SOCK_DGRAM类型的INET套接字，所以查询函数集后，最后两步具体调用的函数是：</p>
 <p><code>→ inet_sendmsg() → udp_sendmsg()</code></p>
@@ -163,12 +186,15 @@
 <li>处理IP选项，<code>ip_cmsg_recv(msg,skb)</code>。</li>
 <li>如果用户程序接收数据采用MSG_PEEK标志，则读出数据，但不删除套接字队列中的缓冲。</li>
 </ol>
+<blockquote>
+<p>参考：《Linux网络内核分析与开发》，肖宇峰、李昕、时岩编著。</p>
+</blockquote>
 ]]></content>
       <tags>
         <tag>Linux</tag>
+        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -489,9 +515,9 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 <img src="/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/udp-socket.png" title="UDP协议数据传输流程">]]></content>
       <tags>
         <tag>Linux</tag>
-        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>
@@ -642,9 +668,9 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 ]]></content>
       <tags>
         <tag>Linux</tag>
-        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>
@@ -657,8 +683,8 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 <img src="/2019/12/24/关于区块链的笔记/2.png">
 ]]></content>
       <tags>
-        <tag>笔记</tag>
         <tag>区块链</tag>
+        <tag>笔记</tag>
         <tag>POW</tag>
       </tags>
   </entry>
@@ -1217,8 +1243,8 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 </ul>
 ]]></content>
       <tags>
-        <tag>操作系统</tag>
         <tag>笔记</tag>
+        <tag>操作系统</tag>
       </tags>
   </entry>
   <entry>
