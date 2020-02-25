@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/kun.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/kun.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/kun.png?v=7.4.1">
+  <link rel="mask-icon" href="/images/kun.svg?v=7.4.1" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.1">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.4.1',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: "",
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Copy',
+      copy_success: 'Copied',
+      copy_failure: 'Copy failed'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="INET套接字类型 SOCK_STREAM：采用TCP协议服务，提供可靠的双工顺序数据流。 SOCK_DGRAM：采用UDP协议服务，提供双工数据传送，不保证不丢失、不错序。 SOCK_RAW：未采用TCP/UDP协议，应用程序可通过该套接字与IP层交互数据。 关于套接字传输数据的流程见附页流程图。收发数据">
+<meta name="keywords" content="Linux,网络,源码,套接字">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux网络内核源码分析|套接字之收发数据、监听、连接、绑定">
+<meta property="og:url" content="https://xingkunz.github.io/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/index.html">
+<meta property="og:site_name" content="KUN">
+<meta property="og:description" content="INET套接字类型 SOCK_STREAM：采用TCP协议服务，提供可靠的双工顺序数据流。 SOCK_DGRAM：采用UDP协议服务，提供双工数据传送，不保证不丢失、不错序。 SOCK_RAW：未采用TCP/UDP协议，应用程序可通过该套接字与IP层交互数据。 关于套接字传输数据的流程见附页流程图。收发数据">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://xingkunz.github.io/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/tcp-socket.png">
+<meta property="og:image" content="https://xingkunz.github.io/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/udp-socket.png">
+<meta property="og:updated_time" content="2020-02-16T08:12:58.444Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux网络内核源码分析|套接字之收发数据、监听、连接、绑定">
+<meta name="twitter:description" content="INET套接字类型 SOCK_STREAM：采用TCP协议服务，提供可靠的双工顺序数据流。 SOCK_DGRAM：采用UDP协议服务，提供双工数据传送，不保证不丢失、不错序。 SOCK_RAW：未采用TCP/UDP协议，应用程序可通过该套接字与IP层交互数据。 关于套接字传输数据的流程见附页流程图。收发数据">
+<meta name="twitter:image" content="https://xingkunz.github.io/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/tcp-socket.png">
+  <link rel="canonical" href="https://xingkunz.github.io/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Linux网络内核源码分析|套接字之收发数据、监听、连接、绑定 | KUN</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">KUN</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+    
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="https://xingkunz.github.io/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="XingkunZ">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="KUN">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Linux网络内核源码分析|套接字之收发数据、监听、连接、绑定
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              
+                
+              
+
+              <time title="Created: 2020-01-09 17:18:51" itemprop="dateCreated datePublished" datetime="2020-01-09T17:18:51+08:00">2020-01-09</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-16 16:12:58" itemprop="dateModified" datetime="2020-02-16T16:12:58+08:00">2020-02-16</time>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="INET套接字类型"><a href="#INET套接字类型" class="headerlink" title="INET套接字类型"></a>INET套接字类型</h1><ul>
+<li>SOCK_STREAM：采用TCP协议服务，提供可靠的双工顺序数据流。</li>
+<li>SOCK_DGRAM：采用UDP协议服务，提供双工数据传送，不保证不丢失、不错序。</li>
+<li>SOCK_RAW：未采用TCP/UDP协议，应用程序可通过该套接字与IP层交互数据。</li>
+</ul><p>关于套接字传输数据的流程见附页流程图。</p><h1 id="收发数据"><a href="#收发数据" class="headerlink" title="收发数据"></a>收发数据</h1><a id="more"></a>
+
+<h2 id="发送数据"><a href="#发送数据" class="headerlink" title="发送数据"></a>发送数据</h2><h3 id="调用过程"><a href="#调用过程" class="headerlink" title="调用过程"></a>调用过程</h3><p>当通信双方需要想对方发送/写数据时，可以调用send()、sendto()、write()函数。</p>
+<p><code>send()|write()|sendto() → sys_send() → sys_sendto() → sock_sendmsg() → __sock_sendmsg() → sock-&gt;prot-&gt;sendmsg() → sk-&gt;sk_prot-&gt;sendmsg()</code></p>
+<p>如果是SOCK_STREAM套接字，则最后两步是<code>→ inet_sendmsg() → tcp_sendmsg()</code></p>
+<blockquote>
+<p>net/socket.c</p>
+</blockquote>
+<h3 id="sys-send"><a href="#sys-send" class="headerlink" title="sys_send()"></a>sys_send()</h3><p>包装了sys_sendto()函数。</p>
+<h3 id="sys-sendto"><a href="#sys-sendto" class="headerlink" title="sys_sendto()"></a>sys_sendto()</h3><p>向指定地址发送一个数据包：完成发送数据前的准备工作，把用户空间地址转换成内核空间地址，检查用户空间数据区是否可读，调用sock_sendmsg()函数指定具体的发送操作。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//根据协议类型执行发送数据的操作</span></span><br><span class="line"><span class="function">asmlinkage <span class="keyword">long</span> <span class="title">sys_sendto</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">void</span> __user * buff, <span class="keyword">size_t</span> len, <span class="keyword">unsigned</span> flags,</span></span></span><br><span class="line"><span class="function"><span class="params">			   struct sockaddr __user *addr, <span class="keyword">int</span> addr_len)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">socket</span> *<span class="title">sock</span>;</span></span><br><span class="line">	<span class="keyword">char</span> address[MAX_SOCK_ADDR];</span><br><span class="line">	<span class="keyword">int</span> err;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">msghdr</span> <span class="title">msg</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">iovec</span> <span class="title">iov</span>;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//根据套接字描述符fd查找对应的socket结构体</span></span><br><span class="line">	sock = sockfd_lookup(fd, &amp;err);</span><br><span class="line">	<span class="keyword">if</span> (!sock)</span><br><span class="line">		<span class="keyword">goto</span> out;</span><br><span class="line">	iov.iov_base=buff; <span class="comment">//指向等待发送的数据内容缓冲区</span></span><br><span class="line">	iov.iov_len=len;</span><br><span class="line">	<span class="comment">// msg用来记录数据的发送信息</span></span><br><span class="line">	msg.msg_name=<span class="literal">NULL</span>;</span><br><span class="line">	msg.msg_iov=&amp;iov;</span><br><span class="line">	msg.msg_iovlen=<span class="number">1</span>;</span><br><span class="line">	msg.msg_control=<span class="literal">NULL</span>;</span><br><span class="line">	msg.msg_controllen=<span class="number">0</span>;</span><br><span class="line">	msg.msg_namelen=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">if</span>(addr)</span><br><span class="line">	&#123;<span class="comment">//把用户空间地址转换成内核空间地址</span></span><br><span class="line">		err = move_addr_to_kernel(addr, addr_len, address);</span><br><span class="line">		<span class="keyword">if</span> (err &lt; <span class="number">0</span>)</span><br><span class="line">			<span class="keyword">goto</span> out_put;</span><br><span class="line">		msg.msg_name=address;</span><br><span class="line">		msg.msg_namelen=addr_len;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (sock-&gt;file-&gt;f_flags &amp; O_NONBLOCK)</span><br><span class="line">		flags |= MSG_DONTWAIT;</span><br><span class="line">	msg.msg_flags = flags;</span><br><span class="line">	<span class="comment">//执行具体的套接字发送操作</span></span><br><span class="line">	err = sock_sendmsg(sock, &amp;msg, len);</span><br><span class="line"></span><br><span class="line">out_put:		</span><br><span class="line">	sockfd_put(sock);</span><br><span class="line">out:</span><br><span class="line">	<span class="keyword">return</span> err;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="sock-sendmsg"><a href="#sock-sendmsg" class="headerlink" title="sock_sendmsg()"></a>sock_sendmsg()</h3><p>调用__sock_sendmsg()发送数据。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sock_sendmsg</span><span class="params">(struct socket *sock, struct msghdr *msg, <span class="keyword">size_t</span> size)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">kiocb</span> <span class="title">iocb</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sock_iocb</span> <span class="title">siocb</span>;</span></span><br><span class="line">	<span class="keyword">int</span> ret;</span><br><span class="line"></span><br><span class="line">	init_sync_kiocb(&amp;iocb, <span class="literal">NULL</span>);</span><br><span class="line">	iocb.<span class="keyword">private</span> = &amp;siocb;</span><br><span class="line">    <span class="comment">//调用__sock_sendmsg()发送数据</span></span><br><span class="line">	ret = __sock_sendmsg(&amp;iocb, sock, msg, size);</span><br><span class="line">	<span class="keyword">if</span> (-EIOCBQUEUED == ret)</span><br><span class="line">		ret = wait_on_sync_kiocb(&amp;iocb);</span><br><span class="line">	<span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>自此函数起，传递的参数多了一个<code>struct kiocb</code>。</p>
+<p>在Linux内核中，每个IO请求都对应一个kiocb结构体，其ki_filp成员指向对应的file指针，通过is_sync_kiocb可以判断某Kiocb是否为同步IO请求，真——同步IO请求，非真——异步IO请求。</p>
+<p>块设备和网络设备本身就是异步的。只有字符设备驱动必须明确指出应支持AIO.需要说明的是AIO对于大多数字符设备而言都不是必须的。只有少数才需要。</p>
+<blockquote>
+<p>参考博客：<a href="https://www.cnblogs.com/hanyan225/archive/2010/10/24/1859655.html">Linux内核开发之异步通知与异步I/O</a></p>
+</blockquote>
+<h3 id="sock-sendmsg-1"><a href="#sock-sendmsg-1" class="headerlink" title="__sock_sendmsg()"></a>__sock_sendmsg()</h3><p>调用属于某协议族的套接字发送函数——在已指定的协议族操作集中。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">int</span> __sock_sendmsg(struct kiocb *iocb, struct socket *sock, </span><br><span class="line">				 struct msghdr *msg, <span class="keyword">size_t</span> size)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">    <span class="comment">//创建套接字时，所指定的具体协议族操作集记录在sock-&gt;ops中。</span></span><br><span class="line">    <span class="comment">//协议族操作集中发送数据的函数则为sock-&gt;ops-&gt;sendmsg。</span></span><br><span class="line">    <span class="comment">//sock-&gt;ops-&gt;sendmsg指向具体协议族操作集中注册的函数</span></span><br><span class="line">	<span class="keyword">return</span> sock-&gt;ops-&gt;sendmsg(iocb, sock, msg, size);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>根据协议类型<code>.type</code>在struct inet_protosw inetsw_array[]查询INET协议具体的操作集。如果套接字为SOCK_STREAM，则<code>.ops=&amp;inet_stream_ops</code>，在inet_stream_ops操作集中负责发送的<code>.sendmsg=inet_sendmsg</code>。</p>
+<p>因此，调用sock-&gt;ops-&gt;sendmsg(iocb, sock, msg, size)；就等于调用inet_stream_ops操作集中的inet_sendmsg()函数。</p>
+<p>关于inet_protosw inetsw_array数组，见我的博客：<a href="https://xingkunz.github.io/2020/01/01/Linux网络内核源码分析-关于套接字/">Linux网络内核源码分析-关于套接字</a>。</p>
+<h3 id="SOCK-STREAM套接字的sock-gt-ops-gt-sendmsg-：inet-sendmsg"><a href="#SOCK-STREAM套接字的sock-gt-ops-gt-sendmsg-：inet-sendmsg" class="headerlink" title="SOCK_STREAM套接字的sock-&gt;ops-&gt;sendmsg()：inet_sendmsg()"></a>SOCK_STREAM套接字的sock-&gt;ops-&gt;sendmsg()：inet_sendmsg()</h3><blockquote>
+<p>net/ipv4/af_inet.c</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">inet_sendmsg</span><span class="params">(struct kiocb *iocb, struct socket *sock, struct msghdr *msg,</span></span></span><br><span class="line"><span class="function"><span class="params">		 <span class="keyword">size_t</span> size)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//得到套接字在传输层的struct sock表示结构</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sock</span> *<span class="title">sk</span> = <span class="title">sock</span>-&gt;<span class="title">sk</span>;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">/* We may need to bind the socket. */</span></span><br><span class="line">	<span class="keyword">if</span> (!inet_sk(sk)-&gt;num &amp;&amp; inet_autobind(sk))</span><br><span class="line">		<span class="keyword">return</span> -EAGAIN;</span><br><span class="line">    <span class="comment">//调用传输层的数据发送方法</span></span><br><span class="line">	<span class="keyword">return</span> sk-&gt;sk_prot-&gt;sendmsg(iocb, sk, msg, size);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="传输层的发送方法sk-gt-sk-prot-gt-sendmsg-tcp-sendmsg"><a href="#传输层的发送方法sk-gt-sk-prot-gt-sendmsg-tcp-sendmsg" class="headerlink" title="传输层的发送方法sk-&gt;sk_prot-&gt;sendmsg(): tcp_sendmsg()"></a>传输层的发送方法sk-&gt;sk_prot-&gt;sendmsg(): tcp_sendmsg()</h3><blockquote>
+<p>net/ipv4/tcp.c</p>
+</blockquote>
+<p>sk是struct socket sock中的指针，指向传输层套接字表示结构，sk中包含传输层协议操作集.prot成员。如果是SOCK_STREAM套接字，则.prot=&amp;tcp_prot，对应sendmsg()的函数即tcp_sendmsg()。</p>
+<h2 id="接收数据"><a href="#接收数据" class="headerlink" title="接收数据"></a>接收数据</h2><h3 id="调用过程-1"><a href="#调用过程-1" class="headerlink" title="调用过程"></a>调用过程</h3><p>当通信双方从对方接收/读数据时，可以调用read()、recv()、recvfrom()函数。</p>
+<p><code>recv()|read()|recvfrom() → sys_recv() → sys_recvfrom() → sock_recvfrom() → __sock_recvmsg() → sock_common_recvmsg() → sock-&gt;ops-&gt;recvmsg() →sk-&gt;sk_prot-&gt;recvmsg()</code></p>
+<h3 id="sys-recv"><a href="#sys-recv" class="headerlink" title="sys_recv()"></a>sys_recv()</h3><p>包装了sys_recvfrom()函数。</p>
+<h3 id="sys-recvfrom"><a href="#sys-recvfrom" class="headerlink" title="sys_recvfrom()"></a>sys_recvfrom()</h3><p>从一个套接字接收一个帧，有选择地记录发送方的地址，检查缓冲区是否可写，如果有需要，就把发送方地址从内核移到用户空间。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">asmlinkage <span class="keyword">long</span> <span class="title">sys_recvfrom</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">void</span> __user * ubuf, <span class="keyword">size_t</span> size, <span class="keyword">unsigned</span> flags,</span></span></span><br><span class="line"><span class="function"><span class="params">			     struct sockaddr __user *addr, <span class="keyword">int</span> __user *addr_len)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">socket</span> *<span class="title">sock</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">iovec</span> <span class="title">iov</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">msghdr</span> <span class="title">msg</span>;</span></span><br><span class="line">	<span class="keyword">char</span> address[MAX_SOCK_ADDR];</span><br><span class="line">	<span class="keyword">int</span> err,err2;</span><br><span class="line">    <span class="comment">//根据套接字描述符fd找到套接字的struct socket结构</span></span><br><span class="line">	sock = sockfd_lookup(fd, &amp;err);</span><br><span class="line">	<span class="keyword">if</span> (!sock)</span><br><span class="line">		<span class="keyword">goto</span> out;</span><br><span class="line">	msg.msg_control=<span class="literal">NULL</span>;</span><br><span class="line">	msg.msg_controllen=<span class="number">0</span>;</span><br><span class="line">	msg.msg_iovlen=<span class="number">1</span>;</span><br><span class="line">	msg.msg_iov=&amp;iov;</span><br><span class="line">	iov.iov_len=size;</span><br><span class="line">	iov.iov_base=ubuf;</span><br><span class="line">	msg.msg_name=address;</span><br><span class="line">	msg.msg_namelen=MAX_SOCK_ADDR;</span><br><span class="line">	<span class="keyword">if</span> (sock-&gt;file-&gt;f_flags &amp; O_NONBLOCK)</span><br><span class="line">		flags |= MSG_DONTWAIT;</span><br><span class="line">    <span class="comment">//调用sock_recvmsg执行具体的数据接收操作</span></span><br><span class="line">	err=sock_recvmsg(sock, &amp;msg, size, flags);</span><br><span class="line">	<span class="keyword">if</span>(err &gt;= <span class="number">0</span> &amp;&amp; addr != <span class="literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">        <span class="comment">//将内核空间的网络数据复制到用户空间</span></span><br><span class="line">		err2=move_addr_to_user(address, msg.msg_namelen, addr, addr_len);</span><br><span class="line">		<span class="keyword">if</span>(err2&lt;<span class="number">0</span>)</span><br><span class="line">			err=err2;</span><br><span class="line">	&#125;</span><br><span class="line">	sockfd_put(sock);			</span><br><span class="line">out:</span><br><span class="line">	<span class="keyword">return</span> err;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="sock-recvmsg"><a href="#sock-recvmsg" class="headerlink" title="sock_recvmsg()"></a>sock_recvmsg()</h3><p>调用__sock_recvmsg()接收数据。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sock_recvmsg</span><span class="params">(struct socket *sock, struct msghdr *msg, </span></span></span><br><span class="line"><span class="function"><span class="params">		 <span class="keyword">size_t</span> size, <span class="keyword">int</span> flags)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">kiocb</span> <span class="title">iocb</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sock_iocb</span> <span class="title">siocb</span>;</span></span><br><span class="line">	<span class="keyword">int</span> ret;</span><br><span class="line"></span><br><span class="line">        init_sync_kiocb(&amp;iocb, <span class="literal">NULL</span>);</span><br><span class="line">	iocb.<span class="keyword">private</span> = &amp;siocb;</span><br><span class="line">	ret = __sock_recvmsg(&amp;iocb, sock, msg, size, flags);</span><br><span class="line">	<span class="keyword">if</span> (-EIOCBQUEUED == ret)</span><br><span class="line">		ret = wait_on_sync_kiocb(&amp;iocb);</span><br><span class="line">	<span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="sock-recvmsg（"><a href="#sock-recvmsg（" class="headerlink" title="__sock_recvmsg（)"></a>__sock_recvmsg（)</h3><p>调用属于某协议族的套接字接收函数——在已指定的协议族操作集中。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">int</span> __sock_recvmsg(struct kiocb *iocb, struct socket *sock, </span><br><span class="line">				 struct msghdr *msg, <span class="keyword">size_t</span> size, <span class="keyword">int</span> flags)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">    <span class="comment">//创建套接字时，所指定的具体协议族操作集记录在sock-&gt;ops中。</span></span><br><span class="line">    <span class="comment">//协议族操作集中接收数据的函数则为sock-&gt;ops-&gt;recvmsg。</span></span><br><span class="line">    <span class="comment">//sock-&gt;ops-&gt;sendmsg指向具体协议族操作集中注册的函数</span></span><br><span class="line">	<span class="keyword">return</span> sock-&gt;ops-&gt;recvmsg(iocb, sock, msg, size, flags);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>根据协议类型<code>.type</code>在struct inet_protosw inetsw_array[]查询INET协议具体的操作集。如果套接字为SOCK_STREAM，则<code>.ops=&amp;inet_stream_ops</code>，在inet_stream_ops操作集中负责接收的<code>.recvmsg=sock_common_recvmsg</code>。</p>
+<p>因此，调用sock-&gt;ops-&gt;recvmsg(iocb, sock, msg, size)；就等于调用inet_stream_ops操作集中的sock_common_recvmsg()函数。</p>
+<h3 id="SOCK-STREAM套接字的sock-gt-ops-gt-recvmsg-sock-common-recvmsg"><a href="#SOCK-STREAM套接字的sock-gt-ops-gt-recvmsg-sock-common-recvmsg" class="headerlink" title="SOCK_STREAM套接字的sock-&gt;ops-&gt;recvmsg():sock_common_recvmsg()"></a>SOCK_STREAM套接字的sock-&gt;ops-&gt;recvmsg():sock_common_recvmsg()</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sock_common_recvmsg</span><span class="params">(struct kiocb *iocb, struct socket *sock,struct msghdr *msg, <span class="keyword">size_t</span> size, <span class="keyword">int</span> flags)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//得到传输层协议套接字</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sock</span> *<span class="title">sk</span> = <span class="title">sock</span>-&gt;<span class="title">sk</span>;</span></span><br><span class="line">	<span class="keyword">int</span> addr_len = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> err;</span><br><span class="line">    <span class="comment">//调用传输层的数据接收函数</span></span><br><span class="line">	err = sk-&gt;sk_prot-&gt;recvmsg(iocb, sk, msg, size, flags &amp; MSG_DONTWAIT,flags &amp; ~MSG_DONTWAIT, &amp;addr_len);</span><br><span class="line">	<span class="keyword">if</span> (err &gt;= <span class="number">0</span>)</span><br><span class="line">		msg-&gt;msg_namelen = addr_len;</span><br><span class="line">	<span class="keyword">return</span> err;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>根据套接字采用的传输层协议，sock_common_recvmsg()调用属于不同协议的接收函数。该函数在inet_create()时指定在inetsw_array中。</p>
+<p>当套接字为SOCK_STREAM时，有.prot=&amp;tcp_prot，操作集中.recvmsg=tcp_recvmsg。所以sock_common_recvmsg()调用sk-&gt;sk_prot-&gt;recvmsg就等于调用tcp_recvmsg()。</p>
+<h3 id="传输层的接收方法sk-gt-sk-prot-gt-recvmsg-tcp-recvmsg"><a href="#传输层的接收方法sk-gt-sk-prot-gt-recvmsg-tcp-recvmsg" class="headerlink" title="传输层的接收方法sk-&gt;sk_prot-&gt;recvmsg(): tcp_recvmsg()"></a>传输层的接收方法sk-&gt;sk_prot-&gt;recvmsg(): tcp_recvmsg()</h3><blockquote>
+<p>net/ipv4/tcp.c</p>
+</blockquote>
+<h1 id="监听套接字"><a href="#监听套接字" class="headerlink" title="监听套接字"></a>监听套接字</h1><h2 id="调用过程-2"><a href="#调用过程-2" class="headerlink" title="调用过程"></a>调用过程</h2><p><code>listen() → sys_listen()</code></p>
+<p>调用listen()函数，程序触发内核的sys_listen()函数，</p>
+<h2 id="sys-listen"><a href="#sys-listen" class="headerlink" title="sys_listen()"></a>sys_listen()</h2><blockquote>
+<p>net/socket.c</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">asmlinkage <span class="keyword">long</span> <span class="title">sys_listen</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> backlog)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">socket</span> *<span class="title">sock</span>;</span></span><br><span class="line">	<span class="keyword">int</span> err;</span><br><span class="line">    <span class="comment">//通过套接字描述符找到套接字对应的struct socket结构</span></span><br><span class="line">	<span class="keyword">if</span> ((sock = sockfd_lookup(fd, &amp;err)) != <span class="literal">NULL</span>) &#123;</span><br><span class="line">		<span class="keyword">if</span> ((<span class="keyword">unsigned</span>) backlog &gt; sysctl_somaxconn)</span><br><span class="line">			backlog = sysctl_somaxconn;</span><br><span class="line"></span><br><span class="line">		err = security_socket_listen(sock, backlog);</span><br><span class="line">		<span class="keyword">if</span> (err) &#123;</span><br><span class="line">			sockfd_put(sock);</span><br><span class="line">			<span class="keyword">return</span> err;</span><br><span class="line">		&#125;</span><br><span class="line">        <span class="comment">//根据套接字协议族类型调用监听函数</span></span><br><span class="line">		err=sock-&gt;ops-&gt;listen(sock, backlog);</span><br><span class="line">		sockfd_put(sock);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> err;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果是INET套接字，且为SOCK_STREAM类型，则调用sock-&gt;ops-&gt;listen()等于调用inet_listen()。</p>
+<h1 id="套接字连接"><a href="#套接字连接" class="headerlink" title="套接字连接"></a>套接字连接</h1><h2 id="被动接收连接-accept"><a href="#被动接收连接-accept" class="headerlink" title="被动接收连接 accept()"></a>被动接收连接 accept()</h2><p><code>accept() → sys_accept() → sock-&gt;ops-&gt;accept()</code></p>
+<p>调用accept()函数时，程序触发sys_accept()，等待接收连接请求，如果允许连接，则重新创建一个代表该连接的套接字，并返回其套接字描述符。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">asmlinkage <span class="keyword">long</span> <span class="title">sys_accept</span><span class="params">(<span class="keyword">int</span> fd, struct sockaddr __user *upeer_sockaddr, <span class="keyword">int</span> __user *upeer_addrlen)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">socket</span> *<span class="title">sock</span>, *<span class="title">newsock</span>;</span></span><br><span class="line">	<span class="keyword">int</span> err, len;</span><br><span class="line">	<span class="keyword">char</span> address[MAX_SOCK_ADDR];</span><br><span class="line">    <span class="comment">//通过套接字描述符找到套接字对应的socket结构</span></span><br><span class="line">	sock = sockfd_lookup(fd, &amp;err);</span><br><span class="line">	<span class="keyword">if</span> (!sock)</span><br><span class="line">		<span class="keyword">goto</span> out;</span><br><span class="line">    <span class="comment">//创建一个新的套接字</span></span><br><span class="line">	err = -EMFILE;</span><br><span class="line">	<span class="keyword">if</span> (!(newsock = sock_alloc())) </span><br><span class="line">		<span class="keyword">goto</span> out_put;</span><br><span class="line">	newsock-&gt;type = sock-&gt;type;</span><br><span class="line">	newsock-&gt;ops = sock-&gt;ops;</span><br><span class="line">    <span class="comment">//根据套接字协议族类型调用接收连接请求的函数</span></span><br><span class="line">    <span class="comment">//如果是INET协议套接字，则调用函数inet_accept</span></span><br><span class="line">	err = security_socket_accept(sock, newsock);</span><br><span class="line">	<span class="keyword">if</span> (err)</span><br><span class="line">		<span class="keyword">goto</span> out_release;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * We don't need try_module_get here, as the listening socket (sock)</span></span><br><span class="line"><span class="comment">	 * has the protocol module (sock-&gt;ops-&gt;owner) held.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	__module_get(newsock-&gt;ops-&gt;owner);</span><br><span class="line">    <span class="comment">//将地址信息从内核空间复制到用户空间</span></span><br><span class="line">	err = sock-&gt;ops-&gt;accept(sock, newsock, sock-&gt;file-&gt;f_flags);</span><br><span class="line">	<span class="keyword">if</span> (err &lt; <span class="number">0</span>)</span><br><span class="line">		<span class="keyword">goto</span> out_release;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (upeer_sockaddr) &#123;</span><br><span class="line">		<span class="keyword">if</span>(newsock-&gt;ops-&gt;getname(newsock, (struct sockaddr *)address, &amp;len, <span class="number">2</span>)&lt;<span class="number">0</span>) &#123;</span><br><span class="line">			err = -ECONNABORTED;</span><br><span class="line">			<span class="keyword">goto</span> out_release;</span><br><span class="line">		&#125;</span><br><span class="line">		err = move_addr_to_user(address, len, upeer_sockaddr, upeer_addrlen);</span><br><span class="line">		<span class="keyword">if</span> (err &lt; <span class="number">0</span>)</span><br><span class="line">			<span class="keyword">goto</span> out_release;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">/* File flags are not inherited via accept() unlike another OSes. */</span></span><br><span class="line">	<span class="keyword">if</span> ((err = sock_map_fd(newsock)) &lt; <span class="number">0</span>)</span><br><span class="line">		<span class="keyword">goto</span> out_release;</span><br><span class="line">	security_socket_post_accept(sock, newsock);</span><br><span class="line">out_put:</span><br><span class="line">	sockfd_put(sock);</span><br><span class="line">out:</span><br><span class="line">	<span class="keyword">return</span> err;</span><br><span class="line">out_release:</span><br><span class="line">	sock_release(newsock);</span><br><span class="line">	<span class="keyword">goto</span> out_put;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="主动连接-connect"><a href="#主动连接-connect" class="headerlink" title="主动连接 connect()"></a>主动连接 connect()</h2><p><code>connect() → sys_connect() → sock-&gt;ops-&gt;connect()</code></p>
+<p>调用connect()发出连接请求，内核会启动函数sys_connect()。如果采用TCP协议，则将启动TCP三次握手过程。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">asmlinkage <span class="keyword">long</span> <span class="title">sys_connect</span><span class="params">(<span class="keyword">int</span> fd, struct sockaddr __user *uservaddr, <span class="keyword">int</span> addrlen)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">socket</span> *<span class="title">sock</span>;</span></span><br><span class="line">	<span class="keyword">char</span> address[MAX_SOCK_ADDR];</span><br><span class="line">	<span class="keyword">int</span> err;</span><br><span class="line">    <span class="comment">//通过套接字描述符找到套接字的socket结构</span></span><br><span class="line">	sock = sockfd_lookup(fd, &amp;err);</span><br><span class="line">	<span class="keyword">if</span> (!sock)</span><br><span class="line">		<span class="keyword">goto</span> out;</span><br><span class="line">    <span class="comment">//将地址信息从用户空间复制到内核空间</span></span><br><span class="line">	err = move_addr_to_kernel(uservaddr, addrlen, address);</span><br><span class="line">	<span class="keyword">if</span> (err &lt; <span class="number">0</span>)</span><br><span class="line">		<span class="keyword">goto</span> out_put;</span><br><span class="line"></span><br><span class="line">	err = security_socket_connect(sock, (struct sockaddr *)address, addrlen);</span><br><span class="line">	<span class="keyword">if</span> (err)</span><br><span class="line">		<span class="keyword">goto</span> out_put;</span><br><span class="line">    <span class="comment">//根据套接字协议族类型调用连接请求函数</span></span><br><span class="line">    <span class="comment">//如果是INET套接字，则调用函数inet_connect()</span></span><br><span class="line">	err = sock-&gt;ops-&gt;connect(sock, (struct sockaddr *) address, addrlen,</span><br><span class="line">				 sock-&gt;file-&gt;f_flags);</span><br><span class="line">out_put:</span><br><span class="line">	sockfd_put(sock);</span><br><span class="line">out:</span><br><span class="line">	<span class="keyword">return</span> err;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="关闭连接-shutdown"><a href="#关闭连接-shutdown" class="headerlink" title="关闭连接 shutdown()"></a>关闭连接 shutdown()</h2><p><code>shutdown() → sys_shutdown() → sock-&gt;ops-&gt;shutdown()</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">asmlinkage <span class="keyword">long</span> <span class="title">sys_shutdown</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> how)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> err;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">socket</span> *<span class="title">sock</span>;</span></span><br><span class="line">    <span class="comment">//通过套接字描述符找到套接字对应的socket结构</span></span><br><span class="line">	<span class="keyword">if</span> ((sock = sockfd_lookup(fd, &amp;err))!=<span class="literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		err = security_socket_shutdown(sock, how);</span><br><span class="line">		<span class="keyword">if</span> (err) &#123;</span><br><span class="line">			sockfd_put(sock);</span><br><span class="line">			<span class="keyword">return</span> err;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//根据套接字协议族调用关闭套接字的函数</span></span><br><span class="line">        <span class="comment">//如果是INET套接字，则调用函数inet_shutdown</span></span><br><span class="line">		err=sock-&gt;ops-&gt;shutdown(sock, how);</span><br><span class="line">		sockfd_put(sock);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> err;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="绑定套接字"><a href="#绑定套接字" class="headerlink" title="绑定套接字"></a>绑定套接字</h1><p><code>bind() → sys_bind()</code></p>
+<blockquote>
+<p>net/socket.c</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">asmlinkage <span class="keyword">long</span> <span class="title">sys_bind</span><span class="params">(<span class="keyword">int</span> fd, struct sockaddr __user *umyaddr, <span class="keyword">int</span> addrlen)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">socket</span> *<span class="title">sock</span>;</span></span><br><span class="line">	<span class="keyword">char</span> address[MAX_SOCK_ADDR];</span><br><span class="line">	<span class="keyword">int</span> err;</span><br><span class="line">    <span class="comment">//通过套接字描述符找到套接字对应的socket结构</span></span><br><span class="line">	<span class="keyword">if</span>((sock = sockfd_lookup(fd,&amp;err))!=<span class="literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">        <span class="comment">//将地址信息从用户空间复制到内核空间</span></span><br><span class="line">        <span class="keyword">if</span>((err=move_addr_to_kernel(umyaddr,addrlen,address))&gt;=<span class="number">0</span>) &#123;</span><br><span class="line">    err = security_socket_bind(sock, (struct sockaddr *)address, addrlen);</span><br><span class="line">			<span class="keyword">if</span> (err) &#123;</span><br><span class="line">				sockfd_put(sock);</span><br><span class="line">				<span class="keyword">return</span> err;</span><br><span class="line">			&#125;</span><br><span class="line">            <span class="comment">//根据套接字协议族调用绑定地址的函数</span></span><br><span class="line">            <span class="comment">//如果是INET套接字，则调用函数inet_bind()</span></span><br><span class="line">			err = sock-&gt;ops-&gt;bind(sock, (struct sockaddr *)address, addrlen);</span><br><span class="line">		&#125;</span><br><span class="line">		sockfd_put(sock);</span><br><span class="line">	&#125;			</span><br><span class="line">	<span class="keyword">return</span> err;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>参考：《Linux网络内核分析与开发》，肖宇峰、李昕、时岩编著。</p>
+</blockquote>
+<h1 id="附-TCP-UDP数据传输流程"><a href="#附-TCP-UDP数据传输流程" class="headerlink" title="附:TCP/UDP数据传输流程"></a>附:TCP/UDP数据传输流程</h1><img src="/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/tcp-socket.png" title="TCP协议数据传输流程">
+<img src="/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/udp-socket.png" title="UDP协议数据传输流程">
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+            
+              <a href="/tags/网络/" rel="tag"># 网络</a>
+            
+              <a href="/tags/源码/" rel="tag"># 源码</a>
+            
+              <a href="/tags/套接字/" rel="tag"># 套接字</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2020/01/08/hexo-关于博客图片无法显示的问题/" rel="next" title="hexo|关于博客图片无法显示的问题">
+                  <i class="fa fa-chevron-left"></i> hexo|关于博客图片无法显示的问题
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2020/01/12/符号执行测试-概述/" rel="prev" title="符号执行测试|概述">
+                  符号执行测试|概述 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#INET套接字类型"><span class="nav-number">1.</span> <span class="nav-text">INET套接字类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#收发数据"><span class="nav-number">2.</span> <span class="nav-text">收发数据</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#发送数据"><span class="nav-number">2.1.</span> <span class="nav-text">发送数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#调用过程"><span class="nav-number">2.1.1.</span> <span class="nav-text">调用过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sys-send"><span class="nav-number">2.1.2.</span> <span class="nav-text">sys_send()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sys-sendto"><span class="nav-number">2.1.3.</span> <span class="nav-text">sys_sendto()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sock-sendmsg"><span class="nav-number">2.1.4.</span> <span class="nav-text">sock_sendmsg()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sock-sendmsg-1"><span class="nav-number">2.1.5.</span> <span class="nav-text">__sock_sendmsg()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SOCK-STREAM套接字的sock-gt-ops-gt-sendmsg-：inet-sendmsg"><span class="nav-number">2.1.6.</span> <span class="nav-text">SOCK_STREAM套接字的sock-&gt;ops-&gt;sendmsg()：inet_sendmsg()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#传输层的发送方法sk-gt-sk-prot-gt-sendmsg-tcp-sendmsg"><span class="nav-number">2.1.7.</span> <span class="nav-text">传输层的发送方法sk-&gt;sk_prot-&gt;sendmsg(): tcp_sendmsg()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接收数据"><span class="nav-number">2.2.</span> <span class="nav-text">接收数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#调用过程-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">调用过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sys-recv"><span class="nav-number">2.2.2.</span> <span class="nav-text">sys_recv()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sys-recvfrom"><span class="nav-number">2.2.3.</span> <span class="nav-text">sys_recvfrom()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sock-recvmsg"><span class="nav-number">2.2.4.</span> <span class="nav-text">sock_recvmsg()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sock-recvmsg（"><span class="nav-number">2.2.5.</span> <span class="nav-text">__sock_recvmsg（)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SOCK-STREAM套接字的sock-gt-ops-gt-recvmsg-sock-common-recvmsg"><span class="nav-number">2.2.6.</span> <span class="nav-text">SOCK_STREAM套接字的sock-&gt;ops-&gt;recvmsg():sock_common_recvmsg()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#传输层的接收方法sk-gt-sk-prot-gt-recvmsg-tcp-recvmsg"><span class="nav-number">2.2.7.</span> <span class="nav-text">传输层的接收方法sk-&gt;sk_prot-&gt;recvmsg(): tcp_recvmsg()</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#监听套接字"><span class="nav-number">3.</span> <span class="nav-text">监听套接字</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#调用过程-2"><span class="nav-number">3.1.</span> <span class="nav-text">调用过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sys-listen"><span class="nav-number">3.2.</span> <span class="nav-text">sys_listen()</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#套接字连接"><span class="nav-number">4.</span> <span class="nav-text">套接字连接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#被动接收连接-accept"><span class="nav-number">4.1.</span> <span class="nav-text">被动接收连接 accept()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主动连接-connect"><span class="nav-number">4.2.</span> <span class="nav-text">主动连接 connect()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关闭连接-shutdown"><span class="nav-number">4.3.</span> <span class="nav-text">关闭连接 shutdown()</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#绑定套接字"><span class="nav-number">5.</span> <span class="nav-text">绑定套接字</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附-TCP-UDP数据传输流程"><span class="nav-number">6.</span> <span class="nav-text">附:TCP/UDP数据传输流程</span></a></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">XingkunZ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span>
+        
+      </div>
+    
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">XingkunZ</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.4.1</div>
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.1"></script><script src="/js/motion.js?v=7.4.1"></script>
+<script src="/js/schemes/muse.js?v=7.4.1"></script>
+<script src="/js/next-boot.js?v=7.4.1"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
