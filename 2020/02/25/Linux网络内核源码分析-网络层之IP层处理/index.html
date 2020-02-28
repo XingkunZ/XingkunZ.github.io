@@ -56,7 +56,7 @@
 </script>
 
   <meta name="description" content="关于IPv4IP简述IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。">
-<meta name="keywords" content="Linux,UDP,网络,源码">
+<meta name="keywords" content="Linux,网络,源码,UDP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux网络内核源码分析|网络层之IP层处理">
 <meta property="og:url" content="https://xingkunz.github.io/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/index.html">
@@ -64,8 +64,7 @@
 <meta property="og:description" content="关于IPv4IP简述IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://xingkunz.github.io/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/ip数据包.PNG">
-<meta property="og:image" content="https://xingkunz.github.io/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/ip模块处理流程.PNG">
-<meta property="og:updated_time" content="2020-02-25T09:43:55.341Z">
+<meta property="og:updated_time" content="2020-02-28T06:58:42.021Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux网络内核源码分析|网络层之IP层处理">
 <meta name="twitter:description" content="关于IPv4IP简述IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。">
@@ -227,11 +226,19 @@
                 
               
 
-              <time title="Created: 2020-02-25 15:57:22 / Modified: 17:43:55" itemprop="dateCreated datePublished" datetime="2020-02-25T15:57:22+08:00">2020-02-25</time>
+              <time title="Created: 2020-02-25 15:57:22" itemprop="dateCreated datePublished" datetime="2020-02-25T15:57:22+08:00">2020-02-25</time>
             </span>
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-28 14:58:42" itemprop="dateModified" datetime="2020-02-28T14:58:42+08:00">2020-02-28</time>
+              </span>
             
           
 
@@ -278,10 +285,16 @@
 <li>TCP模块调用函数<code>ip_queue_xmit()</code>进入IP层。</li>
 </ul>
 <p>这两个函数都为数据包封装了IP协议信息，把对应的头部加到套接字缓冲区内。</p>
-<img src="/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/ip模块处理流程.PNG">
+
 <p><code>ip_queue_xmit()</code>会调用<code>ip_route_output_flow()</code>查找路由表：为套接字缓冲区设置路由出口信息。如果已有TCP连接，则套接字缓冲区保存了路由信息，则不需要这一步。</p>
 <p><strong>两条路下来，都调用<code>dst_output()</code>进入IP层发送流程：</strong></p>
 <p><code>dst_output()→ip_output()→ip_finish_output()→ip_finish_output2()→邻居子系统调用接口函数dev_queue_xmit()→底层网络设备驱动程序</code></p>
+<p><strong>如果是接收数据包:</strong></p>
+<p>网络设备驱动会通过接口<code>netif_rx()</code>把数据包递交给<code>ip_rcv()</code>，进入IP层。接着调用：<code>ip_rcv_finish()作数据包处理→ip_route_input为数据包查询路由信息，确定是转发/交付本地。如果是需要转发的，则不用再次查询路由。</code>接着，<code>ip_rcv_finish()→dst_input()分情况处理数据包：转发/交付本地</code>。</p>
+<p><strong>对于交付本地的数据包：</strong></p>
+<p><code>dst_input()→ip_local_deliver()对要交付的数据包进一步处理→ip_local_deliver_finish()把数据包交给传输层</code></p>
+<p><strong>对于要转发的数据包：</strong></p>
+<p><code>dst_input()→ip_forward()→ip_forward_finish()</code>，之后就按照发送数据包的方式发送，路由信息早已设置好。</p>
 <blockquote>
 <p>参考：《Linux网络内核分析与开发》，肖宇峰、李昕、时岩编著。</p>
 </blockquote>
@@ -302,11 +315,11 @@
             
               <a href="/tags/Linux/" rel="tag"># Linux</a>
             
-              <a href="/tags/UDP/" rel="tag"># UDP</a>
-            
               <a href="/tags/网络/" rel="tag"># 网络</a>
             
               <a href="/tags/源码/" rel="tag"># 源码</a>
+            
+              <a href="/tags/UDP/" rel="tag"># UDP</a>
             
           </div>
         

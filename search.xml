@@ -13,19 +13,25 @@
 <li>TCP模块调用函数<code>ip_queue_xmit()</code>进入IP层。</li>
 </ul>
 <p>这两个函数都为数据包封装了IP协议信息，把对应的头部加到套接字缓冲区内。</p>
-<img src="/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/ip模块处理流程.PNG">
+
 <p><code>ip_queue_xmit()</code>会调用<code>ip_route_output_flow()</code>查找路由表：为套接字缓冲区设置路由出口信息。如果已有TCP连接，则套接字缓冲区保存了路由信息，则不需要这一步。</p>
 <p><strong>两条路下来，都调用<code>dst_output()</code>进入IP层发送流程：</strong></p>
 <p><code>dst_output()→ip_output()→ip_finish_output()→ip_finish_output2()→邻居子系统调用接口函数dev_queue_xmit()→底层网络设备驱动程序</code></p>
+<p><strong>如果是接收数据包:</strong></p>
+<p>网络设备驱动会通过接口<code>netif_rx()</code>把数据包递交给<code>ip_rcv()</code>，进入IP层。接着调用：<code>ip_rcv_finish()作数据包处理→ip_route_input为数据包查询路由信息，确定是转发/交付本地。如果是需要转发的，则不用再次查询路由。</code>接着，<code>ip_rcv_finish()→dst_input()分情况处理数据包：转发/交付本地</code>。</p>
+<p><strong>对于交付本地的数据包：</strong></p>
+<p><code>dst_input()→ip_local_deliver()对要交付的数据包进一步处理→ip_local_deliver_finish()把数据包交给传输层</code></p>
+<p><strong>对于要转发的数据包：</strong></p>
+<p><code>dst_input()→ip_forward()→ip_forward_finish()</code>，之后就按照发送数据包的方式发送，路由信息早已设置好。</p>
 <blockquote>
 <p>参考：《Linux网络内核分析与开发》，肖宇峰、李昕、时岩编著。</p>
 </blockquote>
 ]]></content>
       <tags>
         <tag>Linux</tag>
-        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -42,7 +48,7 @@
 <p>UDP采用SOCK_DGRAM类型的INET套接字，所以查询函数集后，最后两步具体调用的函数是：</p>
 <p><code>→ inet_sendmsg() → udp_sendmsg()</code></p>
 <p>自此，网络数据包从应用程序的发送函数开始，已经过套接字接口，应用程序把应用层数据内容置入内核，并通知内核的<strong>UDP协议模块</strong>继续发送数据。下面主要关注UDP协议模块中的处理流程，直到UDP协议模块将数据包交给IP层协议模块。</p>
-<img src="/2020/02/16/Linux网络内核源码分析-传输层之UDP处理过程/UDP模块处理流程.jpg" title="UDP模块处理流程">
+<img src="/2020/02/16/Linux网络内核源码分析-传输层之UDP处理过程/UDP模块处理流程.png" title="UDP模块处理流程">
 <p>如果在应用层调用发送函数，若采用SOCK_DGRAM套接字，会触发内核<code>udp_sendmsg</code>调用，查找路由信息后，调用<code>ip_append_data</code>对数据做分片处理，然后调用<code>udp_push_pending_frames</code>进行UDP包封装，并把数据包交给IP层处理。</p>
 <p>如果在应用层调用接收函数，IP层取出数据内容后，函数<code>ip_local_deliver_finish</code>会调用UDP模块的<code>udp_rcv</code>函数。数据包会被加入套接字队列，再由函数<code>udp_recvmsg</code>取出，并通知应用程序函数读取数据。</p>
 <h2 id="UDP包的发送"><a href="#UDP包的发送" class="headerlink" title="UDP包的发送"></a>UDP包的发送</h2><p>应用层采用SOCK_DGRAM套接字发送数据，会触发内核<code>udp_sendmsg</code>调用。</p>
@@ -192,9 +198,9 @@
 ]]></content>
       <tags>
         <tag>Linux</tag>
-        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -515,9 +521,9 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 <img src="/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/udp-socket.png" title="UDP协议数据传输流程">]]></content>
       <tags>
         <tag>Linux</tag>
+        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>
@@ -668,9 +674,9 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 ]]></content>
       <tags>
         <tag>Linux</tag>
+        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>

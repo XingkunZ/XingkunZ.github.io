@@ -56,7 +56,7 @@
 </script>
 
   <meta name="description" content="关于UDPUDP数据包source/dest：长16位，取值范围1~65535。len：有效负载和UDP数据报头的总长度，单位为字节。UDP初始化UDP和其他核心协议都是在启动阶段通过方法inet_init()来初始化的。">
-<meta name="keywords" content="Linux,UDP,网络,源码">
+<meta name="keywords" content="Linux,网络,源码,UDP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux网络内核源码分析|传输层之UDP处理过程">
 <meta property="og:url" content="https://xingkunz.github.io/2020/02/16/Linux网络内核源码分析-传输层之UDP处理过程/index.html">
@@ -64,8 +64,8 @@
 <meta property="og:description" content="关于UDPUDP数据包source/dest：长16位，取值范围1~65535。len：有效负载和UDP数据报头的总长度，单位为字节。UDP初始化UDP和其他核心协议都是在启动阶段通过方法inet_init()来初始化的。">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://xingkunz.github.io/2020/02/16/Linux网络内核源码分析-传输层之UDP处理过程/UDP数据包.PNG">
-<meta property="og:image" content="https://xingkunz.github.io/2020/02/16/Linux网络内核源码分析-传输层之UDP处理过程/UDP模块处理流程.jpg">
-<meta property="og:updated_time" content="2020-02-25T08:57:16.086Z">
+<meta property="og:image" content="https://xingkunz.github.io/2020/02/16/Linux网络内核源码分析-传输层之UDP处理过程/UDP模块处理流程.png">
+<meta property="og:updated_time" content="2020-02-28T06:39:59.081Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux网络内核源码分析|传输层之UDP处理过程">
 <meta name="twitter:description" content="关于UDPUDP数据包source/dest：长16位，取值范围1~65535。len：有效负载和UDP数据报头的总长度，单位为字节。UDP初始化UDP和其他核心协议都是在启动阶段通过方法inet_init()来初始化的。">
@@ -238,7 +238,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-25 16:57:16" itemprop="dateModified" datetime="2020-02-25T16:57:16+08:00">2020-02-25</time>
+                <time title="Modified: 2020-02-28 14:39:59" itemprop="dateModified" datetime="2020-02-28T14:39:59+08:00">2020-02-28</time>
               </span>
             
           
@@ -287,7 +287,7 @@
 <p>UDP采用SOCK_DGRAM类型的INET套接字，所以查询函数集后，最后两步具体调用的函数是：</p>
 <p><code>→ inet_sendmsg() → udp_sendmsg()</code></p>
 <p>自此，网络数据包从应用程序的发送函数开始，已经过套接字接口，应用程序把应用层数据内容置入内核，并通知内核的<strong>UDP协议模块</strong>继续发送数据。下面主要关注UDP协议模块中的处理流程，直到UDP协议模块将数据包交给IP层协议模块。</p>
-<img src="/2020/02/16/Linux网络内核源码分析-传输层之UDP处理过程/UDP模块处理流程.jpg" title="UDP模块处理流程">
+<img src="/2020/02/16/Linux网络内核源码分析-传输层之UDP处理过程/UDP模块处理流程.png" title="UDP模块处理流程">
 <p>如果在应用层调用发送函数，若采用SOCK_DGRAM套接字，会触发内核<code>udp_sendmsg</code>调用，查找路由信息后，调用<code>ip_append_data</code>对数据做分片处理，然后调用<code>udp_push_pending_frames</code>进行UDP包封装，并把数据包交给IP层处理。</p>
 <p>如果在应用层调用接收函数，IP层取出数据内容后，函数<code>ip_local_deliver_finish</code>会调用UDP模块的<code>udp_rcv</code>函数。数据包会被加入套接字队列，再由函数<code>udp_recvmsg</code>取出，并通知应用程序函数读取数据。</p>
 <h2 id="UDP包的发送"><a href="#UDP包的发送" class="headerlink" title="UDP包的发送"></a>UDP包的发送</h2><p>应用层采用SOCK_DGRAM套接字发送数据，会触发内核<code>udp_sendmsg</code>调用。</p>
@@ -451,11 +451,11 @@
             
               <a href="/tags/Linux/" rel="tag"># Linux</a>
             
-              <a href="/tags/UDP/" rel="tag"># UDP</a>
-            
               <a href="/tags/网络/" rel="tag"># 网络</a>
             
               <a href="/tags/源码/" rel="tag"># 源码</a>
+            
+              <a href="/tags/UDP/" rel="tag"># UDP</a>
             
           </div>
         
