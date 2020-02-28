@@ -23,15 +23,57 @@
 <p><code>dst_input()→ip_local_deliver()对要交付的数据包进一步处理→ip_local_deliver_finish()把数据包交给传输层</code></p>
 <p><strong>对于要转发的数据包：</strong></p>
 <p><code>dst_input()→ip_forward()→ip_forward_finish()</code>，之后就按照发送数据包的方式发送，路由信息早已设置好。</p>
+<h2 id="发送数据包"><a href="#发送数据包" class="headerlink" title="发送数据包"></a>发送数据包</h2><h3 id="从UDP发：ip-push-pending-frames-sk-ip-output-c"><a href="#从UDP发：ip-push-pending-frames-sk-ip-output-c" class="headerlink" title="从UDP发：ip_push_pending_frames(sk) ip_output.c"></a>从UDP发：ip_push_pending_frames(sk) <code>ip_output.c</code></h3><p>大致的功能：封装IP头部信息，进入IP层的发送流程。</p>
+<ol>
+<li>通过sk中的struct inet_opt结构获得路由表项信息。sk中的inet-&gt;cork.rt是udp_sendmsg调用ip_append_data时指定的，记录了ip_route_output_flow查找路由表所返回的路由表项信息。此处将信息记录在struct rtable *rt中。<ol>
+<li>rt的rt-&gt;u.dst决定了套接字缓冲区skb数据如何进一步发送。</li>
+</ol>
+</li>
+<li>检查套接字发送队列是否为空，并返回队首的套接字缓冲区，存为skb。</li>
+<li>遍历套接字发送队列，调整数据长度。</li>
+<li>获得分片标志：df。</li>
+<li>获取TTL：ttl。</li>
+<li>将套接字缓冲区中的data所指区域强制转换成struct iphdr结构。<ol>
+<li>通过设置iph的信息：TOS、总长度、标志号等IP头部信息。</li>
+<li>计算校验和并设置IP头部的校验和字段，<code>ip_send_check()</code>。</li>
+</ol>
+</li>
+<li><code>skb-&gt;dst = dst_clone(&amp;rt-&gt;u.dst);</code>为套接字缓冲区指定了路由表项信息。<strong>从传输层到IP层的至关重要的一步。</strong><ol>
+<li>即，为数据包进入IP发送流程设置了具体方法（<strong>skb-&gt;dst-&gt;output = ip_output</strong>）。</li>
+<li><strong>此时，程序已经为dst_output配置完skb处理信息。</strong></li>
+</ol>
+</li>
+<li><code>err = NF_HOOK(PF_INET, NF_IP_LOCAL_OUT, skb, NULL, skb-&gt;dst-&gt;dev, dst_output)</code>。内核将从这里转到dst_output函数，通过ip_output函数进入IP发送流程。</li>
+</ol>
+<h3 id="从TCP发：ip-queue-xmit-skb-ipfragok-ip-output-c"><a href="#从TCP发：ip-queue-xmit-skb-ipfragok-ip-output-c" class="headerlink" title="从TCP发：ip_queue_xmit(skb,ipfragok) ip_output.c"></a>从TCP发：ip_queue_xmit(skb,ipfragok) <code>ip_output.c</code></h3><p>TCP模块调用该函数处理数据包，该函数与<code>ip_push_pending_frames()</code>相似：封装IP头部信息，进入IP层的发送流程。</p>
+<ol>
+<li>得到套接字缓冲区曾经记录的路由表项信息，写入变量rt中。</li>
+<li>确认套接字缓存的路由是否有效，并返回给变量rt，<code>__sk_dst_check(sk,0)</code>。</li>
+<li>建立TCP连接后，路由表项信息被保存在套接字缓冲区中。<ol>
+<li>如果没有缓存的路由表项，则查找路由表<code>ip_route_output_flow()</code>，获取路由表项信息，把路由信息返回给rt。</li>
+</ol>
+</li>
+<li><strong>重要步骤</strong>：为数据包进入IP发送流程设置具体方法：<code>skb-&gt;dst = dst_clone(&amp;rt-&gt;u.dst)</code>。</li>
+<li>在套接字缓冲区中为IP头部留下IP头部空间，<code>skb_push()</code>。</li>
+<li>设置IP头部协议信息。</li>
+<li>构建IP选项信息：给iph的各项元素赋值。</li>
+<li>设置IP包的头部标识符；设置IP校验和<code>ip_send_check()</code>。</li>
+<li><strong>此时，已经配置了必要的skb信息，为发送了足够的准备。</strong></li>
+<li><code>NF_HOOK(PF_INET, NF_IP_LOCAL_OUT, skb, NULL, rt-&gt;u.dst.dev,dst_output);</code>内核将从这里转到dst_output函数，通过ip_output函数进入IP层处理。</li>
+</ol>
+<h3 id="dst-output-skb-net-dst-h"><a href="#dst-output-skb-net-dst-h" class="headerlink" title="dst_output(skb) /net/dst.h"></a>dst_output(skb) <code>/net/dst.h</code></h3><p>该函数的任务是把套接字缓冲区(skb)中的数据发送出去，具体去向由路由表项的出口信息决定。</p>
+<p>dst_output通过struct dst_entry的output指针进入具体的IP发送流程。所以此前要指定具体函数，这一步在UDP的udp_sendmsg()完成或TCP的ip_queue_xmit()完成。</p>
+<p>此时skb-&gt;dst-&gt;output已经指向ip_output()函数。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* Output packet to network from transport.  */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">dst_output</span><span class="params">(struct sk_buff *skb)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> err;</span><br><span class="line">	<span class="keyword">for</span> (;;) &#123;</span><br><span class="line">		<span class="comment">// 这里实际调用了ip_output函数</span></span><br><span class="line">		err = skb-&gt;dst-&gt;output(&amp;skb);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (likely(err == <span class="number">0</span>))</span><br><span class="line">			<span class="keyword">return</span> err;</span><br><span class="line">		<span class="keyword">if</span> (unlikely(err != NET_XMIT_BYPASS))</span><br><span class="line">			<span class="keyword">return</span> err;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>参考：《Linux网络内核分析与开发》，肖宇峰、李昕、时岩编著。</p>
 </blockquote>
 ]]></content>
       <tags>
         <tag>Linux</tag>
+        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -198,9 +240,9 @@
 ]]></content>
       <tags>
         <tag>Linux</tag>
+        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -521,9 +563,9 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 <img src="/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/udp-socket.png" title="UDP协议数据传输流程">]]></content>
       <tags>
         <tag>Linux</tag>
-        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>
@@ -674,9 +716,9 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 ]]></content>
       <tags>
         <tag>Linux</tag>
-        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>
@@ -975,12 +1017,8 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 <h3 id="静态外部链接变量"><a href="#静态外部链接变量" class="headerlink" title="静态外部链接变量"></a>静态外部链接变量</h3><p>又称“外部存储类别”，属于该存储类别的变量成为<strong>外部变量</strong>，具有文件作用域、外部链接、静态存储器。</p>
 <p>外部变量的定义式说明在所有函数外面。</p>
 <p>使用关键字extern的情况：</p>
-<ul>
-<li><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a;<span class="comment">//外部变量a的定义式声明</span></span><br><span class="line"><span class="keyword">int</span> aa[<span class="number">100</span>];<span class="comment">//外部变量aa数组的定义式声明</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">extern</span> <span class="keyword">int</span> a;<span class="comment">//可选的再次声明</span></span><br><span class="line">    <span class="keyword">extern</span> <span class="keyword">int</span> aa[];<span class="comment">//可选的再次声明</span></span><br><span class="line">    <span class="comment">/*这两条完全可以省略。如果去掉extern就会成为自动变量。*/</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">extern</span> <span class="keyword">int</span> a;<span class="comment">//a与上下文的a是同一个a。</span></span><br><span class="line">    <span class="keyword">int</span> aa[<span class="number">2</span>];<span class="comment">//fun()里的自动变量</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*-------one.c--------*/</span></span><br><span class="line"><span class="keyword">int</span> b;<span class="comment">//外部变量b的定义式声明</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*-------two.c--------*/</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> b;<span class="comment">//b被定义在另一个文件，则必须声明extern</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*情况一*/</span></span><br><span class="line"><span class="keyword">int</span> a;<span class="comment">//外部变量a的定义式声明</span></span><br><span class="line"><span class="keyword">int</span> aa[<span class="number">100</span>];<span class="comment">//外部变量aa数组的定义式声明</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">extern</span> <span class="keyword">int</span> a;<span class="comment">//可选的再次声明</span></span><br><span class="line">    <span class="keyword">extern</span> <span class="keyword">int</span> aa[];<span class="comment">//可选的再次声明</span></span><br><span class="line">    <span class="comment">/*这两条完全可以省略。如果去掉extern就会成为自动变量。*/</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">extern</span> <span class="keyword">int</span> a;<span class="comment">//a与上下文的a是同一个a。</span></span><br><span class="line">    <span class="keyword">int</span> aa[<span class="number">2</span>];<span class="comment">//fun()里的自动变量</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*情况二*/</span></span><br><span class="line"><span class="comment">/*-------one.c--------*/</span></span><br><span class="line"><span class="keyword">int</span> b;<span class="comment">//外部变量b的定义式声明</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*-------two.c--------*/</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> b;<span class="comment">//b被定义在另一个文件，则必须声明extern</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="静态内部链接变量"><a href="#静态内部链接变量" class="headerlink" title="静态内部链接变量"></a>静态内部链接变量</h3><p>在所有函数外用static定义的变量，具有静态存储器、文件作用域和内部链接。</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> a=<span class="number">1</span>;<span class="comment">//内部链接的变量</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">extern</span> <span class="keyword">int</span> a;<span class="comment">//使用定义在别处的外部变量a，不是本文件的a。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="静态无链接变量（块作用域的静态变量）"><a href="#静态无链接变量（块作用域的静态变量）" class="headerlink" title="静态无链接变量（块作用域的静态变量）"></a>静态无链接变量（块作用域的静态变量）</h3><p>具有块作用域、无链接，但是具有静态存储期。</p>
