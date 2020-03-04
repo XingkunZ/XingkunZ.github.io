@@ -67,7 +67,7 @@
 <meta property="og:image" content="https://xingkunz.github.io/2020/01/01/Linux网络内核源码分析-套接字相关的数据结构和功能实现/image-20191220141837701.png">
 <meta property="og:image" content="https://xingkunz.github.io/2020/01/01/Linux网络内核源码分析-套接字相关的数据结构和功能实现/image-20200108195011023.PNG">
 <meta property="og:image" content="https://xingkunz.github.io/2020/01/01/Linux网络内核源码分析-套接字相关的数据结构和功能实现/image-20200108195011024.PNG">
-<meta property="og:updated_time" content="2020-02-20T07:53:25.563Z">
+<meta property="og:updated_time" content="2020-03-04T06:46:11.958Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux网络内核源码分析|套接字相关的数据结构和功能实现">
 <meta name="twitter:description" content="管理套接字的数据类型套接字缓冲区类型 struct sk_buff, struct sk_buff_head skbuff.h struct sk_buff是套接字缓冲区类型，用来管理网络数据包，为发/收的网络数据提供存储区域和操作方法。sk_buff数据类型贯穿数据传输全过程，是十分重要的数据结构。">
@@ -240,7 +240,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-20 15:53:25" itemprop="dateModified" datetime="2020-02-20T15:53:25+08:00">2020-02-20</time>
+                <time title="Modified: 2020-03-04 14:46:11" itemprop="dateModified" datetime="2020-03-04T14:46:11+08:00">2020-03-04</time>
               </span>
             
           
@@ -390,9 +390,6 @@
 <p>例，如果<code>sock-&gt;type=SOCK_STREAM</code>，那么内核会创建TCP协议的套接字，<code>sock-&gt;ops</code>提供INET协议族操作集，<code>sock-&gt;sk-&gt;sk_prot</code>将提供TCP协议操作集。通过查询inetsw链表，inet_create()得到记录传输层协议操作集的信息。</p>
 <p>针对TCP协议，查询到的结果是tcp_prot，传输协议操作集struct proto tcp_prot中记录了一系列TCP协议相关操作的函数，有关套接字初始化的函数为tcp_v4_init_sock()。</p>
 <h3 id="TCP协议套接字初始化函数-tcp-v4-init-sock"><a href="#TCP协议套接字初始化函数-tcp-v4-init-sock" class="headerlink" title="TCP协议套接字初始化函数 tcp_v4_init_sock()"></a>TCP协议套接字初始化函数 tcp_v4_init_sock()</h3><p>tcp_v4_init_sock()初始化套接字与TCP有关的数据，包括初始化TCP队列、传输定时器、发送窗口、慢启动窗口、拥塞窗口控制、数据包最小长度，以及sk相关参数：套接字状态、收发缓冲区、队列有关的字段。</p>
-<blockquote>
-<p>参考：《Linux网络内核分析与开发》，肖宇峰、李昕、时岩编著。</p>
-</blockquote>
 
     </div>
 
@@ -502,7 +499,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-count">16</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -511,7 +508,7 @@
       
       <div class="site-state-item site-state-tags">
         
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">tags</span>
         
       </div>

@@ -73,7 +73,7 @@
 <meta property="og:image" content="https://xingkunz.github.io/2019/12/20/Linux网络内核源码分析-重要数据结构/image-20191220174418888.png">
 <meta property="og:image" content="https://xingkunz.github.io/2019/12/20/Linux网络内核源码分析-重要数据结构/image-20191229180604542.png">
 <meta property="og:image" content="https://xingkunz.github.io/2019/12/20/Linux网络内核源码分析-重要数据结构/image-20191229181906396.png">
-<meta property="og:updated_time" content="2020-02-16T08:11:49.423Z">
+<meta property="og:updated_time" content="2020-03-04T06:45:41.377Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux网络内核源码分析|重要数据结构">
 <meta name="twitter:description" content="概述内核版本：linux-2.6.8.1linux目录解析网络内核布局套接字struct sk_buff, struct sk_buff_head skbuff.h">
@@ -246,7 +246,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-16 16:11:49" itemprop="dateModified" datetime="2020-02-16T16:11:49+08:00">2020-02-16</time>
+                <time title="Modified: 2020-03-04 14:45:41" itemprop="dateModified" datetime="2020-03-04T14:45:41+08:00">2020-03-04</time>
               </span>
             
           
@@ -378,9 +378,6 @@
 <p><strong>通知链注册事件函数notifier_chain_register(</strong>notifier_block列表,notifier_block待登记块<strong>)</strong>。可以向通知链中等级一个事件，事件发生时可以从notifier_block链表中找到该事件对应的元素，执行记录的函数。</p>
 <p><strong>通知链注销事件函数notifier_chain_unregister(</strong>notifier_block列表,notifier_block待注销块<strong>)</strong>。可以向通知链中注销一个事件。</p>
 <p>事件发生时，使用<strong>notifier_call_chain(通知链名，事件名，void*)</strong>。向某个通知链表发送消息，按顺序<strong>调用链表块中记录的函数</strong>。</p>
-<blockquote>
-<p>参考：《Linux网络内核分析与开发》，肖宇峰、李昕、时岩编著。</p>
-</blockquote>
 
     </div>
 
@@ -488,7 +485,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-count">16</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -497,7 +494,7 @@
       
       <div class="site-state-item site-state-tags">
         
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">tags</span>
         
       </div>

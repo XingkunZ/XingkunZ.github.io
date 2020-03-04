@@ -65,7 +65,7 @@
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://xingkunz.github.io/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/tcp-socket.png">
 <meta property="og:image" content="https://xingkunz.github.io/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/udp-socket.png">
-<meta property="og:updated_time" content="2020-02-16T08:12:58.444Z">
+<meta property="og:updated_time" content="2020-03-04T06:46:00.831Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux网络内核源码分析|套接字之收发数据、监听、连接、绑定">
 <meta name="twitter:description" content="INET套接字类型 SOCK_STREAM：采用TCP协议服务，提供可靠的双工顺序数据流。 SOCK_DGRAM：采用UDP协议服务，提供双工数据传送，不保证不丢失、不错序。 SOCK_RAW：未采用TCP/UDP协议，应用程序可通过该套接字与IP层交互数据。">
@@ -238,7 +238,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-16 16:12:58" itemprop="dateModified" datetime="2020-02-16T16:12:58+08:00">2020-02-16</time>
+                <time title="Modified: 2020-03-04 14:46:00" itemprop="dateModified" datetime="2020-03-04T14:46:00+08:00">2020-03-04</time>
               </span>
             
           
@@ -349,9 +349,6 @@
 <p>net/socket.c</p>
 </blockquote>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">asmlinkage <span class="keyword">long</span> <span class="title">sys_bind</span><span class="params">(<span class="keyword">int</span> fd, struct sockaddr __user *umyaddr, <span class="keyword">int</span> addrlen)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">socket</span> *<span class="title">sock</span>;</span></span><br><span class="line">	<span class="keyword">char</span> address[MAX_SOCK_ADDR];</span><br><span class="line">	<span class="keyword">int</span> err;</span><br><span class="line">    <span class="comment">//通过套接字描述符找到套接字对应的socket结构</span></span><br><span class="line">	<span class="keyword">if</span>((sock = sockfd_lookup(fd,&amp;err))!=<span class="literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">        <span class="comment">//将地址信息从用户空间复制到内核空间</span></span><br><span class="line">        <span class="keyword">if</span>((err=move_addr_to_kernel(umyaddr,addrlen,address))&gt;=<span class="number">0</span>) &#123;</span><br><span class="line">    err = security_socket_bind(sock, (struct sockaddr *)address, addrlen);</span><br><span class="line">			<span class="keyword">if</span> (err) &#123;</span><br><span class="line">				sockfd_put(sock);</span><br><span class="line">				<span class="keyword">return</span> err;</span><br><span class="line">			&#125;</span><br><span class="line">            <span class="comment">//根据套接字协议族调用绑定地址的函数</span></span><br><span class="line">            <span class="comment">//如果是INET套接字，则调用函数inet_bind()</span></span><br><span class="line">			err = sock-&gt;ops-&gt;bind(sock, (struct sockaddr *)address, addrlen);</span><br><span class="line">		&#125;</span><br><span class="line">		sockfd_put(sock);</span><br><span class="line">	&#125;			</span><br><span class="line">	<span class="keyword">return</span> err;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>参考：《Linux网络内核分析与开发》，肖宇峰、李昕、时岩编著。</p>
-</blockquote>
 <h1 id="附-TCP-UDP数据传输流程"><a href="#附-TCP-UDP数据传输流程" class="headerlink" title="附:TCP/UDP数据传输流程"></a>附:TCP/UDP数据传输流程</h1><img src="/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/tcp-socket.png" title="TCP协议数据传输流程">
 <img src="/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/udp-socket.png" title="UDP协议数据传输流程">
     </div>
@@ -462,7 +459,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-count">16</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -471,7 +468,7 @@
       
       <div class="site-state-item site-state-tags">
         
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">tags</span>
         
       </div>
