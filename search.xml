@@ -175,9 +175,9 @@
 ]]></content>
       <tags>
         <tag>Linux</tag>
-        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -341,9 +341,9 @@
 ]]></content>
       <tags>
         <tag>Linux</tag>
-        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -424,8 +424,8 @@
 <h2 id="编辑公式参考语法"><a href="#编辑公式参考语法" class="headerlink" title="编辑公式参考语法"></a>编辑公式参考语法</h2><a href="http://www.mohu.org/info/lshort-cn.pdf">常用数学符号的 LaTeX 表示方法</a>
 ]]></content>
       <tags>
-        <tag>博客</tag>
         <tag>hexo</tag>
+        <tag>博客</tag>
         <tag>教程</tag>
       </tags>
   </entry>
@@ -661,9 +661,9 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 <img src="/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/udp-socket.png" title="UDP协议数据传输流程">]]></content>
       <tags>
         <tag>Linux</tag>
+        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>
@@ -688,8 +688,8 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 <p>因为文件夹详细信息里显示的统一都是<code>PNG图片文件</code>，所以会很难察觉。气死我了……</p>
 ]]></content>
       <tags>
-        <tag>博客</tag>
         <tag>hexo</tag>
+        <tag>博客</tag>
         <tag>教程</tag>
       </tags>
   </entry>
@@ -811,9 +811,9 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 ]]></content>
       <tags>
         <tag>Linux</tag>
+        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>
@@ -881,7 +881,7 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 <p>安装内核模块：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make modules_install</span><br></pre></td></tr></table></figure>
 <p>就可以把已编译的模块安装到正确的主目录/lib/modules下。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">make install ;安装内</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">make install ;安装内核模块</span><br></pre></td></tr></table></figure>
 <p>这一步生成新内核的引导文件。重启系统：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
 <p>过程结束。</p>
@@ -1518,10 +1518,10 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 </ul>
 ]]></content>
       <tags>
-        <tag>博客</tag>
         <tag>hexo</tag>
-        <tag>github</tag>
+        <tag>博客</tag>
         <tag>教程</tag>
+        <tag>github</tag>
       </tags>
   </entry>
 </search>

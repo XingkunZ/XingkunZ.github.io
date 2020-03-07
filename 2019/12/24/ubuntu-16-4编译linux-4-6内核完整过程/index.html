@@ -63,7 +63,7 @@
 <meta property="og:site_name" content="KUN">
 <meta property="og:description" content="完整的编译过程大约会占用10GB的存储空间！谨慎！ 如果你已有环境基础，那么整个过程会大致耗时5h+! 版本说明环境版本Ubuntu版本查看方法：12345kun@ubuntu:~$ cat /etc/issueUbuntu 16.04.6 LTS \n \lkun@ubuntu:~$ cat /proc/versionLinux version 4.15.0-45-generic (build">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-30T17:00:22.575Z">
+<meta property="og:updated_time" content="2020-03-06T09:33:02.719Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ubuntu 16.04编译linux 4.6内核完整过程（含各种error解决方案）">
 <meta name="twitter:description" content="完整的编译过程大约会占用10GB的存储空间！谨慎！ 如果你已有环境基础，那么整个过程会大致耗时5h+! 版本说明环境版本Ubuntu版本查看方法：12345kun@ubuntu:~$ cat /etc/issueUbuntu 16.04.6 LTS \n \lkun@ubuntu:~$ cat /proc/versionLinux version 4.15.0-45-generic (build">
@@ -235,7 +235,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-12-31 01:00:22" itemprop="dateModified" datetime="2019-12-31T01:00:22+08:00">2019-12-31</time>
+                <time title="Modified: 2020-03-06 17:33:02" itemprop="dateModified" datetime="2020-03-06T17:33:02+08:00">2020-03-06</time>
               </span>
             
           
@@ -312,7 +312,7 @@
 <p>安装内核模块：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make modules_install</span><br></pre></td></tr></table></figure>
 <p>就可以把已编译的模块安装到正确的主目录/lib/modules下。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make install ;安装内</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make install ;安装内核模块</span><br></pre></td></tr></table></figure>
 <p>这一步生成新内核的引导文件。重启系统：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
 <p>过程结束。</p>
