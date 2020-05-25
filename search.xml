@@ -1,39 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Linux网络内核源码分析|数据链路层处理流程及PPP协议</title>
-    <url>/2020/03/04/Linux%E7%BD%91%E7%BB%9C%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B%E5%8F%8APPP%E5%8D%8F%E8%AE%AE/</url>
-    <content><![CDATA[<h1 id="数据链路层协议"><a href="#数据链路层协议" class="headerlink" title="数据链路层协议"></a>数据链路层协议</h1><p>数据链路层把物理层的比特流<strong>封装成数据帧</strong>，并进行<strong>差错控制</strong>和<strong>流速调节</strong>。</p><p>以太网是常见的局域网（LAN）。IEEE 802局域网标准是一个标准系列，主要规定了物理层和数据链路层两个层次。其中，将数据链路层分成<strong>逻辑链路控制（LLC）</strong>和<strong>介质访问控制（MAC）</strong>两个子层。</p><a id="more"></a>
-
-<img src="/2020/03/04/Linux网络内核源码分析-数据链路层处理流程及PPP协议/IEEE802.PNG" class="IEEE 802 局域网标准系列之间的关系">
-<p>LLC子层屏蔽传输介质、接口的差异，对任何协议的局域网都可靠，为网络层提供统一的服务接口。</p>
-<p>MAC子层为访问不同介质提供具体方法，包含从接入到传输介质有关的内容。</p>
-<h1 id="帧的发送与接收"><a href="#帧的发送与接收" class="headerlink" title="帧的发送与接收"></a>帧的发送与接收</h1><h2 id="设备初始化-net-dev-init-dev-c"><a href="#设备初始化-net-dev-init-dev-c" class="headerlink" title="设备初始化 net_dev_init() dev.c"></a>设备初始化 net_dev_init() <code>dev.c</code></h2><ol>
-<li>通过struct list_head类型变量ptype_all，为ETH_P_ALL类型数据包初始化上层协议处理方法，<code>INIT_LIST_HEAD(&amp;ptype_all)</code>。</li>
-<li>通过struct list_head类型变量ptype_base，为注册协议的数据包初始化上层协议处理方法：循环{<code>INIT_LIST_HEAD(&amp;ptype_base[i])</code>}。</li>
-<li>初始化设备名列表：<code>INIT_HLIST_HEAD(&amp;dev_name_head[i])</code>。</li>
-<li>初始化设备索引列表：<code>INIT_HLIST_HEAD(&amp;dev_index_head[i])</code>。</li>
-<li>为处理器初始化数据包接收队列：struct softnet_data *queue。<ol>
-<li>给queue赋值。</li>
-<li>注册处理接收数据包的方法。</li>
-</ol>
-</li>
-<li>为软中断NET_TX_SOFTIRQ注册终端处理程序net_tx_action：<code>open_softirq(NET_TX_SOFTIRQ, net_tx_action, NULL)</code>。</li>
-<li>为软中断NET_RX_SOFTIRQ注册中断处理程序net_rx_action：<code>open_softirq(NET_RX_SOFTIRQ, net_rx_action, NULL)</code>。</li>
-<li><code>hotcpu_notifier(dev_cpu_callback, 0);</code></li>
-<li><code>dst_init();</code></li>
-<li><code>dev_mcast_init();</code></li>
-</ol>
-<h2 id="帧的发送"><a href="#帧的发送" class="headerlink" title="帧的发送"></a>帧的发送</h2><p>数据包从网络设备驱动上层协议（例如：IP协议处理模块）传下来：函数<code>ip_finish_output2</code>通过邻居子系统的指针调用函数<code>dev_queue_xmit</code>进入数据链路层的帧的发送流程。</p>
-]]></content>
-      <tags>
-        <tag>Linux</tag>
-        <tag>网络</tag>
-        <tag>源码</tag>
-        <tag>PPP</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux网络内核源码分析|网络层之IP层处理</title>
     <url>/2020/02/25/Linux%E7%BD%91%E7%BB%9C%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%BD%91%E7%BB%9C%E5%B1%82%E4%B9%8BIP%E5%B1%82%E5%A4%84%E7%90%86/</url>
     <content><![CDATA[<h1 id="关于IPv4"><a href="#关于IPv4" class="headerlink" title="关于IPv4"></a>关于IPv4</h1><h2 id="IP简述"><a href="#IP简述" class="headerlink" title="IP简述"></a>IP简述</h2><p>IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。</p><p>IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。</p><a id="more"></a>
@@ -424,8 +391,8 @@
 <h2 id="编辑公式参考语法"><a href="#编辑公式参考语法" class="headerlink" title="编辑公式参考语法"></a>编辑公式参考语法</h2><a href="http://www.mohu.org/info/lshort-cn.pdf">常用数学符号的 LaTeX 表示方法</a>
 ]]></content>
       <tags>
-        <tag>hexo</tag>
         <tag>博客</tag>
+        <tag>hexo</tag>
         <tag>教程</tag>
       </tags>
   </entry>
@@ -688,8 +655,8 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 <p>因为文件夹详细信息里显示的统一都是<code>PNG图片文件</code>，所以会很难察觉。气死我了……</p>
 ]]></content>
       <tags>
-        <tag>hexo</tag>
         <tag>博客</tag>
+        <tag>hexo</tag>
         <tag>教程</tag>
       </tags>
   </entry>
@@ -834,8 +801,8 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 <img src="/2019/12/24/关于区块链的笔记/2.png">
 ]]></content>
       <tags>
-        <tag>笔记</tag>
         <tag>区块链</tag>
+        <tag>笔记</tag>
         <tag>POW</tag>
       </tags>
   </entry>
@@ -1387,8 +1354,8 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 </ul>
 ]]></content>
       <tags>
-        <tag>操作系统</tag>
         <tag>笔记</tag>
+        <tag>操作系统</tag>
       </tags>
   </entry>
   <entry>
@@ -1518,10 +1485,10 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 </ul>
 ]]></content>
       <tags>
-        <tag>hexo</tag>
         <tag>博客</tag>
-        <tag>教程</tag>
+        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>教程</tag>
       </tags>
   </entry>
 </search>
