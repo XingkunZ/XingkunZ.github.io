@@ -1,6 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Packetdrill使用方法，结合tcpdump监测</title>
+    <url>/2020/06/25/Packetdrill%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%8C%E7%BB%93%E5%90%88tcpdump%E7%9B%91%E6%B5%8B/</url>
+    <content><![CDATA[<h1 id="Packetdrill"><a href="#Packetdrill" class="headerlink" title="Packetdrill"></a>Packetdrill</h1><p><a href="https://blog.csdn.net/zhangmeimei_pku/article/details/79562879">细读P4论文(Programming Protocol-Independent Packet Processors)</a></p><p><a href="https://zhuanlan.zhihu.com/p/61593853">packetdrill是什么  入门demo</a></p><a id="more"></a>
+
+<h2 id="Install-and-Usage"><a href="#Install-and-Usage" class="headerlink" title="Install and Usage"></a>Install and Usage</h2><p>下载地址：<a href="https://github.com/google/packetdrill">https://github.com/google/packetdrill</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span> root</span><br><span class="line"><span class="meta">#</span> 需要下载flex,bison</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get upgrade</span><br><span class="line">sudo apt-get install flex bison</span><br><span class="line"><span class="meta">#</span> 解压代码，配置编译</span><br><span class="line">unzip packetdrill-master.zip</span><br><span class="line">cd packetdrill-master/gtests/net/packetdrill</span><br><span class="line">./configure &amp; make</span><br><span class="line"><span class="meta">#</span> 执行</span><br><span class="line">./packetdrill ./tests/linux/packetdrill/XXX.pkt</span><br></pre></td></tr></table></figure>
+<h2 id="添加环境变量-方便执行，不必须"><a href="#添加环境变量-方便执行，不必须" class="headerlink" title="添加环境变量(方便执行，不必须)"></a>添加环境变量(方便执行，不必须)</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim /root/.bashrc</span><br><span class="line"><span class="meta">#</span> 添加环境配置：在末尾添加代码</span><br><span class="line"><span class="meta">#</span> export PATH="/usr/local/packetdrill:$PATH"</span><br></pre></td></tr></table></figure>
+<p>将编译出的packetdrill可执行文件拷贝到/usr/local/bin目录下。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cp /home/kun/Downloads/packetdrill-master/gtests/net/packetdrill/packetdrill /usr/local/bin</span><br></pre></td></tr></table></figure>
+<h2 id="执行-tcpdump监测"><a href="#执行-tcpdump监测" class="headerlink" title="执行+tcpdump监测"></a>执行+tcpdump监测</h2><p>编写test.pkt文件：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3</span><br><span class="line">+0  setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0</span><br><span class="line">+0  bind(3, ..., ...) = 0</span><br><span class="line">+0  listen(3, 1) = 0</span><br><span class="line"></span><br><span class="line">//TCP three-way handshake</span><br><span class="line">+0  &lt; S 0:0(0) win 4000 &lt;mss 1000&gt;</span><br><span class="line">+0  &gt; S. 0:0(0) ack 1 &lt;...&gt;</span><br><span class="line">+.1 &lt; . 1:1(0) ack 1 win 1000</span><br><span class="line"></span><br><span class="line">+0 accept(3, ..., ...) = 4</span><br><span class="line"></span><br><span class="line">+0 &lt; P. 1:201(200) win 4000</span><br><span class="line">+0 &gt; . 1:1(0) ack 201</span><br></pre></td></tr></table></figure>
+<p>打开终端1，用tcpdump监测8080端口（bind默认绑定端口）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">root@ubuntu:~<span class="comment"># sudo tcpdump -i any port 8080 -nn </span></span><br><span class="line">tcpdump: verbose output suppressed, use -v or -vv <span class="keyword">for</span> full protocol decode</span><br><span class="line">listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes</span><br></pre></td></tr></table></figure>
+<p>打开终端2执行上面的pkt测试脚本：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">packetdrill test.pkt</span><br></pre></td></tr></table></figure>
+<p>这时终端1监测到的信息如下:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">13:33:36.573132 IP 192.0.2.1.49941 &gt; 192.168.22.185.8080: Flags [S], seq 0, win 4000, options [mss 1000], length 0</span><br><span class="line">13:33:36.573542 IP 192.168.22.185.8080 &gt; 192.0.2.1.49941: Flags [S.], seq 815367284, ack 1, win 29200, options [mss 1460], length 0</span><br><span class="line">13:33:36.675100 IP 192.0.2.1.49941 &gt; 192.168.22.185.8080: Flags [.], ack 1, win 1000, length 0</span><br><span class="line">13:33:36.675187 IP 192.0.2.1.49941 &gt; 192.168.22.185.8080: Flags [P.], seq 1:201, ack 0, win 4000, length 200: HTTP</span><br><span class="line">13:33:36.675204 IP 192.168.22.185.8080 &gt; 192.0.2.1.49941: Flags [.], ack 201, win 30000, length 0</span><br><span class="line">13:33:36.675997 IP 192.168.22.185.8080 &gt; 192.0.2.1.49941: Flags [R.], seq 1, ack 201, win 30000, length 0</span><br><span class="line">13:33:36.676023 IP 192.0.2.1.49941 &gt; 192.168.22.185.8080: Flags [R.], seq 201, ack 0, win 4000, length 0</span><br><span class="line">^C</span><br><span class="line">7 packets captured</span><br><span class="line">7 packets received by filter</span><br><span class="line">0 packets dropped by kernel</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>测试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>gcov,lcov使用方法|普通程序测试和linux内核测试</title>
+    <url>/2020/06/25/gcov-lcov%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95-%E6%99%AE%E9%80%9A%E7%A8%8B%E5%BA%8F%E6%B5%8B%E8%AF%95%E5%92%8Clinux%E5%86%85%E6%A0%B8%E6%B5%8B%E8%AF%95/</url>
+    <content><![CDATA[<h1 id="gcov"><a href="#gcov" class="headerlink" title="gcov"></a>gcov</h1><h2 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install gcov</span><br></pre></td></tr></table></figure><h2 id="普通程序"><a href="#普通程序" class="headerlink" title="普通程序"></a>普通程序</h2><p>当前目录：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">root@ubuntu:/home/kun/Documents/test#</span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
+<p>编译源文件test，生成twonumber可执行文件。**</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -fprofile-arcs -ftest-coverage -o twonumber test.c</span><br></pre></td></tr></table></figure>
+<p>生成：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">test.gcno  twonumber</span><br></pre></td></tr></table></figure>
+<p>.gcno是由<code>-ftest-coverage</code>产生的，它包含了重建基本块图和相应的块的源码的行号的信息。</p>
+<p><strong>执行twonumber。</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">./twonumber</span><br></pre></td></tr></table></figure>
+<p>生成：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">test.gcda</span><br></pre></td></tr></table></figure>
+<p>.gcda是由加了<code>-fprofile-arcs</code>编译参数的编译后的文件运行所产生的，它包含了弧跳变的次数和其他的概要信息（而gcda只能在程序运行完毕后才能产生的）</p>
+<p><strong>Gcov执行函数覆盖、语句覆盖和分支覆盖。</strong>有几个.c就执行几次。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcov test.c #默认保存覆盖率文件为test.c.gcov</span><br><span class="line">gcov test.c&gt;&gt;test_cov #保存覆盖率文件为test_cov</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">File 'test.c'</span><br><span class="line">Lines executed:51.85% of 27</span><br><span class="line">Creating 'test.c.gcov'</span><br></pre></td></tr></table></figure>
+<p>生成覆盖率文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">test.c.gcov</span><br></pre></td></tr></table></figure>
+<p>查看该文件可以看到代码执行情况。</p>
+<p><a href="https://blog.csdn.net/yukin_xue/article/details/7653482">https://blog.csdn.net/yukin_xue/article/details/7653482</a></p>
+<p><strong>注：一次编译后，执行多次（若执行路径不同），gcov统计出的信息也不同。</strong></p>
+<h2 id="内核覆盖率"><a href="#内核覆盖率" class="headerlink" title="内核覆盖率"></a>内核覆盖率</h2><p>进入内核源文件（这是当初gcc编译内核的位置）：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd /usr/src/linux-4.6/</span><br></pre></td></tr></table></figure>
+<p><strong>执行gcov进行覆盖统计，生成”gcov”文件</strong>。gcov文件需要有gcda和gcno文件（执行的统计信息）的支持才能产生。所需要用到的统计信息放在/sys/kernel/debug/gcov/{内核源文件路径}/kernel/gcov/，因此需要-o。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcov kernel/gcov/base.c -o /sys/kernel/debug/gcov/usr/src/linux-4.6/kernel/gcov/</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">File 'kernel/gcov/base.c'</span><br><span class="line">Lines executed:68.18% of 44</span><br><span class="line">Creating 'base.c.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/module.h'</span><br><span class="line">Lines executed:100.00% of 5</span><br><span class="line">Creating 'module.h.gcov'</span><br></pre></td></tr></table></figure>
+<p>‘base.c.gcov’以及其<strong>包含文件</strong>的覆盖率文件”.gcov”都会生成在<strong>用户当前所在目录</strong>下。</p>
+<p><strong>注意</strong>：gcov命令依旧只能在当初<strong>编译的目录下</strong>进行，否则会找不到源码文件，生成的.gcov文件是残缺的。也就是说<strong>只能在编译的目录下生成完整的gcov文件。</strong></p>
+<p>尝试查看其他文件的覆盖内容：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcov net/ipv4/xfrm4_state.c -o /sys/kernel/debug/gcov/usr/src/linux-4.6/net/ipv4/</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">File 'include/net/xfrm.h'</span><br><span class="line">Lines executed:0.00% of 13</span><br><span class="line">Creating 'xfrm.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'net/ipv4/xfrm4_state.c'</span><br><span class="line">Lines executed:7.50% of 40</span><br><span class="line">Creating 'xfrm4_state.c.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/skbuff.h'</span><br><span class="line">Lines executed:0.00% of 1</span><br><span class="line">Creating 'skbuff.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/net_namespace.h'</span><br><span class="line">Lines executed:0.00% of 1</span><br><span class="line">Creating 'net_namespace.h.gcov'</span><br></pre></td></tr></table></figure>
+<p>此时，<code>xfrm4_state.c.gcov、xfrm.h.gcov、net_namespace.h.gcov、skbuff.h.gcov</code>在编译目录下生成。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">root@ubuntu:/usr/src/linux-4.6# ls</span><br><span class="line">arch           Kconfig               scripts</span><br><span class="line">block          kernel                security</span><br><span class="line">certs          lib                   skbuff.h.gcov</span><br><span class="line">COPYING        MAINTAINERS           sound</span><br><span class="line">CREDITS        Makefile              System.map</span><br><span class="line">crypto         mm                    tools</span><br><span class="line">Documentation  modules.builtin       usr</span><br><span class="line">drivers        modules.order         virt</span><br><span class="line">firmware       Module.symvers        vmlinux</span><br><span class="line">fs             net                   vmlinux.o</span><br><span class="line">include        net_namespace.h.gcov  xfrm4_state.c.gcov</span><br><span class="line">init           README                xfrm.h.gcov</span><br><span class="line">ipc            REPORTING-BUGS</span><br><span class="line">Kbuild         samples</span><br></pre></td></tr></table></figure>
+<h3 id="net-ipv4-icmp-c"><a href="#net-ipv4-icmp-c" class="headerlink" title="net/ipv4/icmp.c"></a>net/ipv4/icmp.c</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcov net/ipv4/icmp.c -o /sys/kernel/debug/gcov/usr/src/linux-4.6/net/ipv4/</span><br><span class="line">File 'net/ipv4/icmp.c'</span><br><span class="line">Lines executed:61.14% of 332</span><br><span class="line">Creating 'icmp.c.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/l3mdev.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'l3mdev.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/inetpeer.h'</span><br><span class="line">Lines executed:0.00% of 4</span><br><span class="line">Creating 'inetpeer.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/sock.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'sock.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'arch/x86/include/asm/bitops.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'bitops.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/cpumask.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'cpumask.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/inet_common.h'</span><br><span class="line">Lines executed:100.00% of 2</span><br><span class="line">Creating 'inet_common.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/skbuff.h'</span><br><span class="line">Lines executed:52.94% of 51</span><br><span class="line">Creating 'skbuff.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/net_namespace.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'net_namespace.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/xfrm.h'</span><br><span class="line">Lines executed:72.73% of 11</span><br><span class="line">Creating 'xfrm.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'arch/x86/include/asm/atomic64_64.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'atomic64_64.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/compiler.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'compiler.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/slab.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'slab.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/route.h'</span><br><span class="line">Lines executed:33.33% of 9</span><br><span class="line">Creating 'route.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/ip.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'ip.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/err.h'</span><br><span class="line">Lines executed:66.67% of 3</span><br><span class="line">Creating 'err.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/dst.h'</span><br><span class="line">Lines executed:14.29% of 7</span><br><span class="line">Creating 'dst.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/spinlock.h'</span><br><span class="line">Lines executed:66.67% of 3</span><br><span class="line">Creating 'spinlock.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/ip_fib.h'</span><br><span class="line">Lines executed:100.00% of 2</span><br><span class="line">Creating 'ip_fib.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/jhash.h'</span><br><span class="line">Lines executed:100.00% of 7</span><br><span class="line">Creating 'jhash.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'arch/x86/include/asm/checksum_64.h'</span><br><span class="line">Lines executed:100.00% of 5</span><br><span class="line">Creating 'checksum_64.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/checksum.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'checksum.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/bitops.h'</span><br><span class="line">Lines executed:50.00% of 2</span><br><span class="line">Creating 'bitops.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'arch/x86/include/asm/paravirt.h'</span><br><span class="line">Lines executed:0.00% of 1</span><br><span class="line">Creating 'paravirt.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/spinlock_api_smp.h'</span><br><span class="line">Lines executed:0.00% of 1</span><br><span class="line">Creating 'spinlock_api_smp.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'arch/x86/include/asm/preempt.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'preempt.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/bottom_half.h'</span><br><span class="line">Lines executed:50.00% of 2</span><br><span class="line">Creating 'bottom_half.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'arch/x86/include/asm/atomic.h'</span><br><span class="line">Lines executed:0.00% of 1</span><br><span class="line">Creating 'atomic.h.gcov'</span><br></pre></td></tr></table></figure>
+<p>执行了一个ping命令后，再次查看覆盖率：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcov net/ipv4/icmp.c -o /sys/kernel/debug/gcov/usr/src/linux-4.6/net/ipv4/</span><br><span class="line">File 'net/ipv4/icmp.c'</span><br><span class="line">Lines executed:61.75% of 332</span><br><span class="line">Creating 'icmp.c.gcov'</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>icmp.c的覆盖率有变化。</p>
+<h1 id="lcov"><a href="#lcov" class="headerlink" title="lcov"></a>lcov</h1><h2 id="下载安装-1"><a href="#下载安装-1" class="headerlink" title="下载安装"></a>下载安装</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install lcov</span><br></pre></td></tr></table></figure>
+<h2 id="普通程序-1"><a href="#普通程序-1" class="headerlink" title="普通程序"></a>普通程序</h2><p>当前目录：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">root@ubuntu:/home/kun/Documents/test#</span><br></pre></td></tr></table></figure>
+<p>已经编译过：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">test  test.c  test.gcda  test.gcno  test.h</span><br></pre></td></tr></table></figure>
+<p>扫描指定目录下的.gcno文件，生成<strong>基准数据文件</strong>，此处起名init.info：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> -c捕获,收集运行后所产生的信息 -i初始化 -d工作目录 -o输出文件</span></span><br><span class="line">lcov -c -i -d [源码工作目录] -o [基准数据文件名]</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">lcov -c -i -d ./ -o init.info</span><br><span class="line">Capturing coverage data from ./</span><br><span class="line">Found gcov version: 5.4.0</span><br><span class="line">Scanning ./ for .gcno files ...</span><br><span class="line">Found 1 graph files in ./</span><br><span class="line">Processing test.gcno</span><br><span class="line">Finished .info-file creation</span><br></pre></td></tr></table></figure>
+<p><strong>执行程序</strong>：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">./test</span><br></pre></td></tr></table></figure>
+<p>扫描指定目录下的.gcda文件，生成<strong>覆盖率文件</strong>，此处起名cover.info：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">lcov -c -d ./ -o cover.info</span><br><span class="line">Capturing coverage data from ./</span><br><span class="line">Found gcov version: 5.4.0</span><br><span class="line">Scanning ./ for .gcda files ...</span><br><span class="line">Found 1 data files in ./</span><br><span class="line">Processing test.gcda</span><br><span class="line">Finished .info-file creation</span><br></pre></td></tr></table></figure>
+<p>合并<strong>基准数据文件</strong>和<strong>覆盖率文件</strong>，生成一个总数据文件，total.info：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> -a合并 [文件名之一]</span></span><br><span class="line">lcov -a init.info -a cover.info -o total.info</span><br><span class="line">Combining tracefiles.</span><br><span class="line">Reading tracefile init.info</span><br><span class="line">Reading tracefile cover.info</span><br><span class="line">Writing data to total.info</span><br><span class="line">Summary coverage rate:</span><br><span class="line">  lines......: 64.9% (24 of 37 lines)</span><br><span class="line">  functions..: 80.0% (4 of 5 functions)</span><br><span class="line">  branches...: no data found</span><br></pre></td></tr></table></figure>
+<p>如果有不需要的信息可以删掉（可省略这步）：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> --remove 删除统计信息中如下的代码或文件，支持正则</span></span><br><span class="line">lcov --remove total.info '*/usr/include/*' -o total.info</span><br></pre></td></tr></table></figure>
+<p>通过总数据文件生成html文件：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> -o 输出的文件夹</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> --legend 简单的统计信息说明</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> --title 项目名称，最后会出现在html页里<span class="built_in">test</span>一项</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> --prefix 将要生成的html文件路径（基于[输出的文件夹]）</span></span><br><span class="line">genhtml -o cover_report --legend --title "lcov-test" --prefix=./ total.info</span><br></pre></td></tr></table></figure>
+<p>生成的文件：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ls</span><br><span class="line">cover.info    init.info  test.c     test.gcno  total.info</span><br><span class="line">cover_report  test       test.gcda  test.h</span><br></pre></td></tr></table></figure>
+<p>cover_report/下，浏览器打开<strong>index.html文件</strong>则可以看到结果:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ls</span><br><span class="line">amber.png    glass.png   index-sort-f.html  snow.png</span><br><span class="line">emerald.png  home        index-sort-l.html  updown.png</span><br><span class="line">gcov.css     index.html  ruby.png</span><br></pre></td></tr></table></figure>
+<p><strong>常用参数</strong>：</p>
+<ol>
+<li>-d 项目路径，即.gcda .gcno所在的路径</li>
+<li>-a 合并（归并）多个lcov生成的info文件</li>
+<li>-c 捕获，也即收集代码运行后所产生的统计计数信息</li>
+<li>—external 捕获其它目录产生的统计计数文件</li>
+<li>-i/—initial 初始化所有的覆盖率信息，作为基准数据</li>
+<li>-o 生成处理后的文件</li>
+<li>-r/—remove 移除不需要关注的覆盖率信息文件</li>
+<li>-z 重置所有执行程序所产生的统计信息为0</li>
+</ol>
+<h2 id="内核覆盖率-1"><a href="#内核覆盖率-1" class="headerlink" title="内核覆盖率"></a>内核覆盖率</h2><p><a href="https://github.com/linux-test-project/lcov">linux-test-project</a></p>
+<p>As root:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">lcov --zerocounters</span><br></pre></td></tr></table></figure>
+<p><strong>捕捉当前覆盖状态</strong>，存于一个文件（需要等几分钟）：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">lcov -c -o lcov_res/kernel.info</span><br><span class="line">...</span><br><span class="line">Processing crypto/gf128mul.gcda</span><br><span class="line">Processing crypto/gcm.gcda</span><br><span class="line">Processing crypto/ghash-generic.gcda</span><br><span class="line">Finished .info-file creation</span><br><span class="line">Removing temporary directories.</span><br></pre></td></tr></table></figure>
+<p><strong>生成html输出</strong>。读当前文件/lcov_res/kernel.info，在当前目录/cover_report/下生成html文件。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">genhtml -o cover_report --legend --title "kernel_cov" --prefix=./ lcov_res/kernel.info</span><br><span class="line">...</span><br><span class="line">Processing file /usr/src/linux-4.6/sound/pci/ens1370.c</span><br><span class="line">Processing file /usr/src/linux-4.6/sound/pci/ac97/ac97_pcm.c</span><br><span class="line">Processing file /usr/src/linux-4.6/sound/pci/ac97/ac97_patch.c</span><br><span class="line">Processing file /usr/src/linux-4.6/sound/pci/ac97/ac97_codec.c</span><br><span class="line">Processing file /usr/src/linux-4.6/sound/pci/ac97/ac97_proc.c</span><br><span class="line">Writing directory view page.</span><br><span class="line">Overall coverage rate:</span><br><span class="line">  lines......: 7.0% (42498 of 605635 lines)</span><br><span class="line">  functions..: 8.7% (4784 of 54929 functions)</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>测试</tag>
+        <tag>gcov/lcov</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux网络内核源码分析|网络层之IP层处理</title>
     <url>/2020/02/25/Linux%E7%BD%91%E7%BB%9C%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%BD%91%E7%BB%9C%E5%B1%82%E4%B9%8BIP%E5%B1%82%E5%A4%84%E7%90%86/</url>
     <content><![CDATA[<h1 id="关于IPv4"><a href="#关于IPv4" class="headerlink" title="关于IPv4"></a>关于IPv4</h1><h2 id="IP简述"><a href="#IP简述" class="headerlink" title="IP简述"></a>IP简述</h2><p>IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。</p><p>IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。</p><a id="more"></a>
@@ -142,9 +251,9 @@
 ]]></content>
       <tags>
         <tag>Linux</tag>
+        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -308,9 +417,9 @@
 ]]></content>
       <tags>
         <tag>Linux</tag>
+        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -391,8 +500,8 @@
 <h2 id="编辑公式参考语法"><a href="#编辑公式参考语法" class="headerlink" title="编辑公式参考语法"></a>编辑公式参考语法</h2><a href="http://www.mohu.org/info/lshort-cn.pdf">常用数学符号的 LaTeX 表示方法</a>
 ]]></content>
       <tags>
-        <tag>博客</tag>
         <tag>hexo</tag>
+        <tag>博客</tag>
         <tag>教程</tag>
       </tags>
   </entry>
@@ -628,9 +737,9 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 <img src="/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/udp-socket.png" title="UDP协议数据传输流程">]]></content>
       <tags>
         <tag>Linux</tag>
-        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>
@@ -655,8 +764,8 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 <p>因为文件夹详细信息里显示的统一都是<code>PNG图片文件</code>，所以会很难察觉。气死我了……</p>
 ]]></content>
       <tags>
-        <tag>博客</tag>
         <tag>hexo</tag>
+        <tag>博客</tag>
         <tag>教程</tag>
       </tags>
   </entry>
@@ -778,9 +887,9 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 ]]></content>
       <tags>
         <tag>Linux</tag>
-        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>
@@ -1485,10 +1594,10 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 </ul>
 ]]></content>
       <tags>
-        <tag>博客</tag>
         <tag>hexo</tag>
-        <tag>github</tag>
+        <tag>博客</tag>
         <tag>教程</tag>
+        <tag>github</tag>
       </tags>
   </entry>
 </search>
