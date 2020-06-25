@@ -3,8 +3,8 @@
   <entry>
     <title>Packetdrill使用方法，结合tcpdump监测</title>
     <url>/2020/06/25/Packetdrill%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%8C%E7%BB%93%E5%90%88tcpdump%E7%9B%91%E6%B5%8B/</url>
-    <content><![CDATA[<h1 id="Packetdrill"><a href="#Packetdrill" class="headerlink" title="Packetdrill"></a>Packetdrill</h1><p><a href="https://blog.csdn.net/zhangmeimei_pku/article/details/79562879">细读P4论文(Programming Protocol-Independent Packet Processors)</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/61593853">packetdrill是什么  入门demo</a></p>
+    <content><![CDATA[<h1 id="Packetdrill"><a href="#Packetdrill" class="headerlink" title="Packetdrill"></a>Packetdrill</h1><p><a href="https://blog.csdn.net/zhangmeimei_pku/article/details/79562879">细读P4论文(Programming Protocol-Independent Packet Processors)</a></p><p><a href="https://zhuanlan.zhihu.com/p/61593853">packetdrill是什么  入门demo</a></p><a id="more"></a>
+
 <h2 id="Install-and-Usage"><a href="#Install-and-Usage" class="headerlink" title="Install and Usage"></a>Install and Usage</h2><p>下载地址：<a href="https://github.com/google/packetdrill">https://github.com/google/packetdrill</a></p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span> root</span><br><span class="line"><span class="meta">#</span> 需要下载flex,bison</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get upgrade</span><br><span class="line">sudo apt-get install flex bison</span><br><span class="line"><span class="meta">#</span> 解压代码，配置编译</span><br><span class="line">unzip packetdrill-master.zip</span><br><span class="line">cd packetdrill-master/gtests/net/packetdrill</span><br><span class="line">./configure &amp; make</span><br><span class="line"><span class="meta">#</span> 执行</span><br><span class="line">./packetdrill ./tests/linux/packetdrill/XXX.pkt</span><br></pre></td></tr></table></figure>
 <h2 id="添加环境变量-方便执行，不必须"><a href="#添加环境变量-方便执行，不必须" class="headerlink" title="添加环境变量(方便执行，不必须)"></a>添加环境变量(方便执行，不必须)</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim /root/.bashrc</span><br><span class="line"><span class="meta">#</span> 添加环境配置：在末尾添加代码</span><br><span class="line"><span class="meta">#</span> export PATH="/usr/local/packetdrill:$PATH"</span><br></pre></td></tr></table></figure>
@@ -26,9 +26,9 @@
   <entry>
     <title>gcov,lcov使用方法|普通程序测试和linux内核测试</title>
     <url>/2020/06/25/gcov-lcov%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95-%E6%99%AE%E9%80%9A%E7%A8%8B%E5%BA%8F%E6%B5%8B%E8%AF%95%E5%92%8Clinux%E5%86%85%E6%A0%B8%E6%B5%8B%E8%AF%95/</url>
-    <content><![CDATA[<h1 id="gcov"><a href="#gcov" class="headerlink" title="gcov"></a>gcov</h1><h2 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install gcov</span><br></pre></td></tr></table></figure>
-<h2 id="普通程序"><a href="#普通程序" class="headerlink" title="普通程序"></a>普通程序</h2><p>当前目录：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">root@ubuntu:/home/kun/Documents/test#</span><br></pre></td></tr></table></figure>
+    <content><![CDATA[<h1 id="gcov"><a href="#gcov" class="headerlink" title="gcov"></a>gcov</h1><h2 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install gcov</span><br></pre></td></tr></table></figure><h2 id="普通程序"><a href="#普通程序" class="headerlink" title="普通程序"></a>普通程序</h2><p>当前目录：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">root@ubuntu:/home/kun/Documents/test#</span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
 <p>编译源文件test，生成twonumber可执行文件。</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -fprofile-arcs -ftest-coverage -o twonumber test.c</span><br></pre></td></tr></table></figure>
 <p>生成以下两个文件：</p>
@@ -112,8 +112,8 @@
   <entry>
     <title>Linux网络内核源码分析|网络层之IP层处理</title>
     <url>/2020/02/25/Linux%E7%BD%91%E7%BB%9C%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%BD%91%E7%BB%9C%E5%B1%82%E4%B9%8BIP%E5%B1%82%E5%A4%84%E7%90%86/</url>
-    <content><![CDATA[<h1 id="关于IPv4"><a href="#关于IPv4" class="headerlink" title="关于IPv4"></a>关于IPv4</h1><h2 id="IP简述"><a href="#IP简述" class="headerlink" title="IP简述"></a>IP简述</h2><p>IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。</p>
-<p>IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。</p>
+    <content><![CDATA[<h1 id="关于IPv4"><a href="#关于IPv4" class="headerlink" title="关于IPv4"></a>关于IPv4</h1><h2 id="IP简述"><a href="#IP简述" class="headerlink" title="IP简述"></a>IP简述</h2><p>IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。</p><p>IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。</p><a id="more"></a>
+
 <h2 id="IPv4数据包"><a href="#IPv4数据包" class="headerlink" title="IPv4数据包"></a>IPv4数据包</h2><img src="/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/ip数据包.PNG">
 <p>一个数IPv4数据包由头部和数据构成，数据中记录了传输层信息内容。</p>
 <h1 id="IPv4模块处理流程"><a href="#IPv4模块处理流程" class="headerlink" title="IPv4模块处理流程"></a>IPv4模块处理流程</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>从传输层到IP层发送数据包：</strong></p>
@@ -259,10 +259,10 @@
   <entry>
     <title>Linux网络内核源码分析|传输层之UDP处理过程</title>
     <url>/2020/02/16/Linux%E7%BD%91%E7%BB%9C%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BC%A0%E8%BE%93%E5%B1%82%E4%B9%8BUDP%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B/</url>
-    <content><![CDATA[<h1 id="关于UDP"><a href="#关于UDP" class="headerlink" title="关于UDP"></a>关于UDP</h1><h2 id="UDP数据包"><a href="#UDP数据包" class="headerlink" title="UDP数据包"></a>UDP数据包</h2><img src="/2020/02/16/Linux网络内核源码分析-传输层之UDP处理过程/UDP数据包.PNG">
-<p>source/dest：长16位，取值范围1~65535。</p>
-<p>len：有效负载和UDP数据报头的总长度，单位为字节。</p>
-<h2 id="UDP初始化"><a href="#UDP初始化" class="headerlink" title="UDP初始化"></a>UDP初始化</h2><p>UDP和其他核心协议都是在启动阶段通过方法<code>inet_init()</code>来初始化的。</p>
+    <content><![CDATA[<h1 id="关于UDP"><a href="#关于UDP" class="headerlink" title="关于UDP"></a>关于UDP</h1><h2 id="UDP数据包"><a href="#UDP数据包" class="headerlink" title="UDP数据包"></a>UDP数据包</h2><img src="/2020/02/16/Linux网络内核源码分析-传输层之UDP处理过程/UDP数据包.PNG"><p>source/dest：长16位，取值范围1~65535。</p><p>len：有效负载和UDP数据报头的总长度，单位为字节。</p><h2 id="UDP初始化"><a href="#UDP初始化" class="headerlink" title="UDP初始化"></a>UDP初始化</h2><p>UDP和其他核心协议都是在启动阶段通过方法<code>inet_init()</code>来初始化的。</p><a id="more"></a>
+
+
+
 <p>定义对象udp_protocol，用<code>inet_add_protocol()</code>添加。</p>
 <p>内核还提供了UDP传输层操作集：<code>struct proto udp_prot{...}</code>，用<code>proto_register()</code>注册。</p>
 <h1 id="UDP模块处理流程"><a href="#UDP模块处理流程" class="headerlink" title="UDP模块处理流程"></a>UDP模块处理流程</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>回顾套接字发送数据的流程，见<a href="https://xingkunz.github.io/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/#more">套接字之收发数据、监听、连接、绑定</a>：</p>
@@ -425,8 +425,8 @@
   <entry>
     <title>计科学生找工作的简洁指南</title>
     <url>/2020/02/07/%E8%AE%A1%E7%A7%91%E5%AD%A6%E7%94%9F%E6%89%BE%E5%B7%A5%E4%BD%9C%E7%9A%84%E7%AE%80%E6%B4%81%E6%8C%87%E5%8D%97/</url>
-    <content><![CDATA[<h2 id="做简历"><a href="#做简历" class="headerlink" title="做简历"></a>做简历</h2><p><strong>简历信息的筛选原则（建议）</strong>：挑重点写，设置在简历上的内容都是为了体现自己的品质和能力。</p>
-<p><strong>措辞方面</strong>：表达简洁、清晰、诚实，尽量规避使用”精通”和”熟练”，重点可加粗。</p>
+    <content><![CDATA[<h2 id="做简历"><a href="#做简历" class="headerlink" title="做简历"></a>做简历</h2><p><strong>简历信息的筛选原则（建议）</strong>：挑重点写，设置在简历上的内容都是为了体现自己的品质和能力。</p><p><strong>措辞方面</strong>：表达简洁、清晰、诚实，尽量规避使用”精通”和”熟练”，重点可加粗。</p><a id="more"></a>
+
 <p><strong>内容</strong>：</p>
 <ul>
 <li>有<strong>目标职位相关、专业的实习经历</strong>最好，清楚地表达在实习中所做的成果和收获；</li>
@@ -481,9 +481,9 @@
   <entry>
     <title>hexo|解决博客渲染公式的问题</title>
     <url>/2020/01/13/hexo-%E8%A7%A3%E5%86%B3%E5%8D%9A%E5%AE%A2%E6%B8%B2%E6%9F%93%E5%85%AC%E5%BC%8F%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>常用的Markdown编辑器都会集成<a href="https://link.jianshu.com/?t=https%3A%2F%2Fwww.mathjax.org%2F">Mathjax</a>，用来渲染文档中的类Latex格式书写的数学公式。</p>
-<h2 id="更换Hexo的markdown渲染引擎"><a href="#更换Hexo的markdown渲染引擎" class="headerlink" title="更换Hexo的markdown渲染引擎"></a>更换Hexo的markdown渲染引擎</h2><p>在<code>博客目录</code>下执行：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm uninstall hexo-renderer-marked --save</span><br><span class="line">npm install hexo-renderer-kramed --save</span><br></pre></td></tr></table></figure>
+    <content><![CDATA[<p>常用的Markdown编辑器都会集成<a href="https://link.jianshu.com/?t=https%3A%2F%2Fwww.mathjax.org%2F">Mathjax</a>，用来渲染文档中的类Latex格式书写的数学公式。</p><h2 id="更换Hexo的markdown渲染引擎"><a href="#更换Hexo的markdown渲染引擎" class="headerlink" title="更换Hexo的markdown渲染引擎"></a>更换Hexo的markdown渲染引擎</h2><p>在<code>博客目录</code>下执行：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm uninstall hexo-renderer-marked --save</span><br><span class="line">npm install hexo-renderer-kramed --save</span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
 <h2 id="在主题配置中开启mathjax开关"><a href="#在主题配置中开启mathjax开关" class="headerlink" title="在主题配置中开启mathjax开关"></a>在主题配置中开启mathjax开关</h2><p>在<code>博客目录/themes/你用的主题/_config.yml</code>文件中，开启math支持，enable置为true：</p>
 <figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Math Formulas Render Support</span></span><br><span class="line"><span class="attr">math:</span></span><br><span class="line"><span class="attr">  enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="comment"># 默认加载mathjax,katex渲染</span></span><br><span class="line"><span class="attr">  per_page:</span> <span class="literal">true</span></span><br><span class="line">  <span class="comment"># 此选项开启表示每页博客是否使用mathjax是单独指定的。</span></span><br><span class="line">  <span class="comment"># 单独指定需要公式渲染的博客，可以提高平均的加载速率。</span></span><br></pre></td></tr></table></figure>
 <p>开启mathjax支持，enable置为true：</p>
@@ -510,8 +510,8 @@
     <url>/2020/01/12/%E7%AC%A6%E5%8F%B7%E6%89%A7%E8%A1%8C%E6%B5%8B%E8%AF%95-%E6%A6%82%E8%BF%B0/</url>
     <content><![CDATA[<blockquote>
 <p>Reference: Symbolic Execution for Software Testing: Three Decades Later</p>
-</blockquote>
-<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>符号执行是一种可生成<strong>高覆盖测试用例</strong>、在复杂程序中寻找<strong>深层错误</strong>的有效技术；是一种流行的<strong>程序分析技术</strong>。</p>
+</blockquote><h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>符号执行是一种可生成<strong>高覆盖测试用例</strong>、在复杂程序中寻找<strong>深层错误</strong>的有效技术；是一种流行的<strong>程序分析技术</strong>。</p><a id="more"></a>
+
 <p>使用符号执行分析一个程序时，该程序会使用符号值作为输入，而非一般执行程序时使用的具体值。在达到目标代码时，分析器可以得到相应的路径约束，然后通过约束求解器来得到可以触发目标代码的具体值。</p>
 <h2 id="目标及优势"><a href="#目标及优势" class="headerlink" title="目标及优势"></a>目标及优势</h2><p>在给定时间里，探索尽量多的、不同的程序路径（program path）。</p>
 <ol>
@@ -664,7 +664,7 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 <li>SOCK_STREAM：采用TCP协议服务，提供可靠的双工顺序数据流。</li>
 <li>SOCK_DGRAM：采用UDP协议服务，提供双工数据传送，不保证不丢失、不错序。</li>
 <li>SOCK_RAW：未采用TCP/UDP协议，应用程序可通过该套接字与IP层交互数据。</li>
-</ul>
+</ul><a id="more"></a>
 <p>关于套接字传输数据的流程见附页流程图。</p>
 <h1 id="收发数据"><a href="#收发数据" class="headerlink" title="收发数据"></a>收发数据</h1><h2 id="发送数据"><a href="#发送数据" class="headerlink" title="发送数据"></a>发送数据</h2><h3 id="调用过程"><a href="#调用过程" class="headerlink" title="调用过程"></a>调用过程</h3><p>当通信双方需要想对方发送/写数据时，可以调用send()、sendto()、write()函数。</p>
 <p><code>send()|write()|sendto() → sys_send() → sys_sendto() → sock_sendmsg() → __sock_sendmsg() → sock-&gt;prot-&gt;sendmsg() → sk-&gt;sk_prot-&gt;sendmsg()</code></p>
@@ -745,9 +745,9 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
   <entry>
     <title>hexo|关于博客图片无法显示的问题</title>
     <url>/2020/01/08/hexo-%E5%85%B3%E4%BA%8E%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87%E6%97%A0%E6%B3%95%E6%98%BE%E7%A4%BA%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h2 id="引用本地图片方式不对"><a href="#引用本地图片方式不对" class="headerlink" title="引用本地图片方式不对"></a>引用本地图片方式不对</h2><p>注意！markdown语法在这里是没有用的！</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">![](/images/image.jpg)</span><br></pre></td></tr></table></figure>
-<p>markdown语法在本地编辑的过程中是有用的，图片可见，一旦部署，通过域名访问是看不到图片的。</p>
+    <content><![CDATA[<h2 id="引用本地图片方式不对"><a href="#引用本地图片方式不对" class="headerlink" title="引用本地图片方式不对"></a>引用本地图片方式不对</h2><p>注意！markdown语法在这里是没有用的！</p><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">![](/images/image.jpg)</span><br></pre></td></tr></table></figure><p>markdown语法在本地编辑的过程中是有用的，图片可见，一旦部署，通过域名访问是看不到图片的。</p><a id="more"></a>
+
+
 <h3 id="正确的方式：文章资源文件夹-asset"><a href="#正确的方式：文章资源文件夹-asset" class="headerlink" title="正确的方式：文章资源文件夹+asset"></a>正确的方式：文章资源文件夹+asset</h3><p>首先要打开资源文件管理功能：将 <code>config.yml</code> 文件中的 <code>post_asset_folder</code> 选项设为 <code>true</code> 来打开。</p>
 <figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="string">_config.yml</span></span><br><span class="line"><span class="attr">post_asset_folder:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
 <p>当资源文件管理功能打开后，Hexo将会在你每一次通过 <code>hexo new [layout]</code> 命令创建新文章时自动创建一个文件夹。这个资源文件夹将会有与这个文章文件一样的名字。例如：<code>hexo n &quot;一篇博客&quot;</code>，则会在source中产生一个<code>一篇博客.md</code>和<code>一篇博客</code>文件夹。</p>
@@ -774,8 +774,8 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
     <url>/2020/01/01/Linux%E7%BD%91%E7%BB%9C%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%A5%97%E6%8E%A5%E5%AD%97%E7%9B%B8%E5%85%B3%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/</url>
     <content><![CDATA[<h1 id="管理套接字的数据类型"><a href="#管理套接字的数据类型" class="headerlink" title="管理套接字的数据类型"></a>管理套接字的数据类型</h1><h2 id="套接字缓冲区类型-struct-sk-buff-struct-sk-buff-head"><a href="#套接字缓冲区类型-struct-sk-buff-struct-sk-buff-head" class="headerlink" title="套接字缓冲区类型 struct sk_buff, struct sk_buff_head"></a>套接字缓冲区类型 struct sk_buff, struct sk_buff_head</h2><blockquote>
 <p>skbuff.h</p>
-</blockquote>
-<p>struct sk_buff是套接字缓冲区类型，用来管理网络数据包，为发/收的网络数据提供存储区域和操作方法。sk_buff数据类型贯穿数据传输全过程，是十分重要的数据结构。</p>
+</blockquote><p>struct sk_buff是套接字缓冲区类型，用来管理网络数据包，为发/收的网络数据提供存储区域和操作方法。sk_buff数据类型贯穿数据传输全过程，是十分重要的数据结构。</p><a id="more"></a>
+
 <p>struct sk_buff_head管理一个双向链表，来组织sk_buff。</p>
 <img src="/2020/01/01/Linux网络内核源码分析-套接字相关的数据结构和功能实现/image-20191220134051960.png">
 <p>sk_buff与数据存储</p>
@@ -897,14 +897,14 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
     <url>/2019/12/24/%E5%85%B3%E4%BA%8E%E5%8C%BA%E5%9D%97%E9%93%BE%E7%9A%84%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<blockquote>
 <p>参考：B站-是落拓呀，视频ID：75077145，75755443。</p>
-</blockquote>
-<p>本篇博客放置两页手写笔记，内容包括：</p>
-<ol>
+</blockquote><p>本篇博客放置两页手写笔记，内容包括：</p><ol>
 <li>区块链（block chain）基本概念：区块组成、链的形成、区块链应用。</li>
 <li>篡改区块行为以及应对措施——工作量证明机制（POW）——的原理。</li>
 <li>P2P网络，篡改数据所需要的条件。</li>
 <li>计算哈希值、SHA算法和POW函数实现。</li>
-</ol>
+</ol><a id="more"></a>
+
+
 <p>下面是笔记：</p>
 <img src="/2019/12/24/关于区块链的笔记/1.png">
 <img src="/2019/12/24/关于区块链的笔记/2.png">
@@ -921,9 +921,9 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
     <content><![CDATA[<blockquote>
 <p>完整的编译过程大约会占用10GB的存储空间！谨慎！</p>
 <p>如果你已有环境基础，那么整个过程会大致耗时5h+!</p>
-</blockquote>
-<h2 id="版本说明"><a href="#版本说明" class="headerlink" title="版本说明"></a>版本说明</h2><h3 id="环境版本"><a href="#环境版本" class="headerlink" title="环境版本"></a>环境版本</h3><p>Ubuntu版本查看方法：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">kun@ubuntu:~$ cat /etc/issue</span><br><span class="line">Ubuntu 16.04.6 LTS \n \l</span><br><span class="line"></span><br><span class="line">kun@ubuntu:~$ cat /proc/version</span><br><span class="line">Linux version 4.15.0-45-generic (buildd@lcy01-amd64-027) (gcc version 5.4.0 20160609 (Ubuntu 5.4.0-6ubuntu1~16.04.10)) #48~16.04.1-Ubuntu SMP Tue Jan 29 18:03:48 UTC 2019</span><br></pre></td></tr></table></figure>
+</blockquote><h2 id="版本说明"><a href="#版本说明" class="headerlink" title="版本说明"></a>版本说明</h2><h3 id="环境版本"><a href="#环境版本" class="headerlink" title="环境版本"></a>环境版本</h3><p>Ubuntu版本查看方法：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">kun@ubuntu:~$ cat /etc/issue</span><br><span class="line">Ubuntu 16.04.6 LTS \n \l</span><br><span class="line"></span><br><span class="line">kun@ubuntu:~$ cat /proc/version</span><br><span class="line">Linux version 4.15.0-45-generic (buildd@lcy01-amd64-027) (gcc version 5.4.0 20160609 (Ubuntu 5.4.0-6ubuntu1~16.04.10)) #48~16.04.1-Ubuntu SMP Tue Jan 29 18:03:48 UTC 2019</span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
 <p>VMware® Workstation 15 Player</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">15.1.0 build-13591040</span><br></pre></td></tr></table></figure>
 <h3 id="linux内核版本"><a href="#linux内核版本" class="headerlink" title="linux内核版本"></a>linux内核版本</h3><p>linux-4.6</p>
@@ -974,12 +974,12 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
     <url>/2019/12/21/C%E8%AF%AD%E8%A8%80-%E5%85%B3%E4%BA%8E%E4%BD%9C%E7%94%A8%E5%9F%9F%E3%80%81%E9%93%BE%E6%8E%A5%E3%80%81%E5%AD%98%E5%82%A8%E6%9C%9F%E3%80%81%E5%AD%98%E5%82%A8%E7%B1%BB%E5%88%AB/</url>
     <content><![CDATA[<blockquote>
 <p>参考《C Primer Plus》(第6版)</p>
-</blockquote>
-<h2 id="重要概念"><a href="#重要概念" class="headerlink" title="重要概念"></a>重要概念</h2><p>c提供了许多不同的模型或<strong>存储类别</strong>在内存中存储数据。</p>
-<ul>
+</blockquote><h2 id="重要概念"><a href="#重要概念" class="headerlink" title="重要概念"></a>重要概念</h2><p>c提供了许多不同的模型或<strong>存储类别</strong>在内存中存储数据。</p><ul>
 <li>对象（obect）：值占用的一块物理内存。一个对象可以存储一个/多个值。</li>
 <li>标识符（entity）：程序指定硬件内存中对象的方式，用于访问对象。</li>
-</ul>
+</ul><a id="more"></a>
+
+
 <p>可以用<strong>存储期</strong>来描述对象，用<strong>作用域</strong>和<strong>链接</strong>描述标识符。</p>
 <ul>
 <li>存储期（storage duration）：对象在内存中保存了多长时间。</li>
@@ -1207,13 +1207,13 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
   <entry>
     <title>Linux网络内核源码分析|重要数据结构</title>
     <url>/2019/12/20/Linux%E7%BD%91%E7%BB%9C%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E9%87%8D%E8%A6%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</url>
-    <content><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>内核版本：linux-2.6.8.1</p>
-<h2 id="linux目录解析"><a href="#linux目录解析" class="headerlink" title="linux目录解析"></a>linux目录解析</h2><img src="/2019/12/20/Linux网络内核源码分析-重要数据结构/image-20191218002916745.png">
-<h2 id="网络内核布局"><a href="#网络内核布局" class="headerlink" title="网络内核布局"></a>网络内核布局</h2><img src="/2019/12/20/Linux网络内核源码分析-重要数据结构/image-20191220132906019.png">
-<img src="/2019/12/20/Linux网络内核源码分析-重要数据结构/image-20191220132646373.png">
-<h1 id="套接字"><a href="#套接字" class="headerlink" title="套接字"></a>套接字</h1><h2 id="struct-sk-buff-struct-sk-buff-head"><a href="#struct-sk-buff-struct-sk-buff-head" class="headerlink" title="struct sk_buff, struct sk_buff_head"></a>struct sk_buff, struct sk_buff_head</h2><blockquote>
+    <content><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>内核版本：linux-2.6.8.1</p><h2 id="linux目录解析"><a href="#linux目录解析" class="headerlink" title="linux目录解析"></a>linux目录解析</h2><img src="/2019/12/20/Linux网络内核源码分析-重要数据结构/image-20191218002916745.png"><h2 id="网络内核布局"><a href="#网络内核布局" class="headerlink" title="网络内核布局"></a>网络内核布局</h2><img src="/2019/12/20/Linux网络内核源码分析-重要数据结构/image-20191220132906019.png"><img src="/2019/12/20/Linux网络内核源码分析-重要数据结构/image-20191220132646373.png"><h1 id="套接字"><a href="#套接字" class="headerlink" title="套接字"></a>套接字</h1><h2 id="struct-sk-buff-struct-sk-buff-head"><a href="#struct-sk-buff-struct-sk-buff-head" class="headerlink" title="struct sk_buff, struct sk_buff_head"></a>struct sk_buff, struct sk_buff_head</h2><blockquote>
 <p>skbuff.h</p>
-</blockquote>
+</blockquote><a id="more"></a>
+
+
+
+
 <p>sk_buff是套接字缓冲区类型，用来管理网络数据包，为发/收的网络数据提供存储区域和操作方法。</p>
 <p>sk_buff_head管理一个双向链表，来组织sk_buff。</p>
 <img src="/2019/12/20/Linux网络内核源码分析-重要数据结构/image-20191220134051960.png">
@@ -1311,8 +1311,8 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
   <entry>
     <title>操作系统丨（1）概述</title>
     <url>/2019/10/04/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%A8%EF%BC%881%EF%BC%89%E6%A6%82%E8%BF%B0/</url>
-    <content><![CDATA[<h2 id="操作系统定义"><a href="#操作系统定义" class="headerlink" title="操作系统定义"></a>操作系统定义</h2><h3 id="统一定义"><a href="#统一定义" class="headerlink" title="统一定义"></a>统一定义</h3><p>操作系统是控制和管理计算机系统的硬件和软件资源、合理地组织计算机工作流程及方便用户使用的程序和数据的集合。</p>
-<p><strong>目的</strong>：提高计算机系统的效率、增强系统的处理能力、充分发挥系统资源利用率、方便用户使用。</p>
+    <content><![CDATA[<h2 id="操作系统定义"><a href="#操作系统定义" class="headerlink" title="操作系统定义"></a>操作系统定义</h2><h3 id="统一定义"><a href="#统一定义" class="headerlink" title="统一定义"></a>统一定义</h3><p>操作系统是控制和管理计算机系统的硬件和软件资源、合理地组织计算机工作流程及方便用户使用的程序和数据的集合。</p><p><strong>目的</strong>：提高计算机系统的效率、增强系统的处理能力、充分发挥系统资源利用率、方便用户使用。</p><a id="more"></a>
+
 <h3 id="作为最基本的系统软件"><a href="#作为最基本的系统软件" class="headerlink" title="作为最基本的系统软件"></a>作为最基本的系统软件</h3><p>操作系统是计算机系统软件的重要组成部分，其物质基础是系统硬件。</p>
 <blockquote>
 <p>计算机系统资源包括：系统硬件和系统软件</p>
@@ -1470,8 +1470,7 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
   <entry>
     <title>Python丨tkinter丨窗口与标签(label)</title>
     <url>/2019/10/04/Python%E4%B8%A8tkinter%E4%B8%A8%E7%AA%97%E5%8F%A3%E4%B8%8E%E6%A0%87%E7%AD%BE-label/</url>
-    <content><![CDATA[<h2 id="Tkinter简介"><a href="#Tkinter简介" class="headerlink" title="Tkinter简介"></a>Tkinter简介</h2><p>Tkinter是Python的标准GUI库。Python使用Tkinter可以快速地创建GUI应用程序。创建一个GUI程序的流程是：</p>
-<ul>
+    <content><![CDATA[<h2 id="Tkinter简介"><a href="#Tkinter简介" class="headerlink" title="Tkinter简介"></a>Tkinter简介</h2><p>Tkinter是Python的标准GUI库。Python使用Tkinter可以快速地创建GUI应用程序。创建一个GUI程序的流程是：</p><ul>
 <li><p>导入tkinter模块</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br></pre></td></tr></table></figure>
 </li>
@@ -1479,7 +1478,8 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 </li>
 <li>创建控件、摆放控件</li>
 <li>进入消息循环</li>
-</ul>
+</ul><a id="more"></a>
+
 <h2 id="初始化窗口"><a href="#初始化窗口" class="headerlink" title="初始化窗口"></a>初始化窗口</h2><p>导入包后，即可创建tk实例（一个窗口），指定窗口名称、大小及背景色等属性。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">window = tk.Tk()</span><br><span class="line">window.title(<span class="string">'ha!'</span>) <span class="comment">#指定窗口名称</span></span><br><span class="line">window.geometry(<span class="string">'400x500'</span>) <span class="comment">#指定窗口大小</span></span><br><span class="line">window.configure(background=<span class="string">'white'</span>) <span class="comment">#指定窗口背景色，白色很好看！</span></span><br></pre></td></tr></table></figure>
 <p>接下来就可以创建控件、摆放控件了。后续会介绍各个控件的基本用法。</p>
@@ -1516,7 +1516,7 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 <li><p>安装hexo，在命令行工具输入：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">cnpm install -g hexo-cli</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
+</ul><a id="more"></a>
 <h2 id="本地搭建博客"><a href="#本地搭建博客" class="headerlink" title="本地搭建博客"></a>本地搭建博客</h2><ul>
 <li><p>在自己喜欢的地方新建一个空白文件夹，例如：“D:\BLOG”。</p>
 </li>
