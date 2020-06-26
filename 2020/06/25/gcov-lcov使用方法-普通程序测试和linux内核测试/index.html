@@ -1,85 +1,273 @@
 <!DOCTYPE html>
-<html  lang=en>
-  <head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+
+
+
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/kun.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/kun.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/kun.png?v=7.4.1">
+  <link rel="mask-icon" href="/images/kun.svg?v=7.4.1" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.1">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.4.1',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: "",
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Copy',
+      copy_success: 'Copied',
+      copy_failure: 'Copy failed'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="gcov下载安装12sudo apt-get updatesudo apt-get install gcov普通程序当前目录：1root@ubuntu:/home/kun/Documents/test#">
+<meta name="keywords" content="测试,gcov&#x2F;lcov">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gcov,lcov使用方法|普通程序测试和linux内核测试">
+<meta property="og:url" content="https://xingkunz.github.io/2020/06/25/gcov-lcov使用方法-普通程序测试和linux内核测试/index.html">
+<meta property="og:site_name" content="KUN">
+<meta property="og:description" content="gcov下载安装12sudo apt-get updatesudo apt-get install gcov普通程序当前目录：1root@ubuntu:/home/kun/Documents/test#">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-06-25T15:07:09.304Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="gcov,lcov使用方法|普通程序测试和linux内核测试">
+<meta name="twitter:description" content="gcov下载安装12sudo apt-get updatesudo apt-get install gcov普通程序当前目录：1root@ubuntu:/home/kun/Documents/test#">
+  <link rel="canonical" href="https://xingkunz.github.io/2020/06/25/gcov-lcov使用方法-普通程序测试和linux内核测试/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>gcov,lcov使用方法|普通程序测试和linux内核测试 | KUN</title>
   
-    
-    <link rel="shortcut icon" href="/images/favicon.ico ">
-    
-    
-    <link rel="icon" type="image/png" href="/images/favicon-android.png " sizes="192x192">
-    
-    
-    <link rel="apple-touch-icon" href="/images/favicon-apple.png " sizes="180x180">
-    
-  
-  <!-- title -->
-  <title>KUN gcov,lcov使用方法|普通程序测试和linux内核测试 </title>
-  <!-- styles -->
-  <!-- styles -->
-<link rel="stylesheet" href="/styles/global.css">
-  <!-- rss -->
-  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
 </head>
-  <body>
-    <header id="header">
-  
-  <nav class="menu menu--right">
-  
-    <a class="menu__item" href="/">主页</a>
-    <a class="menu__item" href="/archives/">归档</a>
-    <a class="menu__item" href="/categories/">专题</a>
-    <a class="menu__item" href="/tags/">标签</a>
-    <!-- <a class="menu__item" href="/">作品</a> -->
-    <!-- <a class="menu__item" href="/about/">关于</a> -->
-  </nav>
-</header>
-    <main>
-      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-  <header class="post__header">
-  <h1 class="post__title">gcov,lcov使用方法|普通程序测试和linux内核测试</h1>
-  
-  
-  <div class="post__meta">
-    
-<time class="post__date" datetime="2020-06-25T14:50:14.000Z" itemprop="datePublished">
-  
-  <i class="blogfont">&#xedff;</i>
-  
-  2020-06-25 22:50:14
-</time>
 
-    
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+  <div class="container use-motion">
+    <div class="headband"></div>
 
-    
-<div class="post__tag">
-  <i class="blogfont">&#xe7ec;</i>
-  <a class="tag-link" href="/tags/gcov-lcov/">gcov/lcov</a>, <a class="tag-link" href="/tags/测试/">测试</a>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">KUN</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
 </div>
 
 
-    <div id="/2020/06/25/gcov-lcov使用方法-普通程序测试和linux内核测试/" class="leancloud_visitors post__stat" data-flag-title="gcov,lcov使用方法|普通程序测试和linux内核测试">
-  <i class="blogfont">&#xe672;</i>
-  <span class="leancloud-visitors-count">loading...</span>
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+    
+
+</nav>
 </div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
   </div>
-</header>
-  <aside class="post__aside">
-  <div class="post__actions">
-    <a id="backTop" class="post__top" href="javascript:">
-      <i class="blogfont">&#xe6b1;</i><!-- Top -->
-    </a>
-    <a id="share" class="post__share" href="javascript:">
-      <i class="blogfont">&#xe6c1;</i>
-    </a>
-  </div>
-  <ol class="post__toc"><li class="post__toc-item post__toc-level-1"><a class="post__toc-link" href="#gcov"><span class="post__toc-text">gcov</span></a><ol class="post__toc-child"><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#下载安装"><span class="post__toc-text">下载安装</span></a></li><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#普通程序"><span class="post__toc-text">普通程序</span></a></li><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#内核覆盖率"><span class="post__toc-text">内核覆盖率</span></a><ol class="post__toc-child"><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#net-ipv4-icmp-c"><span class="post__toc-text">net/ipv4/icmp.c</span></a></li></ol></li></ol></li><li class="post__toc-item post__toc-level-1"><a class="post__toc-link" href="#lcov"><span class="post__toc-text">lcov</span></a><ol class="post__toc-child"><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#下载安装-1"><span class="post__toc-text">下载安装</span></a></li><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#普通程序-1"><span class="post__toc-text">普通程序</span></a></li><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#内核覆盖率-1"><span class="post__toc-text">内核覆盖率</span></a></li></ol></li></ol>
-</aside>
-  <div class="post__content" itemprop="articleBody">
-    <h1 id="gcov"><a href="#gcov" class="headerlink" title="gcov"></a>gcov</h1><h2 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install gcov</span><br></pre></td></tr></table></figure>
-<h2 id="普通程序"><a href="#普通程序" class="headerlink" title="普通程序"></a>普通程序</h2><p>当前目录：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/kun/Documents/test#</span><br></pre></td></tr></table></figure>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="https://xingkunz.github.io/2020/06/25/gcov-lcov使用方法-普通程序测试和linux内核测试/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="XingkunZ">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="KUN">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">gcov,lcov使用方法|普通程序测试和linux内核测试
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              
+                
+              
+
+              <time title="Created: 2020-06-25 22:50:14 / Modified: 23:07:09" itemprop="dateCreated datePublished" datetime="2020-06-25T22:50:14+08:00">2020-06-25</time>
+            </span>
+          
+            
+
+            
+          
+
+          
+            <span id="/2020/06/25/gcov-lcov使用方法-普通程序测试和linux内核测试/" class="post-meta-item leancloud_visitors" data-flag-title="gcov,lcov使用方法|普通程序测试和linux内核测试" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2020/06/25/gcov-lcov使用方法-普通程序测试和linux内核测试/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2020/06/25/gcov-lcov使用方法-普通程序测试和linux内核测试/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="gcov"><a href="#gcov" class="headerlink" title="gcov"></a>gcov</h1><h2 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install gcov</span><br></pre></td></tr></table></figure><h2 id="普通程序"><a href="#普通程序" class="headerlink" title="普通程序"></a>普通程序</h2><p>当前目录：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/kun/Documents/test#</span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
 <p>编译源文件test，生成twonumber可执行文件。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -fprofile-arcs -ftest-coverage -o twonumber test.c</span><br></pre></td></tr></table></figure>
 <p>生成以下两个文件：</p>
@@ -155,25 +343,236 @@
 <p><strong>生成html输出</strong>。读当前文件/lcov_res/kernel.info，在当前目录/cover_report/下生成html文件。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">genhtml -o cover_report --legend --title "kernel_cov" --prefix=./ lcov_res/kernel.info</span><br><span class="line">...</span><br><span class="line">Processing file /usr/src/linux-4.6/sound/pci/ens1370.c</span><br><span class="line">Processing file /usr/src/linux-4.6/sound/pci/ac97/ac97_pcm.c</span><br><span class="line">Processing file /usr/src/linux-4.6/sound/pci/ac97/ac97_patch.c</span><br><span class="line">Processing file /usr/src/linux-4.6/sound/pci/ac97/ac97_codec.c</span><br><span class="line">Processing file /usr/src/linux-4.6/sound/pci/ac97/ac97_proc.c</span><br><span class="line">Writing directory view page.</span><br><span class="line">Overall coverage rate:</span><br><span class="line">  lines......: 7.0% (42498 of 605635 lines)</span><br><span class="line">  functions..: 8.7% (4784 of 54929 functions)</span><br></pre></td></tr></table></figure>
 
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/测试/" rel="tag"># 测试</a>
+            
+              <a href="/tags/gcov-lcov/" rel="tag"># gcov/lcov</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/" rel="next" title="Linux网络内核源码分析|网络层之IP层处理">
+                  <i class="fa fa-chevron-left"></i> Linux网络内核源码分析|网络层之IP层处理
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2020/06/25/Packetdrill使用方法，结合tcpdump监测/" rel="prev" title="Packetdrill使用方法，结合tcpdump监测">
+                  Packetdrill使用方法，结合tcpdump监测 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
   </div>
   
-</article>
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#gcov"><span class="nav-number">1.</span> <span class="nav-text">gcov</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#下载安装"><span class="nav-number">1.1.</span> <span class="nav-text">下载安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#普通程序"><span class="nav-number">1.2.</span> <span class="nav-text">普通程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内核覆盖率"><span class="nav-number">1.3.</span> <span class="nav-text">内核覆盖率</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#net-ipv4-icmp-c"><span class="nav-number">1.3.1.</span> <span class="nav-text">net/ipv4/icmp.c</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lcov"><span class="nav-number">2.</span> <span class="nav-text">lcov</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#下载安装-1"><span class="nav-number">2.1.</span> <span class="nav-text">下载安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#普通程序-1"><span class="nav-number">2.2.</span> <span class="nav-text">普通程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内核覆盖率-1"><span class="nav-number">2.3.</span> <span class="nav-text">内核覆盖率</span></a></li></ol></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">XingkunZ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">tags</span>
+        
+      </div>
+    
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
     </main>
-    <footer id="footer">
-  Copyright &copy;
-  2020
-  XingkunZ
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">XingkunZ</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.4.1</div>
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
   
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.1"></script><script src="/js/motion.js?v=7.4.1"></script>
+<script src="/js/schemes/muse.js?v=7.4.1"></script>
+<script src="/js/next-boot.js?v=7.4.1"></script>
+
+
+
   
-    <a class="social-links" href="https://github.com/jylzs369"><i class="blogfont">&#xe6b7; </i></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
-    <a class="social-links" href="mailto:jylzs369@163.com"><i class="blogfont">&#xe61a; </i></a>
+
   
-    <a class="social-links" href="/atom.xml"><i class="blogfont">&#xe640; </i></a>
+
   
+
   
-</footer>
-    <!-- scripts -->
-<script src="/scripts/main.js"></script>
-  </body>
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'Pjstp83mhOuOGVRgfQH9Wy8d-gzGzoHsz',
+    appKey: 'kpMNCJPyBxzPPgGwUuPhpbY7',
+    placeholder: 'Bite me!',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: true,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
 </html>
