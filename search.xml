@@ -251,9 +251,9 @@
 ]]></content>
       <tags>
         <tag>Linux</tag>
+        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -417,9 +417,9 @@
 ]]></content>
       <tags>
         <tag>Linux</tag>
+        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -737,9 +737,9 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 <img src="/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/udp-socket.png" title="UDP协议数据传输流程">]]></content>
       <tags>
         <tag>Linux</tag>
-        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>
@@ -887,9 +887,9 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 ]]></content>
       <tags>
         <tag>Linux</tag>
-        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>
@@ -910,8 +910,8 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 <img src="/2019/12/24/关于区块链的笔记/2.png">
 ]]></content>
       <tags>
-        <tag>笔记</tag>
         <tag>区块链</tag>
+        <tag>笔记</tag>
         <tag>POW</tag>
       </tags>
   </entry>
@@ -1463,8 +1463,8 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 </ul>
 ]]></content>
       <tags>
-        <tag>操作系统</tag>
         <tag>笔记</tag>
+        <tag>操作系统</tag>
       </tags>
   </entry>
   <entry>
