@@ -1,16 +1,128 @@
-extends includes/layout
+<!DOCTYPE html>
+<html  lang=en>
+  <head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  
+    
+    <link rel="shortcut icon" href="/images/favicon.ico ">
+    
+    
+    <link rel="icon" type="image/png" href="/images/favicon-android.png " sizes="192x192">
+    
+    
+    <link rel="apple-touch-icon" href="/images/favicon-apple.png " sizes="180x180">
+    
+  
+  <!-- title -->
+  <title>KUN Python丨tkinter丨窗口与标签(label) </title>
+  <!-- styles -->
+  <!-- styles -->
+<link rel="stylesheet" href="/styles/global.css">
+  <!-- rss -->
+  
+</head>
+  <body>
+    <header id="header">
+  
+  <nav class="menu menu--right">
+  
+    <a class="menu__item" href="/">主页</a>
+    <a class="menu__item" href="/archives/">归档</a>
+    <a class="menu__item" href="/categories/">专题</a>
+    <a class="menu__item" href="/tags/">标签</a>
+    <!-- <a class="menu__item" href="/">作品</a> -->
+    <!-- <a class="menu__item" href="/about/">关于</a> -->
+  </nav>
+</header>
+    <main>
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post__header">
+  <h1 class="post__title">Python丨tkinter丨窗口与标签(label)</h1>
+  
+  
+  <div class="post__meta">
+    
+<time class="post__date" datetime="2019-10-04T02:36:32.000Z" itemprop="datePublished">
+  
+  <i class="blogfont">&#xedff;</i>
+  
+  2019-10-04 10:36:32
+</time>
 
-block site_title
-    != config.title + " | " + page.title
+    
 
-block description
-    meta(name="description", content=page.excerpt)
+    
+<div class="post__tag">
+  <i class="blogfont">&#xe7ec;</i>
+  <a class="tag-link" href="/tags/python/">python</a>, <a class="tag-link" href="/tags/tkinter/">tkinter</a>
+</div>
 
-block container
-    include mixins/post
-    +article(page)
-    include includes/disqus
 
-block pagination
-    include mixins/paginator
-    +forPost()
+    <div id="/2019/10/04/Python丨tkinter丨窗口与标签-label/" class="leancloud_visitors post__stat" data-flag-title="Python丨tkinter丨窗口与标签(label)">
+  <i class="blogfont">&#xe672;</i>
+  <span class="leancloud-visitors-count">loading...</span>
+</div>
+  </div>
+</header>
+  <aside class="post__aside">
+  <div class="post__actions">
+    <a id="backTop" class="post__top" href="javascript:">
+      <i class="blogfont">&#xe6b1;</i><!-- Top -->
+    </a>
+    <a id="share" class="post__share" href="javascript:">
+      <i class="blogfont">&#xe6c1;</i>
+    </a>
+  </div>
+  <ol class="post__toc"><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#Tkinter简介"><span class="post__toc-text">Tkinter简介</span></a></li><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#初始化窗口"><span class="post__toc-text">初始化窗口</span></a></li><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#标签-label"><span class="post__toc-text">标签(label)</span></a></li></ol>
+</aside>
+  <div class="post__content" itemprop="articleBody">
+    <h2 id="Tkinter简介"><a href="#Tkinter简介" class="headerlink" title="Tkinter简介"></a>Tkinter简介</h2><p>Tkinter是Python的标准GUI库。Python使用Tkinter可以快速地创建GUI应用程序。创建一个GUI程序的流程是：</p>
+<ul>
+<li><p>导入tkinter模块</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建和初始化一个tk实例</p>
+</li>
+<li>创建控件、摆放控件</li>
+<li>进入消息循环</li>
+</ul>
+<h2 id="初始化窗口"><a href="#初始化窗口" class="headerlink" title="初始化窗口"></a>初始化窗口</h2><p>导入包后，即可创建tk实例（一个窗口），指定窗口名称、大小及背景色等属性。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">window = tk.Tk()</span><br><span class="line">window.title(<span class="string">'ha!'</span>) <span class="comment">#指定窗口名称</span></span><br><span class="line">window.geometry(<span class="string">'400x500'</span>) <span class="comment">#指定窗口大小</span></span><br><span class="line">window.configure(background=<span class="string">'white'</span>) <span class="comment">#指定窗口背景色，白色很好看！</span></span><br></pre></td></tr></table></figure>
+<p>接下来就可以创建控件、摆放控件了。后续会介绍各个控件的基本用法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">控件们</span></span><br><span class="line"><span class="string">'''</span></span><br></pre></td></tr></table></figure>
+<p>在所有控件之后，进入消息循环即可：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">window.mainloop()</span><br></pre></td></tr></table></figure>
+<p>运行，显示效果如下：</p>
+
+<h2 id="标签-label"><a href="#标签-label" class="headerlink" title="标签(label)"></a>标签(label)</h2><p>最简单的控件使用方式：创建、摆放到窗口。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">l_hello=tk.Label(window, text=<span class="string">'hello!'</span>,bg=<span class="string">'white'</span>,</span><br><span class="line">		font=(<span class="string">'Arial'</span>,<span class="number">9</span>),width=<span class="number">25</span>,height=<span class="number">2</span>)</span><br><span class="line"><span class="comment"># 指定master为window（tk实例)，文本内容为'hello!',背景颜色为白色，</span></span><br><span class="line">		<span class="comment"># 字体，宽度，高度</span></span><br><span class="line">l_hello.pack()</span><br><span class="line"><span class="comment"># pack()函数是将控件放在窗口中，默认情况为居中自上而下依次摆放。</span></span><br></pre></td></tr></table></figure>
+<p>把这段代码插入窗口初始化和消息循环中间，运行看看：</p>
+
+<p>‘hello！’就可以显示出来了！</p>
+<p>不过，这个text被指定为静态的字符串。如果需要动态指定字符串则可以将text替换为textvariable。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var=tk.StringVar()</span><br><span class="line">l_hello=tk.Label(window, textvariable=var,bg=<span class="string">'white'</span>,</span><br><span class="line">		font=(<span class="string">'Arial'</span>,<span class="number">9</span>),width=<span class="number">25</span>,height=<span class="number">2</span>)</span><br><span class="line"><span class="comment"># 指定master为window（tk实例)，文本内容为字符串变量,背景颜色为白色，</span></span><br><span class="line">		<span class="comment"># 字体，宽度，高度</span></span><br><span class="line">l_hello.pack()</span><br><span class="line"><span class="comment"># pack()函数是将控件放在窗口中，默认情况为居中自上而下依次摆放。</span></span><br></pre></td></tr></table></figure>
+<p>这个var可以在用户交互的过程中，动态指定。例如，用户点击按钮，按钮激发一个函数，函数中给var赋值，并在窗口中显示出来。</p>
+
+  </div>
+  
+</article>
+    </main>
+    <footer id="footer">
+  Copyright &copy;
+  2020
+  XingkunZ
+  
+  
+    <a class="social-links" href="https://github.com/jylzs369"><i class="blogfont">&#xe6b7; </i></a>
+  
+    <a class="social-links" href="mailto:jylzs369@163.com"><i class="blogfont">&#xe61a; </i></a>
+  
+    <a class="social-links" href="/atom.xml"><i class="blogfont">&#xe640; </i></a>
+  
+  
+</footer>
+    <!-- scripts -->
+<script src="/scripts/main.js"></script>
+  </body>
+</html>

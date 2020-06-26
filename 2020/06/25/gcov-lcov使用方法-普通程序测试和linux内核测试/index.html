@@ -1,16 +1,179 @@
-extends includes/layout
+<!DOCTYPE html>
+<html  lang=en>
+  <head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  
+    
+    <link rel="shortcut icon" href="/images/favicon.ico ">
+    
+    
+    <link rel="icon" type="image/png" href="/images/favicon-android.png " sizes="192x192">
+    
+    
+    <link rel="apple-touch-icon" href="/images/favicon-apple.png " sizes="180x180">
+    
+  
+  <!-- title -->
+  <title>KUN gcov,lcov使用方法|普通程序测试和linux内核测试 </title>
+  <!-- styles -->
+  <!-- styles -->
+<link rel="stylesheet" href="/styles/global.css">
+  <!-- rss -->
+  
+</head>
+  <body>
+    <header id="header">
+  
+  <nav class="menu menu--right">
+  
+    <a class="menu__item" href="/">主页</a>
+    <a class="menu__item" href="/archives/">归档</a>
+    <a class="menu__item" href="/categories/">专题</a>
+    <a class="menu__item" href="/tags/">标签</a>
+    <!-- <a class="menu__item" href="/">作品</a> -->
+    <!-- <a class="menu__item" href="/about/">关于</a> -->
+  </nav>
+</header>
+    <main>
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post__header">
+  <h1 class="post__title">gcov,lcov使用方法|普通程序测试和linux内核测试</h1>
+  
+  
+  <div class="post__meta">
+    
+<time class="post__date" datetime="2020-06-25T14:50:14.000Z" itemprop="datePublished">
+  
+  <i class="blogfont">&#xedff;</i>
+  
+  2020-06-25 22:50:14
+</time>
 
-block site_title
-    != config.title + " | " + page.title
+    
 
-block description
-    meta(name="description", content=page.excerpt)
+    
+<div class="post__tag">
+  <i class="blogfont">&#xe7ec;</i>
+  <a class="tag-link" href="/tags/gcov-lcov/">gcov/lcov</a>, <a class="tag-link" href="/tags/测试/">测试</a>
+</div>
 
-block container
-    include mixins/post
-    +article(page)
-    include includes/disqus
 
-block pagination
-    include mixins/paginator
-    +forPost()
+    <div id="/2020/06/25/gcov-lcov使用方法-普通程序测试和linux内核测试/" class="leancloud_visitors post__stat" data-flag-title="gcov,lcov使用方法|普通程序测试和linux内核测试">
+  <i class="blogfont">&#xe672;</i>
+  <span class="leancloud-visitors-count">loading...</span>
+</div>
+  </div>
+</header>
+  <aside class="post__aside">
+  <div class="post__actions">
+    <a id="backTop" class="post__top" href="javascript:">
+      <i class="blogfont">&#xe6b1;</i><!-- Top -->
+    </a>
+    <a id="share" class="post__share" href="javascript:">
+      <i class="blogfont">&#xe6c1;</i>
+    </a>
+  </div>
+  <ol class="post__toc"><li class="post__toc-item post__toc-level-1"><a class="post__toc-link" href="#gcov"><span class="post__toc-text">gcov</span></a><ol class="post__toc-child"><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#下载安装"><span class="post__toc-text">下载安装</span></a></li><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#普通程序"><span class="post__toc-text">普通程序</span></a></li><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#内核覆盖率"><span class="post__toc-text">内核覆盖率</span></a><ol class="post__toc-child"><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#net-ipv4-icmp-c"><span class="post__toc-text">net/ipv4/icmp.c</span></a></li></ol></li></ol></li><li class="post__toc-item post__toc-level-1"><a class="post__toc-link" href="#lcov"><span class="post__toc-text">lcov</span></a><ol class="post__toc-child"><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#下载安装-1"><span class="post__toc-text">下载安装</span></a></li><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#普通程序-1"><span class="post__toc-text">普通程序</span></a></li><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#内核覆盖率-1"><span class="post__toc-text">内核覆盖率</span></a></li></ol></li></ol>
+</aside>
+  <div class="post__content" itemprop="articleBody">
+    <h1 id="gcov"><a href="#gcov" class="headerlink" title="gcov"></a>gcov</h1><h2 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install gcov</span><br></pre></td></tr></table></figure>
+<h2 id="普通程序"><a href="#普通程序" class="headerlink" title="普通程序"></a>普通程序</h2><p>当前目录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/kun/Documents/test#</span><br></pre></td></tr></table></figure>
+<p>编译源文件test，生成twonumber可执行文件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -fprofile-arcs -ftest-coverage -o twonumber test.c</span><br></pre></td></tr></table></figure>
+<p>生成以下两个文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">test.gcno  twonumber</span><br></pre></td></tr></table></figure>
+<p>.gcno是由<code>-ftest-coverage</code>产生的，它包含了重建基本块图和相应的块的源码的行号的信息。</p>
+<p><strong>执行twonumber。</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./twonumber</span><br></pre></td></tr></table></figure>
+<p>生成下面的文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">test.gcda</span><br></pre></td></tr></table></figure>
+<p>.gcda是由加了<code>-fprofile-arcs</code>编译参数的编译后的文件运行所产生的，它包含了弧跳变的次数和其他的概要信息（而gcda只能在程序运行完毕后才能产生的）</p>
+<p><strong>Gcov执行函数覆盖、语句覆盖和分支覆盖。</strong>有几个.c就执行几次。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcov test.c #默认保存覆盖率文件为test.c.gcov</span><br><span class="line">gcov test.c&gt;&gt;test_cov #保存覆盖率文件为test_cov</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">File 'test.c'</span><br><span class="line">Lines executed:51.85% of 27</span><br><span class="line">Creating 'test.c.gcov'</span><br></pre></td></tr></table></figure>
+<p>生成覆盖率文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">test.c.gcov</span><br></pre></td></tr></table></figure>
+<p>查看该文件可以看到代码执行情况。</p>
+<p><a href="https://blog.csdn.net/yukin_xue/article/details/7653482">https://blog.csdn.net/yukin_xue/article/details/7653482</a></p>
+<p><strong>注：一次编译后，执行多次（若执行路径不同），gcov统计出的信息也不同。</strong></p>
+<h2 id="内核覆盖率"><a href="#内核覆盖率" class="headerlink" title="内核覆盖率"></a>内核覆盖率</h2><p>进入内核源文件（这是当初gcc编译内核的位置）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/src/linux-4.6/</span><br></pre></td></tr></table></figure>
+<p><strong>执行gcov进行覆盖统计，生成”gcov”文件</strong>。gcov文件需要有gcda和gcno文件（执行的统计信息）的支持才能产生。所需要用到的统计信息放在/sys/kernel/debug/gcov/{内核源文件路径}/kernel/gcov/，因此需要-o。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcov kernel/gcov/base.c -o /sys/kernel/debug/gcov/usr/src/linux-4.6/kernel/gcov/</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">File 'kernel/gcov/base.c'</span><br><span class="line">Lines executed:68.18% of 44</span><br><span class="line">Creating 'base.c.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/module.h'</span><br><span class="line">Lines executed:100.00% of 5</span><br><span class="line">Creating 'module.h.gcov'</span><br></pre></td></tr></table></figure>
+<p>‘base.c.gcov’以及其<strong>包含文件</strong>的覆盖率文件”.gcov”都会生成在<strong>用户当前所在目录</strong>下。</p>
+<p><strong>注意</strong>：gcov命令依旧只能在当初<strong>编译的目录下</strong>进行，否则会找不到源码文件，生成的.gcov文件是残缺的。也就是说<strong>只能在编译的目录下生成完整的gcov文件。</strong></p>
+<p>尝试查看其他文件的覆盖内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcov net/ipv4/xfrm4_state.c -o /sys/kernel/debug/gcov/usr/src/linux-4.6/net/ipv4/</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">File 'include/net/xfrm.h'</span><br><span class="line">Lines executed:0.00% of 13</span><br><span class="line">Creating 'xfrm.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'net/ipv4/xfrm4_state.c'</span><br><span class="line">Lines executed:7.50% of 40</span><br><span class="line">Creating 'xfrm4_state.c.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/skbuff.h'</span><br><span class="line">Lines executed:0.00% of 1</span><br><span class="line">Creating 'skbuff.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/net_namespace.h'</span><br><span class="line">Lines executed:0.00% of 1</span><br><span class="line">Creating 'net_namespace.h.gcov'</span><br></pre></td></tr></table></figure>
+<p>此时，<code>xfrm4_state.c.gcov、xfrm.h.gcov、net_namespace.h.gcov、skbuff.h.gcov</code>在编译目录下生成。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/usr/src/linux-4.6# ls</span><br><span class="line">arch           Kconfig               scripts</span><br><span class="line">block          kernel                security</span><br><span class="line">certs          lib                   skbuff.h.gcov</span><br><span class="line">COPYING        MAINTAINERS           sound</span><br><span class="line">CREDITS        Makefile              System.map</span><br><span class="line">crypto         mm                    tools</span><br><span class="line">Documentation  modules.builtin       usr</span><br><span class="line">drivers        modules.order         virt</span><br><span class="line">firmware       Module.symvers        vmlinux</span><br><span class="line">fs             net                   vmlinux.o</span><br><span class="line">include        net_namespace.h.gcov  xfrm4_state.c.gcov</span><br><span class="line">init           README                xfrm.h.gcov</span><br><span class="line">ipc            REPORTING-BUGS</span><br><span class="line">Kbuild         samples</span><br></pre></td></tr></table></figure>
+<h3 id="net-ipv4-icmp-c"><a href="#net-ipv4-icmp-c" class="headerlink" title="net/ipv4/icmp.c"></a>net/ipv4/icmp.c</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line">gcov net/ipv4/icmp.c -o /sys/kernel/debug/gcov/usr/src/linux-4.6/net/ipv4/</span><br><span class="line">File 'net/ipv4/icmp.c'</span><br><span class="line">Lines executed:61.14% of 332</span><br><span class="line">Creating 'icmp.c.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/l3mdev.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'l3mdev.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/inetpeer.h'</span><br><span class="line">Lines executed:0.00% of 4</span><br><span class="line">Creating 'inetpeer.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/sock.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'sock.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'arch/x86/include/asm/bitops.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'bitops.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/cpumask.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'cpumask.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/inet_common.h'</span><br><span class="line">Lines executed:100.00% of 2</span><br><span class="line">Creating 'inet_common.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/skbuff.h'</span><br><span class="line">Lines executed:52.94% of 51</span><br><span class="line">Creating 'skbuff.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/net_namespace.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'net_namespace.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/xfrm.h'</span><br><span class="line">Lines executed:72.73% of 11</span><br><span class="line">Creating 'xfrm.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'arch/x86/include/asm/atomic64_64.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'atomic64_64.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/compiler.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'compiler.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/slab.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'slab.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/route.h'</span><br><span class="line">Lines executed:33.33% of 9</span><br><span class="line">Creating 'route.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/ip.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'ip.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/err.h'</span><br><span class="line">Lines executed:66.67% of 3</span><br><span class="line">Creating 'err.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/dst.h'</span><br><span class="line">Lines executed:14.29% of 7</span><br><span class="line">Creating 'dst.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/spinlock.h'</span><br><span class="line">Lines executed:66.67% of 3</span><br><span class="line">Creating 'spinlock.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/ip_fib.h'</span><br><span class="line">Lines executed:100.00% of 2</span><br><span class="line">Creating 'ip_fib.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/jhash.h'</span><br><span class="line">Lines executed:100.00% of 7</span><br><span class="line">Creating 'jhash.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'arch/x86/include/asm/checksum_64.h'</span><br><span class="line">Lines executed:100.00% of 5</span><br><span class="line">Creating 'checksum_64.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/net/checksum.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'checksum.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/bitops.h'</span><br><span class="line">Lines executed:50.00% of 2</span><br><span class="line">Creating 'bitops.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'arch/x86/include/asm/paravirt.h'</span><br><span class="line">Lines executed:0.00% of 1</span><br><span class="line">Creating 'paravirt.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/spinlock_api_smp.h'</span><br><span class="line">Lines executed:0.00% of 1</span><br><span class="line">Creating 'spinlock_api_smp.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'arch/x86/include/asm/preempt.h'</span><br><span class="line">Lines executed:100.00% of 1</span><br><span class="line">Creating 'preempt.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'include/linux/bottom_half.h'</span><br><span class="line">Lines executed:50.00% of 2</span><br><span class="line">Creating 'bottom_half.h.gcov'</span><br><span class="line"></span><br><span class="line">File 'arch/x86/include/asm/atomic.h'</span><br><span class="line">Lines executed:0.00% of 1</span><br><span class="line">Creating 'atomic.h.gcov'</span><br></pre></td></tr></table></figure>
+<p>执行了一个ping命令后，再次查看覆盖率：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">gcov net/ipv4/icmp.c -o /sys/kernel/debug/gcov/usr/src/linux-4.6/net/ipv4/</span><br><span class="line">File 'net/ipv4/icmp.c'</span><br><span class="line">Lines executed:61.75% of 332</span><br><span class="line">Creating 'icmp.c.gcov'</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>icmp.c的覆盖率有变化。</p>
+<h1 id="lcov"><a href="#lcov" class="headerlink" title="lcov"></a>lcov</h1><h2 id="下载安装-1"><a href="#下载安装-1" class="headerlink" title="下载安装"></a>下载安装</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install lcov</span><br></pre></td></tr></table></figure>
+<h2 id="普通程序-1"><a href="#普通程序-1" class="headerlink" title="普通程序"></a>普通程序</h2><p>当前目录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/kun/Documents/test#</span><br></pre></td></tr></table></figure>
+<p>已经编译过：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">test  test.c  test.gcda  test.gcno  test.h</span><br></pre></td></tr></table></figure>
+<p>扫描指定目录下的.gcno文件，生成<strong>基准数据文件</strong>，此处起名init.info：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> -c捕获,收集运行后所产生的信息 -i初始化 -d工作目录 -o输出文件</span></span><br><span class="line">lcov -c -i -d [源码工作目录] -o [基准数据文件名]</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">lcov -c -i -d ./ -o init.info</span><br><span class="line">Capturing coverage data from ./</span><br><span class="line">Found gcov version: 5.4.0</span><br><span class="line">Scanning ./ for .gcno files ...</span><br><span class="line">Found 1 graph files in ./</span><br><span class="line">Processing test.gcno</span><br><span class="line">Finished .info-file creation</span><br></pre></td></tr></table></figure>
+<p><strong>执行程序</strong>：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./test</span><br></pre></td></tr></table></figure>
+<p>扫描指定目录下的.gcda文件，生成<strong>覆盖率文件</strong>，此处起名cover.info：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">lcov -c -d ./ -o cover.info</span><br><span class="line">Capturing coverage data from ./</span><br><span class="line">Found gcov version: 5.4.0</span><br><span class="line">Scanning ./ for .gcda files ...</span><br><span class="line">Found 1 data files in ./</span><br><span class="line">Processing test.gcda</span><br><span class="line">Finished .info-file creation</span><br></pre></td></tr></table></figure>
+<p>合并<strong>基准数据文件</strong>和<strong>覆盖率文件</strong>，生成一个总数据文件，total.info：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> -a合并 [文件名之一]</span></span><br><span class="line">lcov -a init.info -a cover.info -o total.info</span><br><span class="line">Combining tracefiles.</span><br><span class="line">Reading tracefile init.info</span><br><span class="line">Reading tracefile cover.info</span><br><span class="line">Writing data to total.info</span><br><span class="line">Summary coverage rate:</span><br><span class="line">  lines......: 64.9% (24 of 37 lines)</span><br><span class="line">  functions..: 80.0% (4 of 5 functions)</span><br><span class="line">  branches...: no data found</span><br></pre></td></tr></table></figure>
+<p>如果有不需要的信息可以删掉（可省略这步）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> --remove 删除统计信息中如下的代码或文件，支持正则</span></span><br><span class="line">lcov --remove total.info '*/usr/include/*' -o total.info</span><br></pre></td></tr></table></figure>
+<p>通过总数据文件生成html文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> -o 输出的文件夹</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> --legend 简单的统计信息说明</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> --title 项目名称，最后会出现在html页里<span class="built_in">test</span>一项</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> --prefix 将要生成的html文件路径（基于[输出的文件夹]）</span></span><br><span class="line">genhtml -o cover_report --legend --title "lcov-test" --prefix=./ total.info</span><br></pre></td></tr></table></figure>
+<p>生成的文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ls</span><br><span class="line">cover.info    init.info  test.c     test.gcno  total.info</span><br><span class="line">cover_report  test       test.gcda  test.h</span><br></pre></td></tr></table></figure>
+<p>cover_report/下，浏览器打开<strong>index.html文件</strong>则可以看到结果:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ls</span><br><span class="line">amber.png    glass.png   index-sort-f.html  snow.png</span><br><span class="line">emerald.png  home        index-sort-l.html  updown.png</span><br><span class="line">gcov.css     index.html  ruby.png</span><br></pre></td></tr></table></figure>
+<p><strong>常用参数</strong>：</p>
+<ol>
+<li>-d 项目路径，即.gcda .gcno所在的路径</li>
+<li>-a 合并（归并）多个lcov生成的info文件</li>
+<li>-c 捕获，也即收集代码运行后所产生的统计计数信息</li>
+<li>—external 捕获其它目录产生的统计计数文件</li>
+<li>-i/—initial 初始化所有的覆盖率信息，作为基准数据</li>
+<li>-o 生成处理后的文件</li>
+<li>-r/—remove 移除不需要关注的覆盖率信息文件</li>
+<li>-z 重置所有执行程序所产生的统计信息为0</li>
+</ol>
+<h2 id="内核覆盖率-1"><a href="#内核覆盖率-1" class="headerlink" title="内核覆盖率"></a>内核覆盖率</h2><p><a href="https://github.com/linux-test-project/lcov">linux-test-project</a></p>
+<p>As root:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lcov --zerocounters</span><br></pre></td></tr></table></figure>
+<p><strong>捕捉当前覆盖状态</strong>，存于一个文件（需要等几分钟）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">lcov -c -o lcov_res/kernel.info</span><br><span class="line">...</span><br><span class="line">Processing crypto/gf128mul.gcda</span><br><span class="line">Processing crypto/gcm.gcda</span><br><span class="line">Processing crypto/ghash-generic.gcda</span><br><span class="line">Finished .info-file creation</span><br><span class="line">Removing temporary directories.</span><br></pre></td></tr></table></figure>
+<p><strong>生成html输出</strong>。读当前文件/lcov_res/kernel.info，在当前目录/cover_report/下生成html文件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">genhtml -o cover_report --legend --title "kernel_cov" --prefix=./ lcov_res/kernel.info</span><br><span class="line">...</span><br><span class="line">Processing file /usr/src/linux-4.6/sound/pci/ens1370.c</span><br><span class="line">Processing file /usr/src/linux-4.6/sound/pci/ac97/ac97_pcm.c</span><br><span class="line">Processing file /usr/src/linux-4.6/sound/pci/ac97/ac97_patch.c</span><br><span class="line">Processing file /usr/src/linux-4.6/sound/pci/ac97/ac97_codec.c</span><br><span class="line">Processing file /usr/src/linux-4.6/sound/pci/ac97/ac97_proc.c</span><br><span class="line">Writing directory view page.</span><br><span class="line">Overall coverage rate:</span><br><span class="line">  lines......: 7.0% (42498 of 605635 lines)</span><br><span class="line">  functions..: 8.7% (4784 of 54929 functions)</span><br></pre></td></tr></table></figure>
+
+  </div>
+  
+</article>
+    </main>
+    <footer id="footer">
+  Copyright &copy;
+  2020
+  XingkunZ
+  
+  
+    <a class="social-links" href="https://github.com/jylzs369"><i class="blogfont">&#xe6b7; </i></a>
+  
+    <a class="social-links" href="mailto:jylzs369@163.com"><i class="blogfont">&#xe61a; </i></a>
+  
+    <a class="social-links" href="/atom.xml"><i class="blogfont">&#xe640; </i></a>
+  
+  
+</footer>
+    <!-- scripts -->
+<script src="/scripts/main.js"></script>
+  </body>
+</html>

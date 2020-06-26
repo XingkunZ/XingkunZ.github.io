@@ -1,16 +1,252 @@
-extends includes/layout
+<!DOCTYPE html>
+<html  lang=en>
+  <head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  
+    
+    <link rel="shortcut icon" href="/images/favicon.ico ">
+    
+    
+    <link rel="icon" type="image/png" href="/images/favicon-android.png " sizes="192x192">
+    
+    
+    <link rel="apple-touch-icon" href="/images/favicon-apple.png " sizes="180x180">
+    
+  
+  <!-- title -->
+  <title>KUN 操作系统丨（1）概述 </title>
+  <!-- styles -->
+  <!-- styles -->
+<link rel="stylesheet" href="/styles/global.css">
+  <!-- rss -->
+  
+</head>
+  <body>
+    <header id="header">
+  
+  <nav class="menu menu--right">
+  
+    <a class="menu__item" href="/">主页</a>
+    <a class="menu__item" href="/archives/">归档</a>
+    <a class="menu__item" href="/categories/">专题</a>
+    <a class="menu__item" href="/tags/">标签</a>
+    <!-- <a class="menu__item" href="/">作品</a> -->
+    <!-- <a class="menu__item" href="/about/">关于</a> -->
+  </nav>
+</header>
+    <main>
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post__header">
+  <h1 class="post__title">操作系统丨（1）概述</h1>
+  
+  
+  <div class="post__meta">
+    
+<time class="post__date" datetime="2019-10-04T13:20:39.000Z" itemprop="datePublished">
+  
+  <i class="blogfont">&#xedff;</i>
+  
+  2019-10-04 21:20:39
+</time>
 
-block site_title
-    != config.title + " | " + page.title
+    
 
-block description
-    meta(name="description", content=page.excerpt)
+    
+<div class="post__tag">
+  <i class="blogfont">&#xe7ec;</i>
+  <a class="tag-link" href="/tags/操作系统/">操作系统</a>, <a class="tag-link" href="/tags/笔记/">笔记</a>
+</div>
 
-block container
-    include mixins/post
-    +article(page)
-    include includes/disqus
 
-block pagination
-    include mixins/paginator
-    +forPost()
+    <div id="/2019/10/04/操作系统丨（1）概述/" class="leancloud_visitors post__stat" data-flag-title="操作系统丨（1）概述">
+  <i class="blogfont">&#xe672;</i>
+  <span class="leancloud-visitors-count">loading...</span>
+</div>
+  </div>
+</header>
+  <aside class="post__aside">
+  <div class="post__actions">
+    <a id="backTop" class="post__top" href="javascript:">
+      <i class="blogfont">&#xe6b1;</i><!-- Top -->
+    </a>
+    <a id="share" class="post__share" href="javascript:">
+      <i class="blogfont">&#xe6c1;</i>
+    </a>
+  </div>
+  <ol class="post__toc"><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#操作系统定义"><span class="post__toc-text">操作系统定义</span></a><ol class="post__toc-child"><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#统一定义"><span class="post__toc-text">统一定义</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#作为最基本的系统软件"><span class="post__toc-text">作为最基本的系统软件</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#作为资源管理器"><span class="post__toc-text">作为资源管理器</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#作为虚拟机"><span class="post__toc-text">作为虚拟机</span></a></li></ol></li><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#操作系统分类"><span class="post__toc-text">操作系统分类</span></a><ol class="post__toc-child"><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#单道批处理系统"><span class="post__toc-text">单道批处理系统</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#多道批处理系统"><span class="post__toc-text">多道批处理系统</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#分时系统——多道程序设计的自然延伸"><span class="post__toc-text">分时系统——多道程序设计的自然延伸</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#实时操作系统"><span class="post__toc-text">实时操作系统</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#网络操作系统"><span class="post__toc-text">网络操作系统</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#分布式操作系统"><span class="post__toc-text">分布式操作系统</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#多处理机系统-并行计算系统"><span class="post__toc-text">多处理机系统/并行计算系统</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#多核系统"><span class="post__toc-text">多核系统</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#集群系统"><span class="post__toc-text">集群系统</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#嵌入式操作系统"><span class="post__toc-text">嵌入式操作系统</span></a></li></ol></li><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#操作系统功能"><span class="post__toc-text">操作系统功能</span></a></li><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#操作系统特征"><span class="post__toc-text">操作系统特征</span></a></li></ol>
+</aside>
+  <div class="post__content" itemprop="articleBody">
+    <h2 id="操作系统定义"><a href="#操作系统定义" class="headerlink" title="操作系统定义"></a>操作系统定义</h2><h3 id="统一定义"><a href="#统一定义" class="headerlink" title="统一定义"></a>统一定义</h3><p>操作系统是控制和管理计算机系统的硬件和软件资源、合理地组织计算机工作流程及方便用户使用的程序和数据的集合。</p>
+<p><strong>目的</strong>：提高计算机系统的效率、增强系统的处理能力、充分发挥系统资源利用率、方便用户使用。</p>
+<h3 id="作为最基本的系统软件"><a href="#作为最基本的系统软件" class="headerlink" title="作为最基本的系统软件"></a>作为最基本的系统软件</h3><p>操作系统是计算机系统软件的重要组成部分，其物质基础是系统硬件。</p>
+<blockquote>
+<p>计算机系统资源包括：系统硬件和系统软件</p>
+</blockquote>
+<h3 id="作为资源管理器"><a href="#作为资源管理器" class="headerlink" title="作为资源管理器"></a>作为资源管理器</h3><p>跟踪资源状态：掌握资源分配的全局信息。分配资源、回收资源、保护资源。</p>
+<blockquote>
+<p>系统资源四大类：处理机、存储器、I/O设备、信息</p>
+<p>操作系统的四类管理器：处理机管理、存储管理、设备管理、信息管理</p>
+</blockquote>
+<h3 id="作为虚拟机"><a href="#作为虚拟机" class="headerlink" title="作为虚拟机"></a>作为虚拟机</h3><p>是用户和计算机之间的接口。</p>
+<blockquote>
+<p>操作系统为用户提供接口：命令接口、编程接口</p>
+</blockquote>
+<hr>
+<h2 id="操作系统分类"><a href="#操作系统分类" class="headerlink" title="操作系统分类"></a>操作系统分类</h2><h3 id="单道批处理系统"><a href="#单道批处理系统" class="headerlink" title="单道批处理系统"></a>单道批处理系统</h3><p>同一批作业自动依次更替，CPU和I/O设备使用忙闲不均。</p>
+<h3 id="多道批处理系统"><a href="#多道批处理系统" class="headerlink" title="多道批处理系统"></a>多道批处理系统</h3><ul>
+<li><p>优点：作业流程自动化，资源利用率高吞吐量大。</p>
+</li>
+<li><p>缺点：用户交互性差，调试程序困难；作业平均周转时间长。</p>
+</li>
+</ul>
+<h3 id="分时系统——多道程序设计的自然延伸"><a href="#分时系统——多道程序设计的自然延伸" class="headerlink" title="分时系统——多道程序设计的自然延伸"></a>分时系统——多道程序设计的自然延伸</h3><p>多个程序分时共享硬件和软件资源。</p>
+<ul>
+<li><p>按时间片分配：各程序在CPU上执行的轮换时间。</p>
+</li>
+<li><p>特点：同时性、交互性、独立性、及时性。</p>
+</li>
+</ul>
+<blockquote>
+<p>同时性：多个用户同时工作；</p>
+<p>独立性：各用户独立操作互不干扰；</p>
+<p>及时性：系统能及时对用户做出响应；</p>
+<p>交互性（基本属性）：用户交互式地向系统提出请求。</p>
+</blockquote>
+<h3 id="实时操作系统"><a href="#实时操作系统" class="headerlink" title="实时操作系统"></a>实时操作系统</h3><p>能够在<strong>制定或者确定的时间内</strong>完成系统功能和对外部或内部、同步或异步时间做出相应的系统。在实时计算中，系统的正确性依赖于计算的逻辑结果和结果产生的时间。</p>
+<blockquote>
+<p>硬实时系统：必须在规定的时刻或时间范围内完成任务。</p>
+<p>软实时系统：接受偶尔违反最终时限的情况。</p>
+</blockquote>
+<p>保证实时性的关键：高精度计时系统、多级中断机制、实时调度机制。</p>
+<h3 id="网络操作系统"><a href="#网络操作系统" class="headerlink" title="网络操作系统"></a>网络操作系统</h3><p>在通常操作系统功能的基础上，提供网络通信和网络服务功能的操作系统。</p>
+<ul>
+<li><p>目标：相互通信、资源共享；</p>
+</li>
+<li><p>功能：网络通信功能、网络资源管理、网络服务、网络管理、互操作。</p>
+</li>
+</ul>
+<h3 id="分布式操作系统"><a href="#分布式操作系统" class="headerlink" title="分布式操作系统"></a>分布式操作系统</h3><p>分布式操作系统的所有系统任务可在系统中任何处理机上运行，自动实现全系统范围内的任务分配并自动调度各处理机的工作负载。</p>
+<p>特征：</p>
+<ul>
+<li><p>功能和任务的分布；</p>
+</li>
+<li><p><strong>透明性</strong>：资源共享，资源对于用户透明；</p>
+</li>
+<li><p><strong>自治性</strong>：多个主机处于平等地位，无主从关系。</p>
+</li>
+</ul>
+<h3 id="多处理机系统-并行计算系统"><a href="#多处理机系统-并行计算系统" class="headerlink" title="多处理机系统/并行计算系统"></a>多处理机系统/并行计算系统</h3><p>优点：</p>
+<ul>
+<li><p>增加系统的吞吐量：采用N个处理器的加速比小于N，因为有额外开销，竞争共享资源</p>
+</li>
+<li><p>提高系统可靠性：故障时系统降级运行，处理器故障会导致系统变慢而不是停止。</p>
+<ul>
+<li>适度退化：根据剩余有效硬件的级别按照比例继续提供服务的能力。</li>
+<li>容错：系统超过适度退化，容忍某部件错误。</li>
+</ul>
+</li>
+<li><p>规模经济：低于多个单处理器系统的价格，因为可以共享外设、大容量存储和电源供给。</p>
+</li>
+</ul>
+<p>分类1:是否对称处理源于硬件或软件</p>
+<ul>
+<li><p><strong>非对称式多处理ASMP</strong>：主从模式</p>
+<ul>
+<li>一个主处理器：运行OS，管理整个系统的资源，为从处理器分配任务。</li>
+<li>从处理器：多个，执行应用程序或I/O处理。</li>
+<li>特点：不同性质任务的负载不均，可靠性不高，不易移植。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>对称式多处理SMP</strong>（常用的多处理机系统）</p>
+<ul>
+<li>os交替在各个处理器上执行，各处理器平等。</li>
+<li>任务负载平均，性能调节容易，可同时执行多进程。</li>
+<li>应当仔细控制I/O；防止CPU先忙不均，处理器共享一定的数据结构即可。</li>
+</ul>
+</li>
+</ul>
+<p>分类2：耦合类型</p>
+<ul>
+<li><p><strong>紧密耦合</strong>：各处理及之间通过快速总线或开关阵列相连，共享内存，整体系统由一个统一的OS管理。</p>
+</li>
+<li><p><strong>松散耦合</strong>：各处理及带有各自的存储器、I/O设备和操作系统，通过通道或通信线路相连。每个处理及上独立运行OS。</p>
+</li>
+</ul>
+<h3 id="多核系统"><a href="#多核系统" class="headerlink" title="多核系统"></a>多核系统</h3><p>多核系统是多处理器系统，但多处理系统不一定都是多核的。</p>
+<p>集成多个计算核到单个CPU芯片。</p>
+<blockquote>
+<p>多处理机系统是多个CPU。</p>
+</blockquote>
+<h3 id="集群系统"><a href="#集群系统" class="headerlink" title="集群系统"></a>集群系统</h3><p>是多处理器系统，是松散耦合的（由两个或多个独立系统或节点组成），可以是对称的或非对称的。</p>
+<ul>
+<li>提供高可用性服务：集群中一个或多个系统出错仍可继续提供服务，代价是增加冗余。</li>
+<li>提供高性能计算：应用程序专门编写以利用集群。</li>
+</ul>
+<blockquote>
+<p>并行计算：程序分成多部分，每部分运行在各个计算核上，所有节点的结果合并在一起形成解决方案。</p>
+</blockquote>
+<h3 id="嵌入式操作系统"><a href="#嵌入式操作系统" class="headerlink" title="嵌入式操作系统"></a>嵌入式操作系统</h3><p>以应用为中心、以计算技术为基础、软硬件可裁剪，适应应用系统，对功能、可靠性、成本、体积、功耗严格要求的专用计算机系统。</p>
+<hr>
+<h2 id="操作系统功能"><a href="#操作系统功能" class="headerlink" title="操作系统功能"></a>操作系统功能</h2><ul>
+<li>处理机管理：进程控制、进程同步、进程通信、进程调度。</li>
+<li>存储管理：内存分配、内存保护、地址映射、内存扩充。</li>
+<li>设备管理：缓冲管理、设备分配、设备处理、虚拟设备。</li>
+<li>文件管理：文件存储空间的管理、目录管理、文件的读\写管理和保护。</li>
+<li>用户接口：命令接口、程序接口、图形接口。</li>
+</ul>
+<hr>
+<h2 id="操作系统特征"><a href="#操作系统特征" class="headerlink" title="操作系统特征"></a>操作系统特征</h2><ul>
+<li><p>并发性（现代操作系统的基本特征）：多个事件在同一时间段内发生。</p>
+</li>
+<li><p>共享性 （现代操作系统的基本特征）</p>
+<ul>
+<li>系统中的资源可供内存中多个并发执行的进程共同使用。</li>
+<li>互斥共享方式，临界资源。</li>
+<li>同时访问方式。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>虚拟性：一个物理实体→若干个逻辑上的对应。</p>
+<ul>
+<li>虚拟处理机技术：多道程序并发执行分时使用一台处理机。</li>
+<li>虚拟存储器技术：一台机器的物理存储器变为虚拟存储器，从逻辑上扩充存储器的容量。</li>
+<li>虚拟设备技术：一台物理I/O设备虚拟为多台逻辑上的I/O设备，允许每个用户占用一台逻辑上的I/O设备。（SPOOLing技术）</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>异步性（不确定性）</p>
+<ul>
+<li>进程的执行顺序、执行时间的不确定。</li>
+<li>运行速度不可预知。分时系统中多个进程并发执行，不可预知每个进程的运行推进快慢；无论快慢，结果应该相同，通过进程互斥和同步手段来保证。</li>
+<li>难以重现系统在某个时刻的状态。</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  
+</article>
+    </main>
+    <footer id="footer">
+  Copyright &copy;
+  2020
+  XingkunZ
+  
+  
+    <a class="social-links" href="https://github.com/jylzs369"><i class="blogfont">&#xe6b7; </i></a>
+  
+    <a class="social-links" href="mailto:jylzs369@163.com"><i class="blogfont">&#xe61a; </i></a>
+  
+    <a class="social-links" href="/atom.xml"><i class="blogfont">&#xe640; </i></a>
+  
+  
+</footer>
+    <!-- scripts -->
+<script src="/scripts/main.js"></script>
+  </body>
+</html>

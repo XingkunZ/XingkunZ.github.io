@@ -1,16 +1,145 @@
-extends includes/layout
+<!DOCTYPE html>
+<html  lang=en>
+  <head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  
+    
+    <link rel="shortcut icon" href="/images/favicon.ico ">
+    
+    
+    <link rel="icon" type="image/png" href="/images/favicon-android.png " sizes="192x192">
+    
+    
+    <link rel="apple-touch-icon" href="/images/favicon-apple.png " sizes="180x180">
+    
+  
+  <!-- title -->
+  <title>KUN ubuntu 16.04编译linux 4.6内核完整过程（含各种error解决方案） </title>
+  <!-- styles -->
+  <!-- styles -->
+<link rel="stylesheet" href="/styles/global.css">
+  <!-- rss -->
+  
+</head>
+  <body>
+    <header id="header">
+  
+  <nav class="menu menu--right">
+  
+    <a class="menu__item" href="/">主页</a>
+    <a class="menu__item" href="/archives/">归档</a>
+    <a class="menu__item" href="/categories/">专题</a>
+    <a class="menu__item" href="/tags/">标签</a>
+    <!-- <a class="menu__item" href="/">作品</a> -->
+    <!-- <a class="menu__item" href="/about/">关于</a> -->
+  </nav>
+</header>
+    <main>
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post__header">
+  <h1 class="post__title">ubuntu 16.04编译linux 4.6内核完整过程（含各种error解决方案）</h1>
+  
+  
+  <div class="post__meta">
+    
+<time class="post__date" datetime="2019-12-23T16:02:47.000Z" itemprop="datePublished">
+  
+  <i class="blogfont">&#xedff;</i>
+  
+  2019-12-24 00:02:47
+</time>
 
-block site_title
-    != config.title + " | " + page.title
+    
 
-block description
-    meta(name="description", content=page.excerpt)
+    
+<div class="post__tag">
+  <i class="blogfont">&#xe7ec;</i>
+  <a class="tag-link" href="/tags/Linux/">Linux</a>, <a class="tag-link" href="/tags/ubuntu/">ubuntu</a>, <a class="tag-link" href="/tags/教程/">教程</a>, <a class="tag-link" href="/tags/编译内核/">编译内核</a>
+</div>
 
-block container
-    include mixins/post
-    +article(page)
-    include includes/disqus
 
-block pagination
-    include mixins/paginator
-    +forPost()
+    <div id="/2019/12/24/ubuntu-16-4编译linux-4-6内核完整过程/" class="leancloud_visitors post__stat" data-flag-title="ubuntu 16.04编译linux 4.6内核完整过程（含各种error解决方案）">
+  <i class="blogfont">&#xe672;</i>
+  <span class="leancloud-visitors-count">loading...</span>
+</div>
+  </div>
+</header>
+  <aside class="post__aside">
+  <div class="post__actions">
+    <a id="backTop" class="post__top" href="javascript:">
+      <i class="blogfont">&#xe6b1;</i><!-- Top -->
+    </a>
+    <a id="share" class="post__share" href="javascript:">
+      <i class="blogfont">&#xe6c1;</i>
+    </a>
+  </div>
+  <ol class="post__toc"><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#版本说明"><span class="post__toc-text">版本说明</span></a><ol class="post__toc-child"><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#环境版本"><span class="post__toc-text">环境版本</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#linux内核版本"><span class="post__toc-text">linux内核版本</span></a></li></ol></li><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#Linux内核编译"><span class="post__toc-text">Linux内核编译</span></a><ol class="post__toc-child"><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#准备编译"><span class="post__toc-text">准备编译</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#内核配置"><span class="post__toc-text">内核配置</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#内核配置不成功的错误"><span class="post__toc-text">内核配置不成功的错误</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#编译和安装内核"><span class="post__toc-text">编译和安装内核</span></a></li></ol></li></ol>
+</aside>
+  <div class="post__content" itemprop="articleBody">
+    <blockquote>
+<p>完整的编译过程大约会占用10GB的存储空间！谨慎！</p>
+<p>如果你已有环境基础，那么整个过程会大致耗时5h+!</p>
+</blockquote>
+<h2 id="版本说明"><a href="#版本说明" class="headerlink" title="版本说明"></a>版本说明</h2><h3 id="环境版本"><a href="#环境版本" class="headerlink" title="环境版本"></a>环境版本</h3><p>Ubuntu版本查看方法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kun@ubuntu:~$ cat /etc/issue</span><br><span class="line">Ubuntu 16.04.6 LTS \n \l</span><br><span class="line"></span><br><span class="line">kun@ubuntu:~$ cat /proc/version</span><br><span class="line">Linux version 4.15.0-45-generic (buildd@lcy01-amd64-027) (gcc version 5.4.0 20160609 (Ubuntu 5.4.0-6ubuntu1~16.04.10)) #48~16.04.1-Ubuntu SMP Tue Jan 29 18:03:48 UTC 2019</span><br></pre></td></tr></table></figure>
+<p>VMware® Workstation 15 Player</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">15.1.0 build-13591040</span><br></pre></td></tr></table></figure>
+<h3 id="linux内核版本"><a href="#linux内核版本" class="headerlink" title="linux内核版本"></a>linux内核版本</h3><p>linux-4.6</p>
+<p>下载链接：<a href="https://www.kernel.org/。">https://www.kernel.org/。</a></p>
+<p>下载linux-4.6.tar.xz文件后复制到Ubuntu的文件系统中，我将复制到了Downloads/文件下。</p>
+<h2 id="Linux内核编译"><a href="#Linux内核编译" class="headerlink" title="Linux内核编译"></a>Linux内核编译</h2><h3 id="准备编译"><a href="#准备编译" class="headerlink" title="准备编译"></a>准备编译</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 解压准备</span></span><br><span class="line">xz -d Downloads/linux-4.6.tar.xz</span><br><span class="line">tar –xvf Downloads/linux-4.6.tar</span><br><span class="line">sudo cp -r Downloads/linux-4.6 /usr/src</span><br><span class="line"><span class="built_in">cd</span> /usr/src</span><br><span class="line"><span class="comment"># 编译配置</span></span><br><span class="line">cp linux-headers-4.15.0-45-generic/.config linux-4.6/</span><br><span class="line"><span class="built_in">cd</span> linux-4.6/</span><br></pre></td></tr></table></figure>
+<h3 id="内核配置"><a href="#内核配置" class="headerlink" title="内核配置"></a>内核配置</h3><p>内核提供了各种不同的工具来简化内核配置，make config/gconfig/oldconfig等，下面以基于ncurse库编制的图形界面工具配置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
+<p>出现可视化菜单，选择load→OK→Save→OK→EXIT→EXIT。</p>
+<p>执行完，则内核配置完毕。</p>
+<h3 id="内核配置不成功的错误"><a href="#内核配置不成功的错误" class="headerlink" title="内核配置不成功的错误"></a>内核配置不成功的错误</h3><p>如果没有出现可视化菜单，而是出现错误：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/usr/src/linux-4.6# make menuconfig</span><br><span class="line">  HOSTCC  scripts/basic/fixdep</span><br><span class="line">  HOSTCC  scripts/kconfig/mconf.o</span><br><span class="line">In file included from scripts/kconfig/mconf.c:23:0:</span><br><span class="line">scripts/kconfig/lxdialog/dialog.h:38:20: fatal error: curses.h: No such file or directory</span><br><span class="line">compilation terminated.</span><br><span class="line">scripts/Makefile.host:108: recipe for target 'scripts/kconfig/mconf.o' failed</span><br><span class="line">make[1]: *** [scripts/kconfig/mconf.o] Error 1</span><br><span class="line">Makefile:538: recipe for target 'menuconfig' failed</span><br><span class="line">make: *** [menuconfig] Error 2</span><br></pre></td></tr></table></figure>
+<p>解决方法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install build-essential </span><br><span class="line">sudo apt-get install libncurses5 </span><br><span class="line">sudo apt-get install libncurses5-dev</span><br></pre></td></tr></table></figure>
+<p>重新尝试，在可视化菜单中选择load→OK→Save→OK→EXIT→EXIT</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/usr/src/kernel/linux-4.6# make menuconfig</span><br><span class="line">  HOSTCC  scripts/kconfig/mconf.o</span><br><span class="line">  HOSTCC  scripts/kconfig/zconf.tab.o</span><br><span class="line">  HOSTCC  scripts/kconfig/lxdialog/checklist.o</span><br><span class="line">  HOSTCC  scripts/kconfig/lxdialog/util.o</span><br><span class="line">  HOSTCC  scripts/kconfig/lxdialog/inputbox.o</span><br><span class="line">  HOSTCC  scripts/kconfig/lxdialog/textbox.o</span><br><span class="line">  HOSTCC  scripts/kconfig/lxdialog/yesno.o</span><br><span class="line">  HOSTCC  scripts/kconfig/lxdialog/menubox.o</span><br><span class="line">  HOSTLD  scripts/kconfig/mconf</span><br><span class="line">scripts/kconfig/mconf  Kconfig</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">*** End of the configuration.</span><br><span class="line">*** Execute 'make' to start the build or try 'make help'.</span><br></pre></td></tr></table></figure>
+<p>如果出现仍错误，如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">scripts/kconfig/mconf  Kconfig</span><br><span class="line">.config:4244:warning: symbol value <span class="string">'m'</span> invalid <span class="keyword">for</span> GPIO_MB86S7X</span><br><span class="line">Your display is too small to run Menuconfig!</span><br><span class="line">It must be at least 19 lines by 80 columns.</span><br><span class="line">scripts/kconfig/Makefile:28: recipe <span class="keyword">for</span> target <span class="string">'menuconfig'</span> failed</span><br><span class="line">make[1]: *** [menuconfig] Error 1</span><br><span class="line">Makefile:538: recipe <span class="keyword">for</span> target <span class="string">'menuconfig'</span> failed</span><br><span class="line">make: *** [menuconfig] Error 2</span><br></pre></td></tr></table></figure>
+<p>则只需要调大终端窗口大小重试即可。</p>
+<p>其他的配置工具简介如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">make config ;字符界面下</span><br><span class="line">make gconfig ;基于gk+的图形工具</span><br><span class="line">make defconfig ;基于默认配置</span><br><span class="line">make oldconfig ;修改过配置文件后，或者用已有配置文件配置新的代码树的时候，应该执行</span><br></pre></td></tr></table></figure>
+<h3 id="编译和安装内核"><a href="#编译和安装内核" class="headerlink" title="编译和安装内核"></a>编译和安装内核</h3><p>编译内核，仍然在你的linux-4.6/下执行，可能耗时数小时：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make</span><br></pre></td></tr></table></figure>
+<p>老版的编译方式会编译启动映像make bzImage。这里不使用，make就可以搞定。</p>
+<p>可能出现错误：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">scripts/sign-file.c:25:30: fatal error: openssl/opensslv.h: No such file or directory</span><br><span class="line">compilation terminated.</span><br><span class="line">scripts/Makefile.host:91: recipe for target 'scripts/sign-file' failed</span><br><span class="line">make[1]: *** [scripts/sign-file] Error 1</span><br><span class="line">Makefile:552: recipe for target 'scripts' failed</span><br><span class="line">make: *** [scripts] Error 2</span><br></pre></td></tr></table></figure>
+<p>解决方法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install libssl-dev</span><br></pre></td></tr></table></figure>
+<p>重新尝试make，开始等待。结束结果如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Setup is 17404 bytes (padded to 17408 bytes).</span><br><span class="line">System is 6942 kB</span><br><span class="line">CRC f4cb1ce4</span><br><span class="line">Kernel: arch/x86/boot/bzImage is ready  (#1)</span><br></pre></td></tr></table></figure>
+<p>安装内核模块：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make modules_install</span><br></pre></td></tr></table></figure>
+<p>就可以把已编译的模块安装到正确的主目录/lib/modules下。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make install ;安装内核模块</span><br></pre></td></tr></table></figure>
+<p>这一步生成新内核的引导文件。重启系统：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<p>过程结束。</p>
+
+  </div>
+  
+</article>
+    </main>
+    <footer id="footer">
+  Copyright &copy;
+  2020
+  XingkunZ
+  
+  
+    <a class="social-links" href="https://github.com/jylzs369"><i class="blogfont">&#xe6b7; </i></a>
+  
+    <a class="social-links" href="mailto:jylzs369@163.com"><i class="blogfont">&#xe61a; </i></a>
+  
+    <a class="social-links" href="/atom.xml"><i class="blogfont">&#xe640; </i></a>
+  
+  
+</footer>
+    <!-- scripts -->
+<script src="/scripts/main.js"></script>
+  </body>
+</html>

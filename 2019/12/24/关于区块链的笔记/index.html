@@ -1,16 +1,115 @@
-extends includes/layout
+<!DOCTYPE html>
+<html  lang=en>
+  <head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  
+    
+    <link rel="shortcut icon" href="/images/favicon.ico ">
+    
+    
+    <link rel="icon" type="image/png" href="/images/favicon-android.png " sizes="192x192">
+    
+    
+    <link rel="apple-touch-icon" href="/images/favicon-apple.png " sizes="180x180">
+    
+  
+  <!-- title -->
+  <title>KUN 关于区块链的笔记 </title>
+  <!-- styles -->
+  <!-- styles -->
+<link rel="stylesheet" href="/styles/global.css">
+  <!-- rss -->
+  
+</head>
+  <body>
+    <header id="header">
+  
+  <nav class="menu menu--right">
+  
+    <a class="menu__item" href="/">主页</a>
+    <a class="menu__item" href="/archives/">归档</a>
+    <a class="menu__item" href="/categories/">专题</a>
+    <a class="menu__item" href="/tags/">标签</a>
+    <!-- <a class="menu__item" href="/">作品</a> -->
+    <!-- <a class="menu__item" href="/about/">关于</a> -->
+  </nav>
+</header>
+    <main>
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post__header">
+  <h1 class="post__title">关于区块链的笔记</h1>
+  
+  
+  <div class="post__meta">
+    
+<time class="post__date" datetime="2019-12-24T03:14:46.000Z" itemprop="datePublished">
+  
+  <i class="blogfont">&#xedff;</i>
+  
+  2019-12-24 11:14:46
+</time>
 
-block site_title
-    != config.title + " | " + page.title
+    
 
-block description
-    meta(name="description", content=page.excerpt)
+    
+<div class="post__tag">
+  <i class="blogfont">&#xe7ec;</i>
+  <a class="tag-link" href="/tags/POW/">POW</a>, <a class="tag-link" href="/tags/区块链/">区块链</a>, <a class="tag-link" href="/tags/笔记/">笔记</a>
+</div>
 
-block container
-    include mixins/post
-    +article(page)
-    include includes/disqus
 
-block pagination
-    include mixins/paginator
-    +forPost()
+    <div id="/2019/12/24/关于区块链的笔记/" class="leancloud_visitors post__stat" data-flag-title="关于区块链的笔记">
+  <i class="blogfont">&#xe672;</i>
+  <span class="leancloud-visitors-count">loading...</span>
+</div>
+  </div>
+</header>
+  <aside class="post__aside">
+  <div class="post__actions">
+    <a id="backTop" class="post__top" href="javascript:">
+      <i class="blogfont">&#xe6b1;</i><!-- Top -->
+    </a>
+    <a id="share" class="post__share" href="javascript:">
+      <i class="blogfont">&#xe6c1;</i>
+    </a>
+  </div>
+  
+</aside>
+  <div class="post__content" itemprop="articleBody">
+    <blockquote>
+<p>参考：B站-是落拓呀，视频ID：75077145，75755443。</p>
+</blockquote>
+<p>本篇博客放置两页手写笔记，内容包括：</p>
+<ol>
+<li>区块链（block chain）基本概念：区块组成、链的形成、区块链应用。</li>
+<li>篡改区块行为以及应对措施——工作量证明机制（POW）——的原理。</li>
+<li>P2P网络，篡改数据所需要的条件。</li>
+<li>计算哈希值、SHA算法和POW函数实现。</li>
+</ol>
+<p>下面是笔记：</p>
+<img src="/2019/12/24/关于区块链的笔记/1.png">
+<img src="/2019/12/24/关于区块链的笔记/2.png">
+
+  </div>
+  
+</article>
+    </main>
+    <footer id="footer">
+  Copyright &copy;
+  2020
+  XingkunZ
+  
+  
+    <a class="social-links" href="https://github.com/jylzs369"><i class="blogfont">&#xe6b7; </i></a>
+  
+    <a class="social-links" href="mailto:jylzs369@163.com"><i class="blogfont">&#xe61a; </i></a>
+  
+    <a class="social-links" href="/atom.xml"><i class="blogfont">&#xe640; </i></a>
+  
+  
+</footer>
+    <!-- scripts -->
+<script src="/scripts/main.js"></script>
+  </body>
+</html>
