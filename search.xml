@@ -1681,10 +1681,7 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 <h3 id="文章折叠和“阅读全文”的设置"><a href="#文章折叠和“阅读全文”的设置" class="headerlink" title="文章折叠和“阅读全文”的设置"></a>文章折叠和“阅读全文”的设置</h3><ul>
 <li><a href="https://www.jianshu.com/p/78c218f9d1e7">https://www.jianshu.com/p/78c218f9d1e7</a></li>
 </ul>
-<h3 id="进阶设置"><a href="#进阶设置" class="headerlink" title="进阶设置"></a>进阶设置</h3><p>关于浏览量统计等杂七杂八：</p>
-<ul>
-<li><a href="http://yearito.cn/posts/hexo-advanced-settings.html">http://yearito.cn/posts/hexo-advanced-settings.html</a></li>
-</ul>
+<h3 id="进阶设置"><a href="#进阶设置" class="headerlink" title="进阶设置"></a>进阶设置</h3><p>关于浏览量统计等杂七杂八：<a href="http://yearito.cn/posts/hexo-advanced-settings.html">http://yearito.cn/posts/hexo-advanced-settings.html</a></p>
 ]]></content>
       <categories>
         <category>杂谈</category>
