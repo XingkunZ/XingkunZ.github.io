@@ -326,9 +326,9 @@
       </categories>
       <tags>
         <tag>Linux</tag>
-        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -495,9 +495,9 @@
       </categories>
       <tags>
         <tag>Linux</tag>
-        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -826,9 +826,9 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
       </categories>
       <tags>
         <tag>Linux</tag>
+        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>
@@ -981,9 +981,9 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
       </categories>
       <tags>
         <tag>Linux</tag>
+        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>
