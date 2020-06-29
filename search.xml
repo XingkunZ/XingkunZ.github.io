@@ -1,7 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>《算法导论》|第一章 算法在计算中的作用</title>
+    <title>《算法导论》| 第二章 算法基础</title>
+    <url>/2020/06/28/%E3%80%8A%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E3%80%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E7%AE%97%E6%B3%95%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h1 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h1><h2 id="思路与实现"><a href="#思路与实现" class="headerlink" title="思路与实现"></a>思路与实现</h2><p>使用插入排序算法解决排序问题：输入一个待排序的序列，期待输出一个非递减的序列。</p><p><strong>插入排序的思路</strong>是从左到右遍历序列，不断为遍历到的数（key）安排到左边（或原地）的合适位置。在遍历过程中，左边已遍历过的序列是已排序的，右边未遍历过的序列是未排序的。</p><a id="more"></a>
+
+<p>下面是c语言实现的插入排序。</p>
+<blockquote>
+<p>书中的伪代码的序列编号是从1开始的，在下面的c语言实现中，序列用数组存储，编号是从0开始的，因此边界值是不同的。</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 输入：待排序数组,数组长度</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">insertionSort</span><span class="params">(<span class="keyword">int</span> A[], <span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i=<span class="number">0</span>, j=<span class="number">0</span>, key=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(j=<span class="number">1</span>; j&lt;n; j++)&#123;</span><br><span class="line">        key = A[j]; <span class="comment">// key存放当前正在被安排位置的数</span></span><br><span class="line">        i = j<span class="number">-1</span>; <span class="comment">// 从key的前一个位置的数开始比较</span></span><br><span class="line">        <span class="keyword">while</span>(i&gt;=<span class="number">0</span> &amp;&amp; A[i]&gt;key)&#123; <span class="comment">// 向左为key寻找位置</span></span><br><span class="line">            A[i+<span class="number">1</span>] = A[i];</span><br><span class="line">            i--;</span><br><span class="line">        &#125;</span><br><span class="line">        A[i+<span class="number">1</span>] = key; <span class="comment">// 找到合适的位置i,将key安排在i后面</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 输出A[]</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 插入排序测例</span></span><br><span class="line"><span class="comment"> * 输入：A[]=&#123;1,5,6,22,0,3,14,56,6,8&#125;</span></span><br><span class="line"><span class="comment"> * 输出：A[]=&#123;0,1,3,5,6,6,8,14,22,56&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<h2 id="插入排序的正确性"><a href="#插入排序的正确性" class="headerlink" title="插入排序的正确性"></a>插入排序的正确性</h2><h3 id="循环不变式"><a href="#循环不变式" class="headerlink" title="循环不变式"></a>循环不变式</h3><p>插入排序的中间状态是，左边已遍历过的序列是已排序的，右边未遍历过的序列是未排序的。当我们遍历到位置$j$时，A[0…j-1]构成了已排序的序列，A[j+1…n-1]构成了未排序的序列。而且，A[0…j-1]的数就是原来未经处理的从0到j-1位置上的数，具有该性质的A[0…j-1]称为一个<strong>循环不变式</strong>。</p>
+<p>循环不变式主要用来帮助我们理解算法的正确性。</p>
+<h3 id="循环不变式的性质"><a href="#循环不变式的性质" class="headerlink" title="循环不变式的性质"></a>循环不变式的性质</h3><p>一个循环不变式具有如下性质：</p>
+<ol>
+<li><strong>初始化</strong>：循环的第一次迭代前，它为真；</li>
+<li><strong>保持</strong>：如果循环的某次迭代之前，它为真，那么下次迭代之前它仍为真；</li>
+<li><strong>终止</strong>：在循环终止时，不变式为我们提供了一个有用的性质，该性质有助于证明算法是正确的。</li>
+</ol>
+<h3 id="循环不变式的性质证明"><a href="#循环不变式的性质证明" class="headerlink" title="循环不变式的性质证明"></a>循环不变式的性质证明</h3><blockquote>
+<p>按照数组存储编号来描述，序列编号从0开始。</p>
+</blockquote>
+<p>当<strong>性质1初始化</strong>成立时，循环不变式保证在第一次迭代前都是<strong>真</strong>的。迭代开始前（<code>j=1</code>），循环不变式由A[0]一个元素组成，该元素在算法开始前后没有变，是已排序的。因而该性质是成立的。</p>
+<p>当<strong>性质2保持</strong>成立时，循环不变式保证在每一次迭代前都是<strong>真</strong>的。如果遍历到A[j]，它的上一次迭代是将A[j-1]前的元素陆续向右移动一个位置直到为A[j-1]找到正确的位置插入。因此遍历到A[j]时的迭代前，A[0…j-1]是一个循环不变式，是已排序的、原元素组成的序列。</p>
+<img src="/2020/06/28/《算法导论》-第二章-算法基础/循环子序列性质.png" title="每次迭代前，循环子序列的保持">
+<p>当<strong>性质3终止</strong>成立时，循环不变式在循环中之后为真。循环终止的条件是<code>j&gt;=A.length=n</code>，当循环结束时，j等于n。将j=n带入上述性质验证中的标识，子数组A[0…n-1]由原来的A[0…n-1]组成，是已排序的状态。而A[0…n-1]就是整个数组，因此整个输入已排序。算法正确。</p>
+<h1 id="分析算法"><a href="#分析算法" class="headerlink" title="分析算法"></a>分析算法</h1><p>分析算法，来预测算法需要多少资源。</p>
+<h2 id="插入排序算法的分析"><a href="#插入排序算法的分析" class="headerlink" title="插入排序算法的分析"></a>插入排序算法的分析</h2><p>一般来说，算法需要的时间与<strong>输入规模</strong>同步增长，所以通常把一个程序的运行时间描述成其输入规模的函数。</p>
+<h3 id="输入规模的度量"><a href="#输入规模的度量" class="headerlink" title="输入规模的度量"></a>输入规模的度量</h3><p>对于排序问题来说输入规模是输入中的项数；对于输入为图的问题来说，输入规模是图的顶点数和边数。</p>
+<p>对于不同的问题，分析算法时需要指出输入规模的度量。</p>
+<h3 id="基本操作数"><a href="#基本操作数" class="headerlink" title="基本操作数"></a>基本操作数</h3><p>一个算法在特定输入上的运行时间是指执行的基本操作数步数。</p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>《算法导论》</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《算法导论》| 第一章 算法在计算中的作用</title>
     <url>/2020/06/28/%E3%80%8A%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA%E3%80%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%AE%97%E6%B3%95%E5%9C%A8%E8%AE%A1%E7%AE%97%E4%B8%AD%E7%9A%84%E4%BD%9C%E7%94%A8/</url>
     <content><![CDATA[<h1 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h1><h2 id="问题与算法"><a href="#问题与算法" class="headerlink" title="问题与算法"></a>问题与算法</h2><p>现实中有很多需要解决的问题，一个<strong>问题</strong>可以看作是对<code>{输入}</code>期待某一种<code>{输出}</code>的过程。<strong>算法</strong>是用来解决一个良好定义的计算问题的工具，在现实中有着实际应用。正确的算法描述了<code>{输入}</code>与<code>{输出}</code>的转换关系。</p><a id="more"></a>
 <p>衡量算法效率的常用标准是算法处理输入到得到输出所花费的<strong>时间</strong>。</p>
@@ -846,7 +885,7 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
 <blockquote>
 <p>参考：<a href="https://hexo.io/zh-cn/docs/asset-folders">hexo官方文档|资源文件夹</a></p>
 </blockquote>
-<h2 id="引用时难以察觉的错误（脏话）"><a href="#引用时难以察觉的错误（脏话）" class="headerlink" title="引用时难以察觉的错误（脏话）"></a>引用时难以察觉的错误（脏话）</h2><p>如果你在博客对应的资源文件夹中放<code>example.JPG</code>，但是在<code>.md</code>中写的是：</p>
+<h2 id="引用时难以察觉的错误（淦）"><a href="#引用时难以察觉的错误（淦）" class="headerlink" title="引用时难以察觉的错误（淦）"></a>引用时难以察觉的错误（淦）</h2><p>如果你在博客对应的资源文件夹中放<code>example.JPG</code>，但是在<code>.md</code>中写的是：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% asset_img example.jpg 这是一个图片 %&#125;</span><br></pre></td></tr></table></figure>
 <p>则图片也不会显示。</p>
 <p>所以使用前要<strong>检查属性中显示的图片格式大小写！</strong></p>
@@ -1705,10 +1744,10 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
         <category>杂谈</category>
       </categories>
       <tags>
-        <tag>博客</tag>
         <tag>hexo</tag>
-        <tag>github</tag>
         <tag>教程</tag>
+        <tag>博客</tag>
+        <tag>github</tag>
       </tags>
   </entry>
 </search>
