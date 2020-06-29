@@ -1,318 +1,89 @@
 <!DOCTYPE html>
-
-
-
-
-
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/kun.png?v=7.4.1">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/kun.png?v=7.4.1">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/kun.png?v=7.4.1">
-  <link rel="mask-icon" href="/images/kun.svg?v=7.4.1" color="#222">
-
-<link rel="stylesheet" href="/css/main.css?v=7.4.1">
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
-
-
-<script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Muse',
-    version: '7.4.1',
-    exturl: false,
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: "",
-    path: 'search.xml',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    translation: {
-      copy_button: 'Copy',
-      copy_success: 'Copied',
-      copy_failure: 'Copy failed'
-    },
-    sidebarPadding: 40
-  };
-</script>
-
-  <meta name="description" content="关于IPv4IP简述IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。">
-<meta name="keywords" content="Linux,UDP,网络,源码">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Linux网络内核源码分析|网络层之IP层处理">
-<meta property="og:url" content="https://xingkunz.github.io/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/index.html">
-<meta property="og:site_name" content="kun">
-<meta property="og:description" content="关于IPv4IP简述IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。">
-<meta property="og:locale" content="en">
-<meta property="og:image" content="https://xingkunz.github.io/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/ip数据包.PNG">
-<meta property="og:image" content="https://xingkunz.github.io/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/ip模块处理流程.PNG">
-<meta property="og:updated_time" content="2020-06-26T08:34:41.575Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux网络内核源码分析|网络层之IP层处理">
-<meta name="twitter:description" content="关于IPv4IP简述IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。">
-<meta name="twitter:image" content="https://xingkunz.github.io/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/ip数据包.PNG">
-  <link rel="canonical" href="https://xingkunz.github.io/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: false,
-    isPost: true,
-    isPage: false,
-    isArchive: false
-  };
-</script>
-
-  <title>Linux网络内核源码分析|网络层之IP层处理 | kun</title>
+<html  lang=en>
+  <head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   
-
-
-
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
+    
+    <link rel="shortcut icon" href="/images/favicon.ico ">
+    
+    
+    <link rel="icon" type="image/png" href="/images/favicon-android.png " sizes="192x192">
+    
+    
+    <link rel="apple-touch-icon" href="/images/favicon-apple.png " sizes="180x180">
+    
+  
+  <!-- title -->
+  <title>kun Linux网络内核源码分析|网络层之IP层处理 </title>
+  <!-- styles -->
+  <!-- styles -->
+<link rel="stylesheet" href="/styles/global.css">
+  <!-- rss -->
+  
 </head>
+  <body>
+    <header id="header">
+  
+  <nav class="menu menu--right">
+  
+    <a class="menu__item" href="/">主页</a>
+    <a class="menu__item" href="/archives/">归档</a>
+    <a class="menu__item" href="/categories/">专题</a>
+    <a class="menu__item" href="/tags/">标签</a>
+    <!-- <a class="menu__item" href="/">作品</a> -->
+    <!-- <a class="menu__item" href="/about/">关于</a> -->
+  </nav>
+</header>
+    <main>
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post__header">
+  <h1 class="post__title">Linux网络内核源码分析|网络层之IP层处理</h1>
+  
+  
+  <div class="post__meta">
+    
+<time class="post__date" datetime="2020-02-25T07:57:22.000Z" itemprop="datePublished">
+  
+  <i class="blogfont">&#xedff;</i>
+  
+  2020-02-25 15:57:22
+</time>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="en">
-  <div class="container use-motion">
-    <div class="headband"></div>
+    
+<div class="post__category">
+  <i class="blogfont">&#xe62d;</i>
+  <a class="category-link" href="/categories/Linux/">Linux</a>
+</div>
+  
 
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-meta">
-
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">kun</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-  </div>
-
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
+    
+<div class="post__tag">
+  <i class="blogfont">&#xe7ec;</i>
+  <a class="tag-link" href="/tags/Linux/">Linux</a>, <a class="tag-link" href="/tags/UDP/">UDP</a>, <a class="tag-link" href="/tags/源码/">源码</a>, <a class="tag-link" href="/tags/网络/">网络</a>
 </div>
 
 
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-      
-      
-      
-        
-        <li class="menu-item menu-item-home">
-      
-    
-
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-tags">
-      
-    
-
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-categories">
-      
-    
-
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-archives">
-      
-    
-
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
-
-  </li>
-  </ul>
-
-    
-
-</nav>
+    <div id="/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/" class="leancloud_visitors post__stat" data-flag-title="Linux网络内核源码分析|网络层之IP层处理">
+  <i class="blogfont">&#xe672;</i>
+  <span class="leancloud-visitors-count">loading...</span>
 </div>
-    </header>
-
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
   </div>
-
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-      <article itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block post">
-    <link itemprop="mainEntityOfPage" href="https://xingkunz.github.io/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="XingkunZ">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="kun">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">Linux网络内核源码分析|网络层之IP层处理
-
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              
-                
-              
-
-              <time title="Created: 2020-02-25 15:57:22" itemprop="dateCreated datePublished" datetime="2020-02-25T15:57:22+08:00">2020-02-25</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-06-26 16:34:41" itemprop="dateModified" datetime="2020-06-26T16:34:41+08:00">2020-06-26</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            <span id="/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/" class="post-meta-item leancloud_visitors" data-flag-title="Linux网络内核源码分析|网络层之IP层处理" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-        
-      
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/" itemprop="commentCount"></span></a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        <h1 id="关于IPv4"><a href="#关于IPv4" class="headerlink" title="关于IPv4"></a>关于IPv4</h1><h2 id="IP简述"><a href="#IP简述" class="headerlink" title="IP简述"></a>IP简述</h2><p>IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。</p><p>IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。</p><a id="more"></a>
-
+</header>
+  <aside class="post__aside">
+  <div class="post__actions">
+    <a id="backTop" class="post__top" href="javascript:">
+      <i class="blogfont">&#xe6b1;</i><!-- Top -->
+    </a>
+    <a id="share" class="post__share" href="javascript:">
+      <i class="blogfont">&#xe6c1;</i>
+    </a>
+  </div>
+  <ol class="post__toc"><li class="post__toc-item post__toc-level-1"><a class="post__toc-link" href="#关于IPv4"><span class="post__toc-text">关于IPv4</span></a><ol class="post__toc-child"><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#IP简述"><span class="post__toc-text">IP简述</span></a></li><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#IPv4数据包"><span class="post__toc-text">IPv4数据包</span></a></li></ol></li><li class="post__toc-item post__toc-level-1"><a class="post__toc-link" href="#IPv4模块处理流程"><span class="post__toc-text">IPv4模块处理流程</span></a><ol class="post__toc-child"><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#概述"><span class="post__toc-text">概述</span></a></li><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#发送数据包"><span class="post__toc-text">发送数据包</span></a><ol class="post__toc-child"><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#从UDP发：ip-push-pending-frames-sk-ip-output-c"><span class="post__toc-text">从UDP发：ip_push_pending_frames(sk) ip_output.c</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#从TCP发：ip-queue-xmit-skb-ipfragok-ip-output-c"><span class="post__toc-text">从TCP发：ip_queue_xmit(skb,ipfragok) ip_output.c</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#dst-output-skb-net-dst-h"><span class="post__toc-text">dst_output(skb) /net/dst.h</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#ip-output-pskb-ip-output-c"><span class="post__toc-text">ip_output(pskb) ip_output.c</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#ip-finish-output-skb-ip-output-c"><span class="post__toc-text">ip_finish_output(skb) ip_output.c</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#ip-finish-output2-skb-ip-output-c"><span class="post__toc-text">ip_finish_output2(skb) ip_output.c</span></a></li></ol></li><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#IP包的本地接收"><span class="post__toc-text">IP包的本地接收</span></a><ol class="post__toc-child"><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#流程概述"><span class="post__toc-text">流程概述</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#ip-rcv-skb-dev-pt-net-ipv4-ip-input-c"><span class="post__toc-text">ip_rcv(skb,dev,pt) net/ipv4/ip_input.c</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#ip-rcv-finish-skb-net-ipv4-ip-input-c"><span class="post__toc-text">ip_rcv_finish(skb) net/ipv4/ip_input.c</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#dst-input-skb-include-net-dst-h"><span class="post__toc-text">dst_input(skb) include/net/dst.h</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#ip-local-deliver-skb-ip-input-c"><span class="post__toc-text">ip_local_deliver(skb) ip_input.c</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#ip-local-deliver-finish-skb-ip-input-c"><span class="post__toc-text">ip_local_deliver_finish(skb) ip_input.c</span></a></li></ol></li><li class="post__toc-item post__toc-level-2"><a class="post__toc-link" href="#IP包的转发"><span class="post__toc-text">IP包的转发</span></a><ol class="post__toc-child"><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#流程概述-1"><span class="post__toc-text">流程概述</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#ip-forward-ip-forward-c"><span class="post__toc-text">ip_forward() ip_forward.c</span></a></li><li class="post__toc-item post__toc-level-3"><a class="post__toc-link" href="#ip-forward-finish-ip-forward-c"><span class="post__toc-text">ip_forward_finish() ip_forward.c</span></a></li></ol></li></ol></li></ol>
+</aside>
+  <div class="post__content" itemprop="articleBody">
+    <h1 id="关于IPv4"><a href="#关于IPv4" class="headerlink" title="关于IPv4"></a>关于IPv4</h1><h2 id="IP简述"><a href="#IP简述" class="headerlink" title="IP简述"></a>IP简述</h2><p>IP包通过路由器向正确的方向跳转，以达到转发数据的效果。为了完成正确的效果，数据包必须包含源地址和目的地址。</p>
+<p>IP支持数据分片。如果数据过长，则将其分成一片一片的分片再发送。分片到达目的地的顺序可能与发送顺序不同，因此IP需要将分片重新组成原来的数据段。</p>
 <h2 id="IPv4数据包"><a href="#IPv4数据包" class="headerlink" title="IPv4数据包"></a>IPv4数据包</h2><img src="/2020/02/25/Linux网络内核源码分析-网络层之IP层处理/ip数据包.PNG">
 <p>一个数IPv4数据包由头部和数据构成，数据中记录了传输层信息内容。</p>
 <h1 id="IPv4模块处理流程"><a href="#IPv4模块处理流程" class="headerlink" title="IPv4模块处理流程"></a>IPv4模块处理流程</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>从传输层到IP层发送数据包：</strong></p>
@@ -448,257 +219,41 @@
 </ol>
 <h3 id="ip-forward-finish-ip-forward-c"><a href="#ip-forward-finish-ip-forward-c" class="headerlink" title="ip_forward_finish() ip_forward.c"></a>ip_forward_finish() <code>ip_forward.c</code></h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">ip_forward_finish</span><span class="params">(struct sk_buff *skb)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 更新统计信息</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">ip_options</span> * <span class="title">opt</span>	= &amp;(<span class="title">IPCB</span>(<span class="title">skb</span>)-&gt;<span class="title">opt</span>);</span></span><br><span class="line"></span><br><span class="line">	IP_INC_STATS_BH(IPSTATS_MIB_OUTFORWDATAGRAMS);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 检查是否包含IP选项</span></span><br><span class="line">	<span class="keyword">if</span> (unlikely(opt-&gt;optlen))</span><br><span class="line">    <span class="comment">// 包含：</span></span><br><span class="line">		ip_forward_options(skb); </span><br><span class="line">    <span class="comment">// 否则：</span></span><br><span class="line">	<span class="keyword">return</span> dst_output(skb);<span class="comment">// 转入IP层的发送流程</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    </div>
-
-    
-    
-    
-        
-      
-
-      <footer class="post-footer">
-          
-            
-          
-          <div class="post-tags">
-            
-              <a href="/tags/Linux/" rel="tag"># Linux</a>
-            
-              <a href="/tags/UDP/" rel="tag"># UDP</a>
-            
-              <a href="/tags/网络/" rel="tag"># 网络</a>
-            
-              <a href="/tags/源码/" rel="tag"># 源码</a>
-            
-          </div>
-        
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-next post-nav-item">
-              
-                <a href="/2020/02/16/Linux网络内核源码分析-传输层之UDP处理过程/" rel="next" title="Linux网络内核源码分析|传输层之UDP处理过程">
-                  <i class="fa fa-chevron-left"></i> Linux网络内核源码分析|传输层之UDP处理过程
-                </a>
-              
-            </div>
-
-            <span class="post-nav-divider"></span>
-
-            <div class="post-nav-prev post-nav-item">
-              
-                <a href="/2020/06/25/gcov-lcov使用方法-普通程序测试和linux内核测试/" rel="prev" title="gcov,lcov使用方法|普通程序测试和linux内核测试">
-                  gcov,lcov使用方法|普通程序测试和linux内核测试 <i class="fa fa-chevron-right"></i>
-                </a>
-              
-            </div>
-          </div>
-        
-      </footer>
-    
   </div>
   
-  
-  
-  </article>
-
-  </div>
-
-
-          </div>
-          
-    
-    <div class="comments" id="comments"></div>
-  
-
-        </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-        
-        
-        
-        
-      
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          Table of Contents
-        </li>
-        <li class="sidebar-nav-overview">
-          Overview
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关于IPv4"><span class="nav-number">1.</span> <span class="nav-text">关于IPv4</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IP简述"><span class="nav-number">1.1.</span> <span class="nav-text">IP简述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IPv4数据包"><span class="nav-number">1.2.</span> <span class="nav-text">IPv4数据包</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IPv4模块处理流程"><span class="nav-number">2.</span> <span class="nav-text">IPv4模块处理流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">2.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发送数据包"><span class="nav-number">2.2.</span> <span class="nav-text">发送数据包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#从UDP发：ip-push-pending-frames-sk-ip-output-c"><span class="nav-number">2.2.1.</span> <span class="nav-text">从UDP发：ip_push_pending_frames(sk) ip_output.c</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从TCP发：ip-queue-xmit-skb-ipfragok-ip-output-c"><span class="nav-number">2.2.2.</span> <span class="nav-text">从TCP发：ip_queue_xmit(skb,ipfragok) ip_output.c</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dst-output-skb-net-dst-h"><span class="nav-number">2.2.3.</span> <span class="nav-text">dst_output(skb) /net/dst.h</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ip-output-pskb-ip-output-c"><span class="nav-number">2.2.4.</span> <span class="nav-text">ip_output(pskb) ip_output.c</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ip-finish-output-skb-ip-output-c"><span class="nav-number">2.2.5.</span> <span class="nav-text">ip_finish_output(skb) ip_output.c</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ip-finish-output2-skb-ip-output-c"><span class="nav-number">2.2.6.</span> <span class="nav-text">ip_finish_output2(skb) ip_output.c</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IP包的本地接收"><span class="nav-number">2.3.</span> <span class="nav-text">IP包的本地接收</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#流程概述"><span class="nav-number">2.3.1.</span> <span class="nav-text">流程概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ip-rcv-skb-dev-pt-net-ipv4-ip-input-c"><span class="nav-number">2.3.2.</span> <span class="nav-text">ip_rcv(skb,dev,pt) net/ipv4/ip_input.c</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ip-rcv-finish-skb-net-ipv4-ip-input-c"><span class="nav-number">2.3.3.</span> <span class="nav-text">ip_rcv_finish(skb) net/ipv4/ip_input.c</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dst-input-skb-include-net-dst-h"><span class="nav-number">2.3.4.</span> <span class="nav-text">dst_input(skb) include/net/dst.h</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ip-local-deliver-skb-ip-input-c"><span class="nav-number">2.3.5.</span> <span class="nav-text">ip_local_deliver(skb) ip_input.c</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ip-local-deliver-finish-skb-ip-input-c"><span class="nav-number">2.3.6.</span> <span class="nav-text">ip_local_deliver_finish(skb) ip_input.c</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IP包的转发"><span class="nav-number">2.4.</span> <span class="nav-text">IP包的转发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#流程概述-1"><span class="nav-number">2.4.1.</span> <span class="nav-text">流程概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ip-forward-ip-forward-c"><span class="nav-number">2.4.2.</span> <span class="nav-text">ip_forward() ip_forward.c</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ip-forward-finish-ip-forward-c"><span class="nav-number">2.4.3.</span> <span class="nav-text">ip_forward_finish() ip_forward.c</span></a></li></ol></li></ol></li></ol></div>
-        
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">XingkunZ</p>
-  <div class="site-description" itemprop="description"></div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-        
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">20</span>
-          <span class="site-state-item-name">posts</span>
-        </a>
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-categories">
-        
-          
-            <a href="/categories/">
-          
-        
-        <span class="site-state-item-count">6</span>
-        <span class="site-state-item-name">categories</span>
-        </a>
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-tags">
-        
-          
-            <a href="/tags/">
-          
-        
-        <span class="site-state-item-count">21</span>
-        <span class="site-state-item-name">tags</span>
-        </a>
-      </div>
-    
-  </nav>
-</div>
-
-
-
-      </div>
-
-    </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">XingkunZ</span>
-</div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0</div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.4.1</div>
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-  </div>
-
-  
-  <script src="/lib/anime.min.js?v=3.1.0"></script>
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-<script src="/js/utils.js?v=7.4.1"></script><script src="/js/motion.js?v=7.4.1"></script>
-<script src="/js/schemes/muse.js?v=7.4.1"></script>
-<script src="/js/next-boot.js?v=7.4.1"></script>
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-
-
+  <section id="comments" class="comments">
+    <div class="valine-comment"></div>
+<!--载入js，在</body>之前插入即可-->
+<!--Leancloud 操作库:-->
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<!--Valine 的核心代码库-->
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
 <script>
-NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
-  var GUEST = ['nick', 'mail', 'link'];
-  var guest = 'nick,mail,link';
-  guest = guest.split(',').filter(item => {
-    return GUEST.includes(item);
-  });
-  new Valine({
-    el: '#comments',
-    verify: false,
-    notify: false,
-    appId: 'Pjstp83mhOuOGVRgfQH9Wy8d-gzGzoHsz',
-    appKey: 'kpMNCJPyBxzPPgGwUuPhpbY7',
+new Valine({
+    el: '.valine-comment',
+    app_id: 'Pjstp83mhOuOGVRgfQH9Wy8d-gzGzoHsz',
+    app_key: 'kpMNCJPyBxzPPgGwUuPhpbY7',
     placeholder: 'Bite me.',
-    avatar: 'mm',
-    meta: guest,
-    pageSize: '10' || 10,
-    visitor: true,
-    lang: '' || 'zh-cn',
-    path: location.pathname,
-    recordIP: false,
-    serverURLs: ''
-  });
-}, window.Valine);
+    visitor: 'true',
+  })
 </script>
-
-</body>
+  </section>
+  
+</article>
+    </main>
+    <footer id="footer">
+  Copyright &copy;
+  2020
+  XingkunZ
+  
+  
+    <a class="social-links" href="https://github.com/XingkunZ"><i class="blogfont">&#xe6b7; </i></a>
+  
+    <a class="social-links" href="mailto:zhaoxingkundeyoujian@outlook.com"><i class="blogfont">&#xe61a; </i></a>
+  
+  
+</footer>
+    <!-- scripts -->
+<script src="/scripts/main.js"></script>
+  </body>
 </html>
