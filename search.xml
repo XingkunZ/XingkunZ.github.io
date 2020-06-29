@@ -1744,10 +1744,10 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
         <category>杂谈</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
-        <tag>教程</tag>
         <tag>博客</tag>
+        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>教程</tag>
       </tags>
   </entry>
 </search>
