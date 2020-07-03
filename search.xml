@@ -30,7 +30,11 @@
 <h3 id="输入规模的度量"><a href="#输入规模的度量" class="headerlink" title="输入规模的度量"></a>输入规模的度量</h3><p>对于排序问题来说输入规模是输入中的项数；对于输入为图的问题来说，输入规模是图的顶点数和边数。</p>
 <p>对于不同的问题，分析算法时需要指出输入规模的度量。</p>
 <h3 id="基本操作数"><a href="#基本操作数" class="headerlink" title="基本操作数"></a>基本操作数</h3><p>一个算法在特定输入上的运行时间是指执行的基本操作数步数。</p>
-]]></content>
+<h1 id="设计算法"><a href="#设计算法" class="headerlink" title="设计算法"></a>设计算法</h1><p>我们可以选择使用的算法设计技术有很多。</p>
+<h2 id="增量法"><a href="#增量法" class="headerlink" title="增量法"></a>增量法</h2><p>插入排序使用了增量方法：在排序子数组A[1…j-1]后，将单个元素A[j]插入子数组的适当位置，产生排序好的子数组A[1…j]。</p>
+<h2 id="分治法"><a href="#分治法" class="headerlink" title="分治法"></a>分治法</h2><p>分治法的算法结构是<strong>递归的</strong>——算法一次或多次递归地调用自身，以解决紧密相关的若干子问题。</p>
+<p><strong>分治法的思想</strong>是将原问题分解为几个规模较小但类似与原问题的子问题，递归地求解这些子问题，然后再合并这些子问题的解来建立原问题的解。</p>
+<h3 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h3><h2 id="分析分治法"><a href="#分析分治法" class="headerlink" title="分析分治法"></a>分析分治法</h2>]]></content>
       <categories>
         <category>算法</category>
       </categories>
@@ -365,9 +369,9 @@
       </categories>
       <tags>
         <tag>Linux</tag>
-        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -534,9 +538,9 @@
       </categories>
       <tags>
         <tag>Linux</tag>
-        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -865,9 +869,9 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
       </categories>
       <tags>
         <tag>Linux</tag>
+        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>
@@ -1020,9 +1024,9 @@ PC = \big( \bigwedge_{i\in[1,n]}{N_i > 0} \big)\wedge(N_{n+1}\leq0)</script><scr
       </categories>
       <tags>
         <tag>Linux</tag>
+        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>

@@ -64,7 +64,7 @@
 <meta property="og:description" content="插入排序思路与实现使用插入排序算法解决排序问题：输入一个待排序的序列，期待输出一个非递减的序列。插入排序的思路是从左到右遍历序列，不断为遍历到的数（key）安排到左边（或原地）的合适位置。在遍历过程中，左边已遍历过的序列是已排序的，右边未遍历过的序列是未排序的。">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://xingkunz.github.io/2020/06/28/《算法导论》-第二章-算法基础/循环子序列性质.png">
-<meta property="og:updated_time" content="2020-06-29T14:39:46.008Z">
+<meta property="og:updated_time" content="2020-06-29T15:30:25.897Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《算法导论》| 第二章 算法基础">
 <meta name="twitter:description" content="插入排序思路与实现使用插入排序算法解决排序问题：输入一个待排序的序列，期待输出一个非递减的序列。插入排序的思路是从左到右遍历序列，不断为遍历到的数（key）安排到左边（或原地）的合适位置。在遍历过程中，左边已遍历过的序列是已排序的，右边未遍历过的序列是未排序的。">
@@ -259,7 +259,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-06-29 22:39:46" itemprop="dateModified" datetime="2020-06-29T22:39:46+08:00">2020-06-29</time>
+                <time title="Modified: 2020-06-29 23:30:25" itemprop="dateModified" datetime="2020-06-29T23:30:25+08:00">2020-06-29</time>
               </span>
             
           
@@ -337,7 +337,11 @@
 <h3 id="输入规模的度量"><a href="#输入规模的度量" class="headerlink" title="输入规模的度量"></a>输入规模的度量</h3><p>对于排序问题来说输入规模是输入中的项数；对于输入为图的问题来说，输入规模是图的顶点数和边数。</p>
 <p>对于不同的问题，分析算法时需要指出输入规模的度量。</p>
 <h3 id="基本操作数"><a href="#基本操作数" class="headerlink" title="基本操作数"></a>基本操作数</h3><p>一个算法在特定输入上的运行时间是指执行的基本操作数步数。</p>
-
+<h1 id="设计算法"><a href="#设计算法" class="headerlink" title="设计算法"></a>设计算法</h1><p>我们可以选择使用的算法设计技术有很多。</p>
+<h2 id="增量法"><a href="#增量法" class="headerlink" title="增量法"></a>增量法</h2><p>插入排序使用了增量方法：在排序子数组A[1…j-1]后，将单个元素A[j]插入子数组的适当位置，产生排序好的子数组A[1…j]。</p>
+<h2 id="分治法"><a href="#分治法" class="headerlink" title="分治法"></a>分治法</h2><p>分治法的算法结构是<strong>递归的</strong>——算法一次或多次递归地调用自身，以解决紧密相关的若干子问题。</p>
+<p><strong>分治法的思想</strong>是将原问题分解为几个规模较小但类似与原问题的子问题，递归地求解这些子问题，然后再合并这些子问题的解来建立原问题的解。</p>
+<h3 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h3><h2 id="分析分治法"><a href="#分析分治法" class="headerlink" title="分析分治法"></a>分析分治法</h2>
     </div>
 
     
@@ -422,7 +426,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#插入排序"><span class="nav-number">1.</span> <span class="nav-text">插入排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#思路与实现"><span class="nav-number">1.1.</span> <span class="nav-text">思路与实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插入排序的正确性"><span class="nav-number">1.2.</span> <span class="nav-text">插入排序的正确性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#循环不变式"><span class="nav-number">1.2.1.</span> <span class="nav-text">循环不变式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环不变式的性质"><span class="nav-number">1.2.2.</span> <span class="nav-text">循环不变式的性质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环不变式的性质证明"><span class="nav-number">1.2.3.</span> <span class="nav-text">循环不变式的性质证明</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分析算法"><span class="nav-number">2.</span> <span class="nav-text">分析算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#插入排序算法的分析"><span class="nav-number">2.1.</span> <span class="nav-text">插入排序算法的分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#输入规模的度量"><span class="nav-number">2.1.1.</span> <span class="nav-text">输入规模的度量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本操作数"><span class="nav-number">2.1.2.</span> <span class="nav-text">基本操作数</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#插入排序"><span class="nav-number">1.</span> <span class="nav-text">插入排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#思路与实现"><span class="nav-number">1.1.</span> <span class="nav-text">思路与实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插入排序的正确性"><span class="nav-number">1.2.</span> <span class="nav-text">插入排序的正确性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#循环不变式"><span class="nav-number">1.2.1.</span> <span class="nav-text">循环不变式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环不变式的性质"><span class="nav-number">1.2.2.</span> <span class="nav-text">循环不变式的性质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环不变式的性质证明"><span class="nav-number">1.2.3.</span> <span class="nav-text">循环不变式的性质证明</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分析算法"><span class="nav-number">2.</span> <span class="nav-text">分析算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#插入排序算法的分析"><span class="nav-number">2.1.</span> <span class="nav-text">插入排序算法的分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#输入规模的度量"><span class="nav-number">2.1.1.</span> <span class="nav-text">输入规模的度量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本操作数"><span class="nav-number">2.1.2.</span> <span class="nav-text">基本操作数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设计算法"><span class="nav-number">3.</span> <span class="nav-text">设计算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#增量法"><span class="nav-number">3.1.</span> <span class="nav-text">增量法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分治法"><span class="nav-number">3.2.</span> <span class="nav-text">分治法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#归并排序"><span class="nav-number">3.2.1.</span> <span class="nav-text">归并排序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析分治法"><span class="nav-number">3.3.</span> <span class="nav-text">分析分治法</span></a></li></ol></li></ol></div>
         
       </div>
       <!--/noindex-->
