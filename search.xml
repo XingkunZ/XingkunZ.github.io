@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>《重构》| 重构对架构、性能的影响</title>
+    <url>/2021/02/19/%E3%80%8A%E9%87%8D%E6%9E%84%E3%80%8B-%E9%87%8D%E6%9E%84%E5%AF%B9%E6%9E%B6%E6%9E%84%E3%80%81%E6%80%A7%E8%83%BD%E7%9A%84%E5%BD%B1%E5%93%8D/</url>
+    <content><![CDATA[<h2 id="重构改变软件架构方式"><a href="#重构改变软件架构方式" class="headerlink" title="重构改变软件架构方式"></a>重构改变软件架构方式</h2><p><strong>重构打破了软件一旦开发完毕就会日渐腐败的行业陈规。</strong>我们在<a href="https://xingkunz.github.io/2021/02/11/%E3%80%8A%E9%87%8D%E6%9E%84%E3%80%8B-%E9%87%8D%E6%9E%84%E7%9A%84%E5%AE%9A%E4%B9%89%E3%80%81%E6%84%8F%E4%B9%89%E5%92%8C%E4%B8%80%E6%AC%A1%E7%A4%BA%E4%BE%8B/">重构的定义、意义和一次示例</a>当中就学习到“设计耐久性假说”这一观点，即重构可以修改调整老代码的结构从而延长软件的生命周期。</p><a id="more"></a>
+<p>通过重构，开发人员可以应对不断变化的需求，因而不再拘泥于“编码前必须完成架构”的观点。</p>
+<h3 id="引入灵活性机制"><a href="#引入灵活性机制" class="headerlink" title="引入灵活性机制"></a>引入灵活性机制</h3><p>为了应对不断变化的需求，要在软件里植入灵活性机制。例如，在编写函数时提前为函数参数做打算，预留几个参数迎接未来可能的需求，来提升函数的通用性。</p>
+<p>可是，我们预测的需求往往和实际不符。这时候应该发挥重构的优势：<strong>按照当前需求将软件的设计质量做得很高，随着用户需求的不断累积，及时对架构进行重构。</strong></p>
+<p><strong>考虑是否值得引入灵活性机制</strong>：能够应对需求且不会增加复杂度，可以引入灵活性机制；能够预测未来此处会变的难以重构时，现在就值得引入灵活性机制。</p>
+<h3 id="YAGNI（You-aren’t-going-to-need-it）"><a href="#YAGNI（You-aren’t-going-to-need-it）" class="headerlink" title="YAGNI（You aren’t going to need it）"></a>YAGNI（You aren’t going to need it）</h3><p>上述的开发和决策过程被成为YAGNI方法，是一种将架构、设计与开发过程融合的工作方式，需要有重构作为基础。</p>
+<p>YAGNI可以理解为：<strong>编码前的架构仍要足够完善，但不必尽善尽美，等到对问题的理解更为充分时，再着手解决。</strong>即一种演进式架构。</p>
+<h2 id="重构对性能的影响：可读性vs性能"><a href="#重构对性能的影响：可读性vs性能" class="headerlink" title="重构对性能的影响：可读性vs性能"></a>重构对性能的影响：可读性vs性能</h2><p>绝不能为了提高设计质量而忽视性能，也绝对不能寄托于高速的硬件。有时，我们为了照顾软件的可读性，往往会牺牲软件的性能，这一点可以理解为：<strong>虽然重构使软件运行更慢，但是它使软件的性能优化更容易。</strong></p>
+<p>所以，可读性和性能的平衡点在于，<strong>先写出方便调优的软件，再调优它以获得足够的性能。</strong></p>
+]]></content>
+      <categories>
+        <category>重构</category>
+      </categories>
+      <tags>
+        <tag>重构</tag>
+        <tag>《重构 改善既有代码的设计》</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《重构》| 代码的坏味道</title>
+    <url>/2021/02/19/%E3%80%8A%E9%87%8D%E6%9E%84%E3%80%8B-%E4%BB%A3%E7%A0%81%E7%9A%84%E5%9D%8F%E5%91%B3%E9%81%93/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>《重构》| 重构的时机、挑战</title>
     <url>/2021/02/14/%E3%80%8A%E9%87%8D%E6%9E%84%E3%80%8B-%E9%87%8D%E6%9E%84%E7%9A%84%E6%97%B6%E6%9C%BA%E3%80%81%E6%8C%91%E6%88%98/</url>
     <content><![CDATA[<h2 id="重构的时机"><a href="#重构的时机" class="headerlink" title="重构的时机"></a>重构的时机</h2><blockquote>
@@ -25,7 +51,7 @@
 <h3 id="复审代码时重构"><a href="#复审代码时重构" class="headerlink" title="复审代码时重构"></a>复审代码时重构</h3><p><strong>把重构作为code review的一种方式。</strong>这样可以对代码进行更高层次的复审，也能够提出更有价值的检视意见。</p>
 <p>与原作者一起浏览代码并重构是最好的，这种工作方式叫做<strong>结对编程</strong>。</p>
 <blockquote>
-<p>思考：把重构作为一种检视方法，可以归类为“已输出的方式来输入”的方法。我们读书、思考并总结出自己的知识点，写成了博客分享给别人，是同理的。</p>
+<p>思考：把重构作为一种检视方法，可以归类为“以输出的方式输入”的方法（费曼学习法）。我们读书、思考并总结出自己的知识点，写成了博客分享给别人，是同理的。</p>
 </blockquote>
 <h3 id="重构的其他情况"><a href="#重构的其他情况" class="headerlink" title="重构的其他情况"></a>重构的其他情况</h3><p>部分经理、客户不具备足够的技术意识，不认同重构对于代码的长期意义。这种情况下，<strong>干脆不要告诉经理自己要重构！</strong>作为软件开发人员，只是选择了一种快速开发的方法而已，采用具体什么方式对于上层管理者是不可见的。</p>
 <h4 id="不合适重构的情况"><a href="#不合适重构的情况" class="headerlink" title="不合适重构的情况"></a>不合适重构的情况</h4><ol>
@@ -892,9 +918,9 @@
       </categories>
       <tags>
         <tag>Linux</tag>
-        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -1063,9 +1089,9 @@
       </categories>
       <tags>
         <tag>Linux</tag>
-        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -1412,9 +1438,9 @@
       </categories>
       <tags>
         <tag>Linux</tag>
+        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>
@@ -1596,9 +1622,9 @@
       </categories>
       <tags>
         <tag>Linux</tag>
+        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>
