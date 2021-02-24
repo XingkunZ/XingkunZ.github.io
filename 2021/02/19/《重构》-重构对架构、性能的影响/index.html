@@ -59,14 +59,14 @@
   <meta name="description" content="重构改变软件架构方式重构打破了软件一旦开发完毕就会日渐腐败的行业陈规。我们在重构的定义、意义和一次示例当中就学习到“设计耐久性假说”这一观点，即重构可以修改调整老代码的结构从而延长软件的生命周期。">
 <meta name="keywords" content="重构,《重构 改善既有代码的设计》">
 <meta property="og:type" content="article">
-<meta property="og:title" content="《重构》| 重构对架构、性能的影响">
+<meta property="og:title" content="《重构》| 第三篇 重构对架构、性能的影响">
 <meta property="og:url" content="https://xingkunz.github.io/2021/02/19/《重构》-重构对架构、性能的影响/index.html">
 <meta property="og:site_name" content="kun">
 <meta property="og:description" content="重构改变软件架构方式重构打破了软件一旦开发完毕就会日渐腐败的行业陈规。我们在重构的定义、意义和一次示例当中就学习到“设计耐久性假说”这一观点，即重构可以修改调整老代码的结构从而延长软件的生命周期。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-02-19T16:21:16.290Z">
+<meta property="og:updated_time" content="2021-02-24T13:57:37.480Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="《重构》| 重构对架构、性能的影响">
+<meta name="twitter:title" content="《重构》| 第三篇 重构对架构、性能的影响">
 <meta name="twitter:description" content="重构改变软件架构方式重构打破了软件一旦开发完毕就会日渐腐败的行业陈规。我们在重构的定义、意义和一次示例当中就学习到“设计耐久性假说”这一观点，即重构可以修改调整老代码的结构从而延长软件的生命周期。">
   <link rel="canonical" href="https://xingkunz.github.io/2021/02/19/《重构》-重构对架构、性能的影响/">
 
@@ -82,7 +82,7 @@
   };
 </script>
 
-  <title>《重构》| 重构对架构、性能的影响 | kun</title>
+  <title>《重构》| 第三篇 重构对架构、性能的影响 | kun</title>
   
 
 
@@ -231,7 +231,7 @@
       <meta itemprop="name" content="kun">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">《重构》| 重构对架构、性能的影响
+        <h1 class="post-title" itemprop="name headline">《重构》| 第三篇 重构对架构、性能的影响
 
           
         </h1>
@@ -258,7 +258,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-02-20 00:21:16" itemprop="dateModified" datetime="2021-02-20T00:21:16+08:00">2021-02-20</time>
+                <time title="Modified: 2021-02-24 21:57:37" itemprop="dateModified" datetime="2021-02-24T21:57:37+08:00">2021-02-24</time>
               </span>
             
           
@@ -277,7 +277,7 @@
           
 
           
-            <span id="/2021/02/19/《重构》-重构对架构、性能的影响/" class="post-meta-item leancloud_visitors" data-flag-title="《重构》| 重构对架构、性能的影响" title="Views">
+            <span id="/2021/02/19/《重构》-重构对架构、性能的影响/" class="post-meta-item leancloud_visitors" data-flag-title="《重构》| 第三篇 重构对架构、性能的影响" title="Views">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -317,7 +317,8 @@
 <h3 id="YAGNI（You-aren’t-going-to-need-it）"><a href="#YAGNI（You-aren’t-going-to-need-it）" class="headerlink" title="YAGNI（You aren’t going to need it）"></a>YAGNI（You aren’t going to need it）</h3><p>上述的开发和决策过程被成为YAGNI方法，是一种将架构、设计与开发过程融合的工作方式，需要有重构作为基础。</p>
 <p>YAGNI可以理解为：<strong>编码前的架构仍要足够完善，但不必尽善尽美，等到对问题的理解更为充分时，再着手解决。</strong>即一种演进式架构。</p>
 <h2 id="重构对性能的影响：可读性vs性能"><a href="#重构对性能的影响：可读性vs性能" class="headerlink" title="重构对性能的影响：可读性vs性能"></a>重构对性能的影响：可读性vs性能</h2><p>绝不能为了提高设计质量而忽视性能，也绝对不能寄托于高速的硬件。有时，我们为了照顾软件的可读性，往往会牺牲软件的性能，这一点可以理解为：<strong>虽然重构使软件运行更慢，但是它使软件的性能优化更容易。</strong></p>
-<p>所以，可读性和性能的平衡点在于，<strong>先写出方便调优的软件，再调优它以获得足够的性能。</strong></p>
+<p>所以，可读性和性能的平衡点在于，<strong>先写出方便调优的软件，再调优它以获得足够的性能。</strong>短期看来，重构可能使软件变慢，但是它使优化阶段的软件性能调优更加容易，长期看来，重构对程序的性能有好处。</p>
+<p>对于性能，有一件有趣的事情：<strong>一大半时间都耗费在一小半代码上</strong>。所以，一视同仁的优化所有代码，则效率非常低，90%的工作都是白费。针对这一现象，我们在编写代码时，只关注创造良好的程序，但是到开发后期——进入性能优化阶段时，可以善用<strong>性能度量工具</strong>来筛出耗费大量时间和空间的代码，<strong>集中关注这些性能热点</strong>进行性能优化。</p>
 
     </div>
 
@@ -345,8 +346,8 @@
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/2021/02/14/《重构》-重构的时机、挑战/" rel="next" title="《重构》| 重构的时机、挑战">
-                  <i class="fa fa-chevron-left"></i> 《重构》| 重构的时机、挑战
+                <a href="/2021/02/14/《重构》-重构的时机、挑战/" rel="next" title="《重构》| 第二篇 重构的时机、挑战">
+                  <i class="fa fa-chevron-left"></i> 《重构》| 第二篇 重构的时机、挑战
                 </a>
               
             </div>
