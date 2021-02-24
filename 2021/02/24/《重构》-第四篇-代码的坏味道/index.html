@@ -56,19 +56,19 @@
   };
 </script>
 
-  <meta name="description" content="重构改变软件架构方式重构打破了软件一旦开发完毕就会日渐腐败的行业陈规。我们在重构的定义、意义和一次示例当中就学习到“设计耐久性假说”这一观点，即重构可以修改调整老代码的结构从而延长软件的生命周期。">
+  <meta name="description" content="问到坏味道，就应当去重构何时重构及何时停止和直到重构机制如何运转一样重要。当闻到代码的坏味道，就应当去重构，而这个近乎直觉的习惯需要开发者长期培养。坏味道与对应的重构手法">
 <meta name="keywords" content="重构,《重构 改善既有代码的设计》">
 <meta property="og:type" content="article">
-<meta property="og:title" content="《重构》| 第三篇 重构对架构、性能的影响">
-<meta property="og:url" content="https://xingkunz.github.io/2021/02/19/《重构》-重构对架构、性能的影响/index.html">
+<meta property="og:title" content="《重构》| 第四篇 代码的坏味道和应对的重构方法">
+<meta property="og:url" content="https://xingkunz.github.io/2021/02/24/《重构》-第四篇-代码的坏味道/index.html">
 <meta property="og:site_name" content="kun">
-<meta property="og:description" content="重构改变软件架构方式重构打破了软件一旦开发完毕就会日渐腐败的行业陈规。我们在重构的定义、意义和一次示例当中就学习到“设计耐久性假说”这一观点，即重构可以修改调整老代码的结构从而延长软件的生命周期。">
+<meta property="og:description" content="问到坏味道，就应当去重构何时重构及何时停止和直到重构机制如何运转一样重要。当闻到代码的坏味道，就应当去重构，而这个近乎直觉的习惯需要开发者长期培养。坏味道与对应的重构手法">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-02-24T13:57:37.480Z">
+<meta property="og:updated_time" content="2021-02-24T15:52:38.709Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="《重构》| 第三篇 重构对架构、性能的影响">
-<meta name="twitter:description" content="重构改变软件架构方式重构打破了软件一旦开发完毕就会日渐腐败的行业陈规。我们在重构的定义、意义和一次示例当中就学习到“设计耐久性假说”这一观点，即重构可以修改调整老代码的结构从而延长软件的生命周期。">
-  <link rel="canonical" href="https://xingkunz.github.io/2021/02/19/《重构》-重构对架构、性能的影响/">
+<meta name="twitter:title" content="《重构》| 第四篇 代码的坏味道和应对的重构方法">
+<meta name="twitter:description" content="问到坏味道，就应当去重构何时重构及何时停止和直到重构机制如何运转一样重要。当闻到代码的坏味道，就应当去重构，而这个近乎直觉的习惯需要开发者长期培养。坏味道与对应的重构手法">
+  <link rel="canonical" href="https://xingkunz.github.io/2021/02/24/《重构》-第四篇-代码的坏味道/">
 
 
 <script id="page-configurations">
@@ -82,7 +82,7 @@
   };
 </script>
 
-  <title>《重构》| 第三篇 重构对架构、性能的影响 | kun</title>
+  <title>《重构》| 第四篇 代码的坏味道和应对的重构方法 | kun</title>
   
 
 
@@ -219,7 +219,7 @@
   
   
   <div class="post-block post">
-    <link itemprop="mainEntityOfPage" href="https://xingkunz.github.io/2021/02/19/《重构》-重构对架构、性能的影响/">
+    <link itemprop="mainEntityOfPage" href="https://xingkunz.github.io/2021/02/24/《重构》-第四篇-代码的坏味道/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="XingkunZ">
@@ -231,7 +231,7 @@
       <meta itemprop="name" content="kun">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">《重构》| 第三篇 重构对架构、性能的影响
+        <h1 class="post-title" itemprop="name headline">《重构》| 第四篇 代码的坏味道和应对的重构方法
 
           
         </h1>
@@ -247,19 +247,11 @@
                 
               
 
-              <time title="Created: 2021-02-19 23:48:48" itemprop="dateCreated datePublished" datetime="2021-02-19T23:48:48+08:00">2021-02-19</time>
+              <time title="Created: 2021-02-24 21:59:00 / Modified: 23:52:38" itemprop="dateCreated datePublished" datetime="2021-02-24T21:59:00+08:00">2021-02-24</time>
             </span>
           
             
 
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-02-24 21:57:37" itemprop="dateModified" datetime="2021-02-24T21:57:37+08:00">2021-02-24</time>
-              </span>
             
           
             <span class="post-meta-item">
@@ -277,7 +269,7 @@
           
 
           
-            <span id="/2021/02/19/《重构》-重构对架构、性能的影响/" class="post-meta-item leancloud_visitors" data-flag-title="《重构》| 第三篇 重构对架构、性能的影响" title="Views">
+            <span id="/2021/02/24/《重构》-第四篇-代码的坏味道/" class="post-meta-item leancloud_visitors" data-flag-title="《重构》| 第四篇 代码的坏味道和应对的重构方法" title="Views">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -295,7 +287,7 @@
       
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/2021/02/19/《重构》-重构对架构、性能的影响/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2021/02/19/《重构》-重构对架构、性能的影响/" itemprop="commentCount"></span></a>
+    <a title="valine" href="/2021/02/24/《重构》-第四篇-代码的坏味道/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2021/02/24/《重构》-第四篇-代码的坏味道/" itemprop="commentCount"></span></a>
   </span>
   
   
@@ -309,16 +301,38 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="重构改变软件架构方式"><a href="#重构改变软件架构方式" class="headerlink" title="重构改变软件架构方式"></a>重构改变软件架构方式</h2><p><strong>重构打破了软件一旦开发完毕就会日渐腐败的行业陈规。</strong>我们在<a href="https://xingkunz.github.io/2021/02/11/%E3%80%8A%E9%87%8D%E6%9E%84%E3%80%8B-%E9%87%8D%E6%9E%84%E7%9A%84%E5%AE%9A%E4%B9%89%E3%80%81%E6%84%8F%E4%B9%89%E5%92%8C%E4%B8%80%E6%AC%A1%E7%A4%BA%E4%BE%8B/">重构的定义、意义和一次示例</a>当中就学习到“设计耐久性假说”这一观点，即重构可以修改调整老代码的结构从而延长软件的生命周期。</p><a id="more"></a>
-<p>通过重构，开发人员可以应对不断变化的需求，因而不再拘泥于“编码前必须完成架构”的观点。</p>
-<h3 id="引入灵活性机制"><a href="#引入灵活性机制" class="headerlink" title="引入灵活性机制"></a>引入灵活性机制</h3><p>为了应对不断变化的需求，要在软件里植入灵活性机制。例如，在编写函数时提前为函数参数做打算，预留几个参数迎接未来可能的需求，来提升函数的通用性。</p>
-<p>可是，我们预测的需求往往和实际不符。这时候应该发挥重构的优势：<strong>按照当前需求将软件的设计质量做得很高，随着用户需求的不断累积，及时对架构进行重构。</strong></p>
-<p><strong>考虑是否值得引入灵活性机制</strong>：能够应对需求且不会增加复杂度，可以引入灵活性机制；能够预测未来此处会变的难以重构时，现在就值得引入灵活性机制。</p>
-<h3 id="YAGNI（You-aren’t-going-to-need-it）"><a href="#YAGNI（You-aren’t-going-to-need-it）" class="headerlink" title="YAGNI（You aren’t going to need it）"></a>YAGNI（You aren’t going to need it）</h3><p>上述的开发和决策过程被成为YAGNI方法，是一种将架构、设计与开发过程融合的工作方式，需要有重构作为基础。</p>
-<p>YAGNI可以理解为：<strong>编码前的架构仍要足够完善，但不必尽善尽美，等到对问题的理解更为充分时，再着手解决。</strong>即一种演进式架构。</p>
-<h2 id="重构对性能的影响：可读性vs性能"><a href="#重构对性能的影响：可读性vs性能" class="headerlink" title="重构对性能的影响：可读性vs性能"></a>重构对性能的影响：可读性vs性能</h2><p>绝不能为了提高设计质量而忽视性能，也绝对不能寄托于高速的硬件。有时，我们为了照顾软件的可读性，往往会牺牲软件的性能，这一点可以理解为：<strong>虽然重构使软件运行更慢，但是它使软件的性能优化更容易。</strong></p>
-<p>所以，可读性和性能的平衡点在于，<strong>先写出方便调优的软件，再调优它以获得足够的性能。</strong>短期看来，重构可能使软件变慢，但是它使优化阶段的软件性能调优更加容易，长期看来，重构对程序的性能有好处。</p>
-<p>对于性能，有一件有趣的事情：<strong>一大半时间都耗费在一小半代码上</strong>。所以，一视同仁的优化所有代码，则效率非常低，90%的工作都是白费。针对这一现象，我们在编写代码时，只关注创造良好的程序，但是到开发后期——进入性能优化阶段时，可以善用<strong>性能度量工具</strong>来筛出耗费大量时间和空间的代码，<strong>集中关注这些性能热点</strong>进行性能优化。</p>
+        <h2 id="问到坏味道，就应当去重构"><a href="#问到坏味道，就应当去重构" class="headerlink" title="问到坏味道，就应当去重构"></a>问到坏味道，就应当去重构</h2><p><strong>何时重构及何时停止和直到重构机制如何运转一样重要。</strong>当闻到代码的坏味道，就应当去重构，而这个近乎直觉的习惯需要开发者长期培养。</p><h2 id="坏味道与对应的重构手法"><a href="#坏味道与对应的重构手法" class="headerlink" title="坏味道与对应的重构手法"></a>坏味道与对应的重构手法</h2><a id="more"></a>
+<h3 id="糟糕的命名"><a href="#糟糕的命名" class="headerlink" title="糟糕的命名"></a>糟糕的命名</h3><blockquote>
+<p>命名是编程中最难的两件事之一。</p>
+</blockquote>
+<p>编程时要深思熟虑给函数、模块、变量和类命名。另外，如果想不出一个好名字，说明背后可能有潜藏的设计问题。</p>
+<p><strong>重构手法</strong>：改名</p>
+<ol>
+<li>改变函数声明</li>
+<li>变量改名</li>
+<li>字段改名</li>
+</ol>
+<h3 id="重复代码"><a href="#重复代码" class="headerlink" title="重复代码"></a>重复代码</h3><p>要修改重复代码时，要将全部的重复代码都找出来，对比其间差异，合二为一。</p>
+<p><strong>重构手法</strong></p>
+<ol>
+<li>提炼函数：将代码中多处重复的部分提炼出一个新的函数。</li>
+<li>移动语句：重组代码顺序 ，把相似的部分放在一起以便提炼。结合提炼函数的方法。</li>
+<li>函数上移：如果重复代码出现在同父的多子类之中，使用此方法来避免在子类之间相互调用。</li>
+</ol>
+<h3 id="过长函数"><a href="#过长函数" class="headerlink" title="过长函数"></a>过长函数</h3><p>过长的函数难以理解、复用性差。<strong>短小的函数具有更好的阐释力、更易于分享、提供更多的使用选择。</strong>好的程序善用短小的函数。这一点也要仰仗于函数良好的命名，使开发者通过函数名直接了解函数作用。</p>
+<p><strong>重构思路</strong></p>
+<p>积极地分解函数：每当感觉要以注释来说明时，就考虑封装一个独立的函数，并以用途命名。关键不在于函数的长度，而在于函数“做什么”和“如何做”之间的语义距离。</p>
+<p><strong>重构手法</strong></p>
+<ol>
+<li>提炼函数：拆分大函数。</li>
+<li>以查询取代临时变量：当大函数的参数和局部变量过多，对提炼函数有障碍时，考虑以查询获取数据的方法取代临时变量。</li>
+<li>引入参数对象：将多个数据封装成一个数据结构。这种方法会催生代码的深层次改变。</li>
+<li>保持对象完整：传递一个结构的多个值给一个函数，不如直接传递整个结构。常发生在引入参数对象的手法之后。</li>
+<li>以命令取代函数：采用上述手法后仍然有大量参数和临时变量，可采用此方法。</li>
+<li>分解条件表达式：例如，对switch的每个分支处理提炼函数。</li>
+<li>以多态取代条件表达式：多个switch语句基于同一个条件进行分支选择时，可以将每个分支的逻辑创建一个类，用多态来承载各个类型特有的行为，从而去除重复的分支逻辑。</li>
+<li>拆分循环：将循环和循环内的代码提炼到一个独立的函数中；将循环内的多个动作提炼出多个功能独立的函数。</li>
+</ol>
 
     </div>
 
@@ -346,8 +360,8 @@
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/2021/02/14/《重构》-重构的时机、挑战/" rel="next" title="《重构》| 第二篇 重构的时机、挑战">
-                  <i class="fa fa-chevron-left"></i> 《重构》| 第二篇 重构的时机、挑战
+                <a href="/2021/02/19/《重构》-第三篇-重构对架构、性能的影响/" rel="next" title="《重构》| 第三篇 重构对架构、性能的影响">
+                  <i class="fa fa-chevron-left"></i> 《重构》| 第三篇 重构对架构、性能的影响
                 </a>
               
             </div>
@@ -404,7 +418,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#重构改变软件架构方式"><span class="nav-text">重构改变软件架构方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引入灵活性机制"><span class="nav-text">引入灵活性机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#YAGNI（You-aren’t-going-to-need-it）"><span class="nav-text">YAGNI（You aren’t going to need it）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重构对性能的影响：可读性vs性能"><span class="nav-text">重构对性能的影响：可读性vs性能</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问到坏味道，就应当去重构"><span class="nav-text">问到坏味道，就应当去重构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坏味道与对应的重构手法"><span class="nav-text">坏味道与对应的重构手法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#糟糕的命名"><span class="nav-text">糟糕的命名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重复代码"><span class="nav-text">重复代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#过长函数"><span class="nav-text">过长函数</span></a></li></ol></li></ol></div>
         
       </div>
       <!--/noindex-->
@@ -420,7 +434,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-count">25</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

@@ -56,19 +56,19 @@
   };
 </script>
 
-  <meta name="description" content="重构的定义重构的定义：在不改变软件可观察行为的前提下，调整其结构，提高其可理解性，降低其修改成本。重构的关键在于运用大量微小且保持软件行为的步骤，一步一步完成大规模的修改。即使重构没有完成，也可以随时停下来，保证代码的运作。">
+  <meta name="description" content="重构改变软件架构方式重构打破了软件一旦开发完毕就会日渐腐败的行业陈规。我们在重构的定义、意义和一次示例当中就学习到“设计耐久性假说”这一观点，即重构可以修改调整老代码的结构从而延长软件的生命周期。">
 <meta name="keywords" content="重构,《重构 改善既有代码的设计》">
 <meta property="og:type" content="article">
-<meta property="og:title" content="《重构》| 第一篇 重构的定义、意义和一次示例">
-<meta property="og:url" content="https://xingkunz.github.io/2021/02/11/《重构》-重构的定义、意义和一次示例/index.html">
+<meta property="og:title" content="《重构》| 第三篇 重构对架构、性能的影响">
+<meta property="og:url" content="https://xingkunz.github.io/2021/02/19/《重构》-第三篇-重构对架构、性能的影响/index.html">
 <meta property="og:site_name" content="kun">
-<meta property="og:description" content="重构的定义重构的定义：在不改变软件可观察行为的前提下，调整其结构，提高其可理解性，降低其修改成本。重构的关键在于运用大量微小且保持软件行为的步骤，一步一步完成大规模的修改。即使重构没有完成，也可以随时停下来，保证代码的运作。">
+<meta property="og:description" content="重构改变软件架构方式重构打破了软件一旦开发完毕就会日渐腐败的行业陈规。我们在重构的定义、意义和一次示例当中就学习到“设计耐久性假说”这一观点，即重构可以修改调整老代码的结构从而延长软件的生命周期。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-02-24T13:41:03.257Z">
+<meta property="og:updated_time" content="2021-02-24T14:00:59.156Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="《重构》| 第一篇 重构的定义、意义和一次示例">
-<meta name="twitter:description" content="重构的定义重构的定义：在不改变软件可观察行为的前提下，调整其结构，提高其可理解性，降低其修改成本。重构的关键在于运用大量微小且保持软件行为的步骤，一步一步完成大规模的修改。即使重构没有完成，也可以随时停下来，保证代码的运作。">
-  <link rel="canonical" href="https://xingkunz.github.io/2021/02/11/《重构》-重构的定义、意义和一次示例/">
+<meta name="twitter:title" content="《重构》| 第三篇 重构对架构、性能的影响">
+<meta name="twitter:description" content="重构改变软件架构方式重构打破了软件一旦开发完毕就会日渐腐败的行业陈规。我们在重构的定义、意义和一次示例当中就学习到“设计耐久性假说”这一观点，即重构可以修改调整老代码的结构从而延长软件的生命周期。">
+  <link rel="canonical" href="https://xingkunz.github.io/2021/02/19/《重构》-第三篇-重构对架构、性能的影响/">
 
 
 <script id="page-configurations">
@@ -82,7 +82,7 @@
   };
 </script>
 
-  <title>《重构》| 第一篇 重构的定义、意义和一次示例 | kun</title>
+  <title>《重构》| 第三篇 重构对架构、性能的影响 | kun</title>
   
 
 
@@ -219,7 +219,7 @@
   
   
   <div class="post-block post">
-    <link itemprop="mainEntityOfPage" href="https://xingkunz.github.io/2021/02/11/《重构》-重构的定义、意义和一次示例/">
+    <link itemprop="mainEntityOfPage" href="https://xingkunz.github.io/2021/02/19/《重构》-第三篇-重构对架构、性能的影响/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="XingkunZ">
@@ -231,7 +231,7 @@
       <meta itemprop="name" content="kun">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">《重构》| 第一篇 重构的定义、意义和一次示例
+        <h1 class="post-title" itemprop="name headline">《重构》| 第三篇 重构对架构、性能的影响
 
           
         </h1>
@@ -247,7 +247,7 @@
                 
               
 
-              <time title="Created: 2021-02-11 15:50:49" itemprop="dateCreated datePublished" datetime="2021-02-11T15:50:49+08:00">2021-02-11</time>
+              <time title="Created: 2021-02-19 23:48:48" itemprop="dateCreated datePublished" datetime="2021-02-19T23:48:48+08:00">2021-02-19</time>
             </span>
           
             
@@ -258,7 +258,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-02-24 21:41:03" itemprop="dateModified" datetime="2021-02-24T21:41:03+08:00">2021-02-24</time>
+                <time title="Modified: 2021-02-24 22:00:59" itemprop="dateModified" datetime="2021-02-24T22:00:59+08:00">2021-02-24</time>
               </span>
             
           
@@ -277,7 +277,7 @@
           
 
           
-            <span id="/2021/02/11/《重构》-重构的定义、意义和一次示例/" class="post-meta-item leancloud_visitors" data-flag-title="《重构》| 第一篇 重构的定义、意义和一次示例" title="Views">
+            <span id="/2021/02/19/《重构》-第三篇-重构对架构、性能的影响/" class="post-meta-item leancloud_visitors" data-flag-title="《重构》| 第三篇 重构对架构、性能的影响" title="Views">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -295,7 +295,7 @@
       
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/2021/02/11/《重构》-重构的定义、意义和一次示例/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2021/02/11/《重构》-重构的定义、意义和一次示例/" itemprop="commentCount"></span></a>
+    <a title="valine" href="/2021/02/19/《重构》-第三篇-重构对架构、性能的影响/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2021/02/19/《重构》-第三篇-重构对架构、性能的影响/" itemprop="commentCount"></span></a>
   </span>
   
   
@@ -309,51 +309,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="重构的定义"><a href="#重构的定义" class="headerlink" title="重构的定义"></a>重构的定义</h2><p><strong>重构的定义</strong>：在不改变软件<strong>可观察行为</strong>的前提下，调整其结构，提高其可理解性，降低其修改成本。</p><p><strong>重构的关键</strong>在于运用<strong>大量微小</strong>且<strong>保持软件行为</strong>的步骤，一步一步完成大规模的修改。即使重构没有完成，也可以随时停下来，保证代码的运作。</p><a id="more"></a>
-
-<p><strong>对于“可观察行为”的理解</strong>：从用户所关心的角度而言，重构前后的软件表现应当一致。如果重构前有bug，重构后应该保留bug。但是重构所带来的性能提升、接口改变、调用栈改变甚至潜在bug的优化都不放在“可观察”的范围内。</p>
-<h2 id="重构的意义"><a href="#重构的意义" class="headerlink" title="重构的意义"></a>重构的意义</h2><ul>
-<li><strong>改进软件的设计。</strong>消除重复代码。</li>
-<li><strong>使软件更容易理解。</strong>代码的读者不只是机器，还有人。一次将所理解的内容表达清楚，就避免了下一个人浪费时间重新理解。</li>
-<li><strong>帮助找到bug。</strong>重构时需要试图理解代码，并将新的理解反映在新代码当中，这个过程使bug暴露。</li>
-<li><strong>（最终意义）提高编程速度。</strong>不及时做重构的团队在添加新功能时，软件的质量会越来越差，添加代码会非常困难。而及时重构的团队能够利用已有功能快速构建新功能，<strong>好的代码更容易理解、更容易修改</strong>。</li>
-</ul>
-<p>行业陈规认为，良好的设计必须在开始编程之前完成，编程时设计只会逐渐腐败。新的观念认为，先做好设计，然后在编码和重构中不断改善它——<strong>“设计耐久性假说”：投入精力改善内部设计，可以延长软件的耐久性</strong>。</p>
-<blockquote>
-<p>两顶帽子：“添加新功能”的帽子、“重构”的帽子。在开发程序的过程中会换帽子：添加功能时，我发现代码结构需要稍微调整调整，于是换上重构的帽子，重构完成后，继续添加新功能。</p>
-</blockquote>
-<h2 id="重构的示例"><a href="#重构的示例" class="headerlink" title="重构的示例"></a>重构的示例</h2><p>现在需要添加新特性，但是发现代码结构性差，因而需要重构。重构后，代码会便于添加特性。下面是一次重构的示例。</p>
-<ol>
-<li>首先，需要一个可靠的测试集：可以<strong>自我检测</strong>（自己对比运行结果的不同）</li>
-<li>分解一个大函数<ol>
-<li>提炼函数（copy出来）<ol>
-<li>考虑：那些变量离开了作用域？两种处理：<ol>
-<li>会被新函数使用但不会被修改，则可作为传入参数；会被修改，则可作为返回值。</li>
-<li>可在新函数中初始化</li>
-</ol>
-</li>
-<li><strong>编译、测试、提交。</strong>之后每一个小操作之后都要小步提交，论小步修改的重要性。</li>
-</ol>
-</li>
-<li>提升代码的表达能力：针对新函数<ol>
-<li>优化命名：<strong>起最好的名字</strong>，起最好的函数名配合返回值result使用</li>
-<li>将函数的返回值命名为result。</li>
-<li>参数命名：a/an+类型名。</li>
-</ol>
-</li>
-<li>移除不必要的参数<ol>
-<li>原函数：以查询取代临时变量。（函数代替变量）<ol>
-<li><strong>内联消除变量</strong>：构造一个新的用于查询的函数，以函数调用返回值作为参数，删除临时变量。</li>
-<li>以查询取代临时变量，需要先将功能相关的代码都集中到一起，拆分循环。</li>
-</ol>
-</li>
-<li>新函数<strong>精简参数</strong>：调用新函数替代传入参数；删掉传入参数，删掉调用方的传入参数；</li>
-</ol>
-</li>
-<li>重复上面三步。</li>
-</ol>
-</li>
-</ol>
+        <h2 id="重构改变软件架构方式"><a href="#重构改变软件架构方式" class="headerlink" title="重构改变软件架构方式"></a>重构改变软件架构方式</h2><p><strong>重构打破了软件一旦开发完毕就会日渐腐败的行业陈规。</strong>我们在<a href="https://xingkunz.github.io/2021/02/11/%E3%80%8A%E9%87%8D%E6%9E%84%E3%80%8B-%E9%87%8D%E6%9E%84%E7%9A%84%E5%AE%9A%E4%B9%89%E3%80%81%E6%84%8F%E4%B9%89%E5%92%8C%E4%B8%80%E6%AC%A1%E7%A4%BA%E4%BE%8B/">重构的定义、意义和一次示例</a>当中就学习到“设计耐久性假说”这一观点，即重构可以修改调整老代码的结构从而延长软件的生命周期。</p><a id="more"></a>
+<p>通过重构，开发人员可以应对不断变化的需求，因而不再拘泥于“编码前必须完成架构”的观点。</p>
+<h3 id="引入灵活性机制"><a href="#引入灵活性机制" class="headerlink" title="引入灵活性机制"></a>引入灵活性机制</h3><p>为了应对不断变化的需求，要在软件里植入灵活性机制。例如，在编写函数时提前为函数参数做打算，预留几个参数迎接未来可能的需求，来提升函数的通用性。</p>
+<p>可是，我们预测的需求往往和实际不符。这时候应该发挥重构的优势：<strong>按照当前需求将软件的设计质量做得很高，随着用户需求的不断累积，及时对架构进行重构。</strong></p>
+<p><strong>考虑是否值得引入灵活性机制</strong>：能够应对需求且不会增加复杂度，可以引入灵活性机制；能够预测未来此处会变的难以重构时，现在就值得引入灵活性机制。</p>
+<h3 id="YAGNI（You-aren’t-going-to-need-it）"><a href="#YAGNI（You-aren’t-going-to-need-it）" class="headerlink" title="YAGNI（You aren’t going to need it）"></a>YAGNI（You aren’t going to need it）</h3><p>上述的开发和决策过程被成为YAGNI方法，是一种将架构、设计与开发过程融合的工作方式，需要有重构作为基础。</p>
+<p>YAGNI可以理解为：<strong>编码前的架构仍要足够完善，但不必尽善尽美，等到对问题的理解更为充分时，再着手解决。</strong>即一种演进式架构。</p>
+<h2 id="重构对性能的影响：可读性vs性能"><a href="#重构对性能的影响：可读性vs性能" class="headerlink" title="重构对性能的影响：可读性vs性能"></a>重构对性能的影响：可读性vs性能</h2><p>绝不能为了提高设计质量而忽视性能，也绝对不能寄托于高速的硬件。有时，我们为了照顾软件的可读性，往往会牺牲软件的性能，这一点可以理解为：<strong>虽然重构使软件运行更慢，但是它使软件的性能优化更容易。</strong></p>
+<p>所以，可读性和性能的平衡点在于，<strong>先写出方便调优的软件，再调优它以获得足够的性能。</strong>短期看来，重构可能使软件变慢，但是它使优化阶段的软件性能调优更加容易，长期看来，重构对程序的性能有好处。</p>
+<p>对于性能，有一件有趣的事情：<strong>一大半时间都耗费在一小半代码上</strong>。所以，一视同仁的优化所有代码，则效率非常低，90%的工作都是白费。针对这一现象，我们在编写代码时，只关注创造良好的程序，但是到开发后期——进入性能优化阶段时，可以善用<strong>性能度量工具</strong>来筛出耗费大量时间和空间的代码，<strong>集中关注这些性能热点</strong>进行性能优化。</p>
 
     </div>
 
@@ -381,8 +346,8 @@
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/2020/08/03/English-Accumulation/" rel="next" title="English Accumulation">
-                  <i class="fa fa-chevron-left"></i> English Accumulation
+                <a href="/2021/02/14/《重构》-第二篇-重构的时机、挑战/" rel="next" title="《重构》| 第二篇 重构的时机、挑战">
+                  <i class="fa fa-chevron-left"></i> 《重构》| 第二篇 重构的时机、挑战
                 </a>
               
             </div>
@@ -391,8 +356,8 @@
 
             <div class="post-nav-prev post-nav-item">
               
-                <a href="/2021/02/14/《重构》-重构的时机、挑战/" rel="prev" title="《重构》| 第二篇 重构的时机、挑战">
-                  《重构》| 第二篇 重构的时机、挑战 <i class="fa fa-chevron-right"></i>
+                <a href="/2021/02/24/《重构》-第四篇-代码的坏味道/" rel="prev" title="《重构》| 第四篇 代码的坏味道和应对的重构方法">
+                  《重构》| 第四篇 代码的坏味道和应对的重构方法 <i class="fa fa-chevron-right"></i>
                 </a>
               
             </div>
@@ -443,7 +408,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#重构的定义"><span class="nav-text">重构的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重构的意义"><span class="nav-text">重构的意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重构的示例"><span class="nav-text">重构的示例</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#重构改变软件架构方式"><span class="nav-text">重构改变软件架构方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引入灵活性机制"><span class="nav-text">引入灵活性机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#YAGNI（You-aren’t-going-to-need-it）"><span class="nav-text">YAGNI（You aren’t going to need it）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重构对性能的影响：可读性vs性能"><span class="nav-text">重构对性能的影响：可读性vs性能</span></a></li></ol></div>
         
       </div>
       <!--/noindex-->
@@ -459,7 +424,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-count">25</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
