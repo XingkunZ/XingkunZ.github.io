@@ -330,13 +330,10 @@
 </blockquote>
 <p>定义在块中的变量具有块作用域，块作用域的可见范围是从定义处到包含该定义的块的末尾。到目前为止，我们使用的局部变量（包括函数的形式参数）都具有块作用域。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">1</span>;<span class="comment">//a的作用域开始</span></span><br><span class="line">    <span class="keyword">if</span>(n &gt;= <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> b = a+a;<span class="comment">//b的作用域开始</span></span><br><span class="line">        <span class="comment">//只有内层块的代码可以访问b</span></span><br><span class="line">        a += b;</span><br><span class="line">    &#125;<span class="comment">//b的作用域结束</span></span><br><span class="line">    <span class="keyword">return</span> a;</span><br><span class="line">&#125;<span class="comment">//a的作用域结束</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="函数作用域-function-scope"><a href="#函数作用域-function-scope" class="headerlink" title="函数作用域(function scope)"></a>函数作用域(function scope)</h3><p>函数作用域仅用于goto语句的标签，作用域从标签位置开始延续至函数结束。与块作用域相比，突破了块的限制。标签的函数作用域避免了两个块中使用相同标签的混乱。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(<span class="keyword">bool</span> condition)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//块1</span></span><br><span class="line">    <span class="keyword">if</span>(condition)</span><br><span class="line">    &#123;</span><br><span class="line">        label:<span class="comment">//块1的label的函数作用域开始</span></span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//块2</span></span><br><span class="line">    <span class="keyword">if</span>(!condition)</span><br><span class="line">    &#123;</span><br><span class="line">        label:<span class="comment">//块2的label的函数作用域开始</span></span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;<span class="comment">//块1、块2的label作用域结束</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="函数原型作用域-function-prototype-scope"><a href="#函数原型作用域-function-prototype-scope" class="headerlink" title="函数原型作用域(function prototype scope)"></a>函数原型作用域(function prototype scope)</h3><p>函数原型作用域用于函数原型中的形参名。作用范围是从形参定义处到原型声明结束。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//函数原型声明：只注重函数类型、参数个数、参数类型，不关心形参名。</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(<span class="keyword">int</span> mouse, <span class="keyword">double</span> large)</span></span>;<span class="comment">//mouse和large的作用域从这里开始、在这里结束。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//函数原型声明也可写作：void fun(int , double );</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//函数定义</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(<span class="keyword">int</span> m, <span class="keyword">double</span> l)</span><span class="comment">//m,l是形式参数，不必与函数声明时的mouse，large一致。</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//定义内容</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>形式参数：函数定义的函数头中声明的变量。</p>
 <p>实际参数：函数调用时实际传入的参数。</p>
@@ -344,10 +341,10 @@
 </blockquote>
 <p>只有在变长数组中，函数原型的形参名才有用。例如：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">use_a_VLA</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span> m, <span class="keyword">int</span> a[n][m])</span></span>;</span><br><span class="line"><span class="comment">//			   n开始----m开始----n,m被使用--n,m的函数原型作用域结束。</span></span><br><span class="line"><span class="comment">//方括号中使用的形参名是在该函数原型作用域中已声明的名称。</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="文件作用域-file-scope"><a href="#文件作用域-file-scope" class="headerlink" title="文件作用域(file scope)"></a>文件作用域(file scope)</h3><p>定义在函数外面的变量，即全局变量，具有文件作用域。作用范围从定义处到该定义所在文件的末尾。</p>
 <p>具有文件作用域的变量在内存中不动。</p>
-<h3 id="作用域总结"><a href="#作用域总结" class="headerlink" title="作用域总结"></a>作用域总结</h3><table>
+<h3 id="作用域总结"><a href="#作用域总结" class="headerlink" title="作用域总结"></a>作用域总结</h3><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>作用域类别</th>
@@ -355,7 +352,8 @@
 <th>应用</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>块作用域</td>
 <td>从定义处到包含该定义的块的末尾。</td>
 <td>局部变量（包括函数的形式参数）都具有块作用域。</td>
@@ -375,14 +373,17 @@
 <td>从定义处到该定义所在文件的末尾。</td>
 <td>全局变量具有文件作用域。</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><blockquote>
 <p>c预处理会将#include指令用包含的头文件替换掉。</p>
 <p>翻译单元：源代码文件中所有#include指令被头文件替换掉后的文件。程序由多个源代码文件组成时，等于由多个翻译单元组成。</p>
 </blockquote>
 <p>文件作用域变量的实际可见范围是一个翻译单元。</p>
 <p>c变量有三种连接属性：外部链接、内部链接、无链接。</p>
-<h3 id="链接与作用域"><a href="#链接与作用域" class="headerlink" title="链接与作用域"></a>链接与作用域</h3><table>
+<h3 id="链接与作用域"><a href="#链接与作用域" class="headerlink" title="链接与作用域"></a>链接与作用域</h3><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>链接</th>
@@ -390,7 +391,8 @@
 <th>作用域</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>外部链接</td>
 <td>变量可以在多文件程序中使用。</td>
 <td>具有文件作用域，外部定义使用存储类别说明符static。</td>
@@ -405,9 +407,10 @@
 <td>变量只属于定义它们的块、函数、原型私有。</td>
 <td>具有块作用域、函数作用域、函数原型作用域。</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">5</span>; <span class="comment">//变量a具有外部链接文件作用域</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> b = <span class="number">4</span>; <span class="comment">//变量b具有内部链接文件作用域</span></span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>习惯称“内部链接的文件作用域”为“文件作用域” ，称“外部链接的文件作用域”为“全局作用域”或“程序作用域”。</p>
 </blockquote>
@@ -422,18 +425,17 @@
 <p>文件作用域变量具有静态存储期，无论是内部链接（有static）还是外部链接。</p>
 <p>带有关键字static的块作用域变量也具有静态存储期。即，静态无链接存储类别。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">5</span>;<span class="comment">//具有外部链接文件作用域</span></span><br><span class="line"><span class="keyword">static</span> b = <span class="number">4</span>;<span class="comment">//具有内部链接文件作用域</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> c = <span class="number">1</span>;<span class="comment">//具有无链接块作用域</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//a,b,c都具有静态存储期。</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="线程存储期"><a href="#线程存储期" class="headerlink" title="线程存储期"></a>线程存储期</h3><p>并发程序设计中，具有线程存储期的对象，从声明时到线程结束一直存在。</p>
 <p>以关键字<strong>_Thread_local</strong>声明一个对象时，每个线程都获得该变量的私有备份。</p>
 <h3 id="自动存储期"><a href="#自动存储期" class="headerlink" title="自动存储期"></a>自动存储期</h3><p>具有块作用域的变量通常都具有自动存储期，从进入定义变量的块到退出块时存在。进入时分配内存，退出块时释放内存。</p>
 <p>自动变量所占的内存可以视为一个可重复利用的暂存区。目前我们使用的局部变量都是自动变量。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(<span class="keyword">int</span> a)</span><span class="comment">//a开始</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> b;</span><br><span class="line">    &#123;<span class="comment">//c开始，内部a开始</span></span><br><span class="line">        <span class="keyword">int</span> c; </span><br><span class="line">        <span class="keyword">int</span> a;<span class="comment">//内层的a会屏蔽外层的a的定义</span></span><br><span class="line">    &#125;<span class="comment">//c结束，内部a结束</span></span><br><span class="line">&#125;<span class="comment">//a,b结束</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//a,b,c都是自动类别。</span></span><br><span class="line"><span class="comment">//a,b在每次调用fun()时被创建，离开fun()时被销毁。</span></span><br><span class="line"><span class="comment">//c在每次进入块时被创建，离开块时被销毁。</span></span><br></pre></td></tr></table></figure>
-
 <p>特例：变长数组是从声明处到块的末尾。</p>
 <p>属于自动存储类别的变量具有自动存储期、块作用域、无链接。</p>
 <p>块作用域无链接意味着变量只能在块内通过变量名访问，不同的函数内可以有同名的变量名（但是占用不同的内存）。</p>
 <h3 id="动态分配存储期"><a href="#动态分配存储期" class="headerlink" title="动态分配存储期"></a>动态分配存储期</h3><p>（无描述）</p>
-<h3 id="存储期总结"><a href="#存储期总结" class="headerlink" title="存储期总结"></a>存储期总结</h3><table>
+<h3 id="存储期总结"><a href="#存储期总结" class="headerlink" title="存储期总结"></a>存储期总结</h3><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>存储期</th>
@@ -441,7 +443,8 @@
 <th>作用域和链接</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>静态存储期</td>
 <td>在程序执行期间一直存在。</td>
 <td>内部/外部链接文件作用域；加static无链接块作用域。</td>
@@ -459,10 +462,12 @@
 <tr>
 <td>动态分配存储期</td>
 <td></td>
-<td></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h2 id="存储类别"><a href="#存储类别" class="headerlink" title="存储类别"></a>存储类别</h2><p>c使用作用域、链接、存储期为变量规定了多种存储类别。</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -473,7 +478,8 @@
 <th>声明方式</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>自动</td>
 <td>自动</td>
 <td>块</td>
@@ -508,32 +514,27 @@
 <td>无</td>
 <td>快内，加关键字static</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a=<span class="number">1</span>;<span class="comment">//静态外部链接类别</span></span><br><span class="line"><span class="keyword">static</span> b=<span class="number">2</span>;<span class="comment">//静态内部链接类别</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(<span class="keyword">int</span> c)</span><span class="comment">//自动类别</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> d=<span class="number">3</span>;<span class="comment">//自动类别</span></span><br><span class="line">    <span class="keyword">static</span> e=<span class="number">4</span>;<span class="comment">//静态无链接类别</span></span><br><span class="line">    <span class="keyword">register</span> f=<span class="number">5</span>;<span class="comment">//寄存器类别</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h3 id="寄存器变量"><a href="#寄存器变量" class="headerlink" title="寄存器变量"></a>寄存器变量</h3><p>寄存器变量存在最快的可用内存中，幸运的话就存在CPU的寄存器中。访问和处理寄存器变量的速度更快。</p>
 <p>绝大多数情况，寄存器变量和自动变量一样——无链接、块作用域、自动存储期。</p>
 <p>“register”类似于一种申请，编译器可以忽略该申请，使得变量变成自动变量。由于寄存器的空间限制，可声明为“register”的数据类型有限。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(<span class="keyword">register</span> <span class="keyword">int</span> n)</span></span>&#123;<span class="comment">//请求成为寄存器变量的形参n</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">register</span> <span class="keyword">int</span> a;<span class="comment">//请求成为寄存器变量的a</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h3 id="静态外部链接变量"><a href="#静态外部链接变量" class="headerlink" title="静态外部链接变量"></a>静态外部链接变量</h3><p>又称“外部存储类别”，属于该存储类别的变量成为<strong>外部变量</strong>，具有文件作用域、外部链接、静态存储器。</p>
 <p>外部变量的定义式说明在所有函数外面。</p>
 <p>使用关键字extern的情况：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*情况一*/</span></span><br><span class="line"><span class="keyword">int</span> a;<span class="comment">//外部变量a的定义式声明</span></span><br><span class="line"><span class="keyword">int</span> aa[<span class="number">100</span>];<span class="comment">//外部变量aa数组的定义式声明</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">extern</span> <span class="keyword">int</span> a;<span class="comment">//可选的再次声明</span></span><br><span class="line">    <span class="keyword">extern</span> <span class="keyword">int</span> aa[];<span class="comment">//可选的再次声明</span></span><br><span class="line">    <span class="comment">/*这两条完全可以省略。如果去掉extern就会成为自动变量。*/</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">extern</span> <span class="keyword">int</span> a;<span class="comment">//a与上下文的a是同一个a。</span></span><br><span class="line">    <span class="keyword">int</span> aa[<span class="number">2</span>];<span class="comment">//fun()里的自动变量</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*情况二*/</span></span><br><span class="line"><span class="comment">/*-------one.c--------*/</span></span><br><span class="line"><span class="keyword">int</span> b;<span class="comment">//外部变量b的定义式声明</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*-------two.c--------*/</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> b;<span class="comment">//b被定义在另一个文件，则必须声明extern</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h3 id="静态内部链接变量"><a href="#静态内部链接变量" class="headerlink" title="静态内部链接变量"></a>静态内部链接变量</h3><p>在所有函数外用static定义的变量，具有静态存储器、文件作用域和内部链接。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> a=<span class="number">1</span>;<span class="comment">//内部链接的变量</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">extern</span> <span class="keyword">int</span> a;<span class="comment">//使用定义在别处的外部变量a，不是本文件的a。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h3 id="静态无链接变量（块作用域的静态变量）"><a href="#静态无链接变量（块作用域的静态变量）" class="headerlink" title="静态无链接变量（块作用域的静态变量）"></a>静态无链接变量（块作用域的静态变量）</h3><p>具有块作用域、无链接，但是具有静态存储期。</p>
 <p>静态的意思是变量在内存中原地不动，并不是说值不变。变量具有和自动变量一样的作用域，但是程序离开该函数的时候，变量不会消失。</p>
 <p>在块中以static声明变量。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> a=<span class="number">0</span>;<span class="comment">//静态无链接变量</span></span><br><span class="line">    a++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//每次调用的时候a的值都还在</span></span><br><span class="line">fun();<span class="comment">//a=1</span></span><br><span class="line">fun();<span class="comment">//a=2</span></span><br><span class="line">fun();<span class="comment">//a=3</span></span><br></pre></td></tr></table></figure>
-
 <p>不能在函数的形参中使用static。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fun</span><span class="params">(<span class="keyword">static</span> <span class="keyword">int</span> a)</span></span>;<span class="comment">//不允许</span></span><br></pre></td></tr></table></figure>
-
 
     </div>
 
@@ -703,10 +704,10 @@
   <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.4.1</div>
 
 
-  <script src='https://unpkg.com/mermaid@/dist/mermaid.min.js'></script>
+  <script src='https://unpkg.com/mermaid@8.8.4/dist/mermaid.min.js'></script>
   <script>
     if (window.mermaid) {
-      mermaid.initialize("");
+      mermaid.initialize(JSON.stringify());
     }
   </script>
 

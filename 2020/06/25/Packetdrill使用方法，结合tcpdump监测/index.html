@@ -313,24 +313,17 @@
 
 <h2 id="Install-and-Usage"><a href="#Install-and-Usage" class="headerlink" title="Install and Usage"></a>Install and Usage</h2><p>下载地址：<a href="https://github.com/google/packetdrill">https://github.com/google/packetdrill</a></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> root</span><br><span class="line"><span class="meta">#</span> 需要下载flex,bison</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get upgrade</span><br><span class="line">sudo apt-get install flex bison</span><br><span class="line"><span class="meta">#</span> 解压代码，配置编译</span><br><span class="line">unzip packetdrill-master.zip</span><br><span class="line">cd packetdrill-master/gtests/net/packetdrill</span><br><span class="line">./configure &amp; make</span><br><span class="line"><span class="meta">#</span> 执行</span><br><span class="line">./packetdrill ./tests/linux/packetdrill/XXX.pkt</span><br></pre></td></tr></table></figure>
-
 <h2 id="添加环境变量-方便执行，不必须"><a href="#添加环境变量-方便执行，不必须" class="headerlink" title="添加环境变量(方便执行，不必须)"></a>添加环境变量(方便执行，不必须)</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vim /root/.bashrc</span><br><span class="line"><span class="meta">#</span> 添加环境配置：在末尾添加代码</span><br><span class="line"><span class="meta">#</span> export PATH="/usr/local/packetdrill:$PATH"</span><br></pre></td></tr></table></figure>
-
 <p>将编译出的packetdrill可执行文件拷贝到/usr/local/bin目录下。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /home/kun/Downloads/packetdrill-master/gtests/net/packetdrill/packetdrill /usr/local/bin</span><br></pre></td></tr></table></figure>
-
 <h2 id="执行-tcpdump监测"><a href="#执行-tcpdump监测" class="headerlink" title="执行+tcpdump监测"></a>执行+tcpdump监测</h2><p>编写test.pkt文件：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3</span><br><span class="line">+0  setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0</span><br><span class="line">+0  bind(3, ..., ...) = 0</span><br><span class="line">+0  listen(3, 1) = 0</span><br><span class="line"></span><br><span class="line">//TCP three-way handshake</span><br><span class="line">+0  &lt; S 0:0(0) win 4000 &lt;mss 1000&gt;</span><br><span class="line">+0  &gt; S. 0:0(0) ack 1 &lt;...&gt;</span><br><span class="line">+.1 &lt; . 1:1(0) ack 1 win 1000</span><br><span class="line"></span><br><span class="line">+0 accept(3, ..., ...) = 4</span><br><span class="line"></span><br><span class="line">+0 &lt; P. 1:201(200) win 4000</span><br><span class="line">+0 &gt; . 1:1(0) ack 201</span><br></pre></td></tr></table></figure>
-
 <p>打开终端1，用tcpdump监测8080端口（bind默认绑定端口）：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:~<span class="comment"># sudo tcpdump -i any port 8080 -nn </span></span><br><span class="line">tcpdump: verbose output suppressed, use -v or -vv <span class="keyword">for</span> full protocol decode</span><br><span class="line">listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes</span><br></pre></td></tr></table></figure>
-
 <p>打开终端2执行上面的pkt测试脚本：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">packetdrill test.pkt</span><br></pre></td></tr></table></figure>
-
 <p>这时终端1监测到的信息如下:</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">13:33:36.573132 IP 192.0.2.1.49941 &gt; 192.168.22.185.8080: Flags [S], seq 0, win 4000, options [mss 1000], length 0</span><br><span class="line">13:33:36.573542 IP 192.168.22.185.8080 &gt; 192.0.2.1.49941: Flags [S.], seq 815367284, ack 1, win 29200, options [mss 1460], length 0</span><br><span class="line">13:33:36.675100 IP 192.0.2.1.49941 &gt; 192.168.22.185.8080: Flags [.], ack 1, win 1000, length 0</span><br><span class="line">13:33:36.675187 IP 192.0.2.1.49941 &gt; 192.168.22.185.8080: Flags [P.], seq 1:201, ack 0, win 4000, length 200: HTTP</span><br><span class="line">13:33:36.675204 IP 192.168.22.185.8080 &gt; 192.0.2.1.49941: Flags [.], ack 201, win 30000, length 0</span><br><span class="line">13:33:36.675997 IP 192.168.22.185.8080 &gt; 192.0.2.1.49941: Flags [R.], seq 1, ack 201, win 30000, length 0</span><br><span class="line">13:33:36.676023 IP 192.0.2.1.49941 &gt; 192.168.22.185.8080: Flags [R.], seq 201, ack 0, win 4000, length 0</span><br><span class="line">^C</span><br><span class="line">7 packets captured</span><br><span class="line">7 packets received by filter</span><br><span class="line">0 packets dropped by kernel</span><br></pre></td></tr></table></figure>
-
 
     </div>
 
@@ -498,10 +491,10 @@
   <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.4.1</div>
 
 
-  <script src='https://unpkg.com/mermaid@/dist/mermaid.min.js'></script>
+  <script src='https://unpkg.com/mermaid@8.8.4/dist/mermaid.min.js'></script>
   <script>
     if (window.mermaid) {
-      mermaid.initialize("");
+      mermaid.initialize(JSON.stringify());
     }
   </script>
 

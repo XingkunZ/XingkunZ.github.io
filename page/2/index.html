@@ -428,7 +428,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>常用的Markdown编辑器都会集成<a href="https://link.jianshu.com/?t=https://www.mathjax.org/">Mathjax</a>，用来渲染文档中的类Latex格式书写的数学公式。</p><h2 id="更换Hexo的markdown渲染引擎"><a href="#更换Hexo的markdown渲染引擎" class="headerlink" title="更换Hexo的markdown渲染引擎"></a>更换Hexo的markdown渲染引擎</h2><p>在<code>博客目录</code>下执行：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm uninstall hexo-renderer-marked --save</span><br><span class="line">npm install hexo-renderer-kramed --save</span><br></pre></td></tr></table></figure>
+          <p>常用的Markdown编辑器都会集成<a href="https://link.jianshu.com/?t=https%3A%2F%2Fwww.mathjax.org%2F">Mathjax</a>，用来渲染文档中的类Latex格式书写的数学公式。</p><h2 id="更换Hexo的markdown渲染引擎"><a href="#更换Hexo的markdown渲染引擎" class="headerlink" title="更换Hexo的markdown渲染引擎"></a>更换Hexo的markdown渲染引擎</h2><p>在<code>博客目录</code>下执行：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm uninstall hexo-renderer-marked --save</span><br><span class="line">npm install hexo-renderer-kramed --save</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           
             <div class="post-button">
@@ -1585,10 +1585,10 @@
   <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.4.1</div>
 
 
-  <script src='https://unpkg.com/mermaid@/dist/mermaid.min.js'></script>
+  <script src='https://unpkg.com/mermaid@8.8.4/dist/mermaid.min.js'></script>
   <script>
     if (window.mermaid) {
-      mermaid.initialize("");
+      mermaid.initialize(JSON.stringify());
     }
   </script>
 

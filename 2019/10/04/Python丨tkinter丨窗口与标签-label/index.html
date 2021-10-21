@@ -56,18 +56,18 @@
   };
 </script>
 
-  <meta name="description" content="Tkinter简介Tkinter是Python的标准GUI库。Python使用Tkinter可以快速地创建GUI应用程序。创建一个GUI程序的流程是： 导入tkinter模块 1import tkinter as tk  创建和初始化一个tk实例  创建控件、摆放控件  进入消息循环">
+  <meta name="description" content="Tkinter简介Tkinter是Python的标准GUI库。Python使用Tkinter可以快速地创建GUI应用程序。创建一个GUI程序的流程是： 导入tkinter模块 1import tkinter as tk  创建和初始化一个tk实例  创建控件、摆放控件 进入消息循环">
 <meta name="keywords" content="python,tkinter">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python丨tkinter丨窗口与标签(label)">
 <meta property="og:url" content="https://xingkunz.github.io/2019/10/04/Python丨tkinter丨窗口与标签-label/index.html">
 <meta property="og:site_name" content="kun">
-<meta property="og:description" content="Tkinter简介Tkinter是Python的标准GUI库。Python使用Tkinter可以快速地创建GUI应用程序。创建一个GUI程序的流程是： 导入tkinter模块 1import tkinter as tk  创建和初始化一个tk实例  创建控件、摆放控件  进入消息循环">
+<meta property="og:description" content="Tkinter简介Tkinter是Python的标准GUI库。Python使用Tkinter可以快速地创建GUI应用程序。创建一个GUI程序的流程是： 导入tkinter模块 1import tkinter as tk  创建和初始化一个tk实例  创建控件、摆放控件 进入消息循环">
 <meta property="og:locale" content="en">
 <meta property="og:updated_time" content="2020-06-26T08:33:36.276Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python丨tkinter丨窗口与标签(label)">
-<meta name="twitter:description" content="Tkinter简介Tkinter是Python的标准GUI库。Python使用Tkinter可以快速地创建GUI应用程序。创建一个GUI程序的流程是： 导入tkinter模块 1import tkinter as tk  创建和初始化一个tk实例  创建控件、摆放控件  进入消息循环">
+<meta name="twitter:description" content="Tkinter简介Tkinter是Python的标准GUI库。Python使用Tkinter可以快速地创建GUI应用程序。创建一个GUI程序的流程是： 导入tkinter模块 1import tkinter as tk  创建和初始化一个tk实例  创建控件、摆放控件 进入消息循环">
   <link rel="canonical" href="https://xingkunz.github.io/2019/10/04/Python丨tkinter丨窗口与标签-label/">
 
 
@@ -315,34 +315,25 @@
 </li>
 <li><p>创建和初始化一个tk实例</p>
 </li>
-<li><p>创建控件、摆放控件</p>
-</li>
-<li><p>进入消息循环</p>
-</li>
+<li>创建控件、摆放控件</li>
+<li>进入消息循环</li>
 </ul><a id="more"></a>
 
 <h2 id="初始化窗口"><a href="#初始化窗口" class="headerlink" title="初始化窗口"></a>初始化窗口</h2><p>导入包后，即可创建tk实例（一个窗口），指定窗口名称、大小及背景色等属性。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">window = tk.Tk()</span><br><span class="line">window.title(<span class="string">'ha!'</span>) <span class="comment">#指定窗口名称</span></span><br><span class="line">window.geometry(<span class="string">'400x500'</span>) <span class="comment">#指定窗口大小</span></span><br><span class="line">window.configure(background=<span class="string">'white'</span>) <span class="comment">#指定窗口背景色，白色很好看！</span></span><br></pre></td></tr></table></figure>
-
 <p>接下来就可以创建控件、摆放控件了。后续会介绍各个控件的基本用法。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">控件们</span></span><br><span class="line"><span class="string">'''</span></span><br></pre></td></tr></table></figure>
-
 <p>在所有控件之后，进入消息循环即可：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">window.mainloop()</span><br></pre></td></tr></table></figure>
-
 <p>运行，显示效果如下：</p>
-
 
 <h2 id="标签-label"><a href="#标签-label" class="headerlink" title="标签(label)"></a>标签(label)</h2><p>最简单的控件使用方式：创建、摆放到窗口。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">l_hello=tk.Label(window, text=<span class="string">'hello!'</span>,bg=<span class="string">'white'</span>,</span><br><span class="line">		font=(<span class="string">'Arial'</span>,<span class="number">9</span>),width=<span class="number">25</span>,height=<span class="number">2</span>)</span><br><span class="line"><span class="comment"># 指定master为window（tk实例)，文本内容为'hello!',背景颜色为白色，</span></span><br><span class="line">		<span class="comment"># 字体，宽度，高度</span></span><br><span class="line">l_hello.pack()</span><br><span class="line"><span class="comment"># pack()函数是将控件放在窗口中，默认情况为居中自上而下依次摆放。</span></span><br></pre></td></tr></table></figure>
-
 <p>把这段代码插入窗口初始化和消息循环中间，运行看看：</p>
-
 
 <p>‘hello！’就可以显示出来了！</p>
 <p>不过，这个text被指定为静态的字符串。如果需要动态指定字符串则可以将text替换为textvariable。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var=tk.StringVar()</span><br><span class="line">l_hello=tk.Label(window, textvariable=var,bg=<span class="string">'white'</span>,</span><br><span class="line">		font=(<span class="string">'Arial'</span>,<span class="number">9</span>),width=<span class="number">25</span>,height=<span class="number">2</span>)</span><br><span class="line"><span class="comment"># 指定master为window（tk实例)，文本内容为字符串变量,背景颜色为白色，</span></span><br><span class="line">		<span class="comment"># 字体，宽度，高度</span></span><br><span class="line">l_hello.pack()</span><br><span class="line"><span class="comment"># pack()函数是将控件放在窗口中，默认情况为居中自上而下依次摆放。</span></span><br></pre></td></tr></table></figure>
-
 <p>这个var可以在用户交互的过程中，动态指定。例如，用户点击按钮，按钮激发一个函数，函数中给var赋值，并在窗口中显示出来。</p>
 
     </div>
@@ -513,10 +504,10 @@
   <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.4.1</div>
 
 
-  <script src='https://unpkg.com/mermaid@/dist/mermaid.min.js'></script>
+  <script src='https://unpkg.com/mermaid@8.8.4/dist/mermaid.min.js'></script>
   <script>
     if (window.mermaid) {
-      mermaid.initialize("");
+      mermaid.initialize(JSON.stringify());
     }
   </script>
 
