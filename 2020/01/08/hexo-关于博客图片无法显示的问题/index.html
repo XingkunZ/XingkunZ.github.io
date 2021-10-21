@@ -312,17 +312,21 @@
         <h2 id="引用本地图片方式不对"><a href="#引用本地图片方式不对" class="headerlink" title="引用本地图片方式不对"></a>引用本地图片方式不对</h2><p>注意！markdown语法在这里是没有用的！</p><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![](/images/image.jpg)</span><br></pre></td></tr></table></figure><p>markdown语法在本地编辑的过程中是有用的，图片可见，一旦部署，通过域名访问是看不到图片的。</p><a id="more"></a>
 
 
+
 <h3 id="正确的方式：文章资源文件夹-asset"><a href="#正确的方式：文章资源文件夹-asset" class="headerlink" title="正确的方式：文章资源文件夹+asset"></a>正确的方式：文章资源文件夹+asset</h3><p>首先要打开资源文件管理功能：将 <code>config.yml</code> 文件中的 <code>post_asset_folder</code> 选项设为 <code>true</code> 来打开。</p>
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">_config.yml</span></span><br><span class="line"><span class="attr">post_asset_folder:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<p>当资源文件管理功能打开后，Hexo将会在你每一次通过 <code>hexo new [layout]</code> 命令创建新文章时自动创建一个文件夹。这个资源文件夹将会有与这个文章文件一样的名字。例如：<code>hexo n &quot;一篇博客&quot;</code>，则会在source中产生一个<code>一篇博客.md</code>和<code>一篇博客</code>文件夹。</p>
+
+<p>当资源文件管理功能打开后，Hexo将会在你每一次通过 <code>hexo new [layout] </code> 命令创建新文章时自动创建一个文件夹。这个资源文件夹将会有与这个文章文件一样的名字。例如：<code>hexo n &quot;一篇博客&quot;</code>，则会在source中产生一个<code>一篇博客.md</code>和<code>一篇博客</code>文件夹。</p>
 <p>当你在<code>一篇博客.md</code>插入一个图片时，在文件夹<code>一篇博客</code>中添加该图片文件<code>example.jpg</code>，使用asset语法：</p>
 <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% asset_img example.jpg 这是一个图片 %&#125;</span><br></pre></td></tr></table></figure>
+
 <p>发布后就可以看到图片了。</p>
 <blockquote>
 <p>参考：<a href="https://hexo.io/zh-cn/docs/asset-folders">hexo官方文档|资源文件夹</a></p>
 </blockquote>
 <h2 id="引用时难以察觉的错误（淦）"><a href="#引用时难以察觉的错误（淦）" class="headerlink" title="引用时难以察觉的错误（淦）"></a>引用时难以察觉的错误（淦）</h2><p>如果你在博客对应的资源文件夹中放<code>example.JPG</code>，但是在<code>.md</code>中写的是：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% asset_img example.jpg 这是一个图片 %&#125;</span><br></pre></td></tr></table></figure>
+
 <p>则图片也不会显示。</p>
 <p>所以使用前要<strong>检查属性中显示的图片格式大小写！</strong></p>
 <p>因为文件夹详细信息里显示的统一都是<code>PNG图片文件</code>，所以会很难察觉。气死我了……</p>
@@ -431,7 +435,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -444,7 +448,7 @@
             <a href="/categories/">
           
         
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">categories</span>
         </a>
       </div>
@@ -457,7 +461,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">tags</span>
         </a>
       </div>
