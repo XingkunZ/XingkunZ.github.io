@@ -64,7 +64,7 @@
 <meta property="og:site_name" content="kun">
 <meta property="og:description" content="第一章 入门–duck类设计    classDiagram         Duck">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-10-21T14:11:21.475Z">
+<meta property="og:updated_time" content="2021-10-21T14:32:39.278Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《Head First 设计模式》读书笔记">
 <meta name="twitter:description" content="第一章 入门–duck类设计    classDiagram         Duck">
@@ -247,7 +247,7 @@
                 
               
 
-              <time title="Created: 2021-10-21 22:10:02 / Modified: 22:11:21" itemprop="dateCreated datePublished" datetime="2021-10-21T22:10:02+08:00">2021-10-21</time>
+              <time title="Created: 2021-10-21 22:10:02 / Modified: 22:32:39" itemprop="dateCreated datePublished" datetime="2021-10-21T22:10:02+08:00">2021-10-21</time>
             </span>
           
             
@@ -317,39 +317,39 @@
             fly()cannot fly
         }</pre>
 
-<p><a href="https://xingkunz.github.io/2021/02/24/《重构》-第四篇-代码的坏味道/#616fe2a6e4378370b74e5e13">@Anonymous</a> , 典型问题：想要为个别子类添加fly动作，直接添加在父类会导致对个别子类出现多余的修改。继承关系的写死导致软件难以应对变化，改动父类牵一发而动全身，容易违反开闭原则。</p>
+<p>典型问题：想要为个别子类添加fly动作，直接添加在父类会导致对个别子类出现多余的修改。继承关系的写死导致软件难以应对变化，改动父类牵一发而动全身，容易违反开闭原则。</p>
 <p>不论子类重写父类方法，还是提取父类接口由子类实现，子类之间重复的代码都不方便复用，修改代价大。</p>
 <p>使用设计模式是希望软件在不断面对变化时的修改代价尽可能小。</p>
 <h2 id="原则：分离变化-不变的部分"><a href="#原则：分离变化-不变的部分" class="headerlink" title="原则：分离变化/不变的部分"></a>原则：分离变化/不变的部分</h2><p>我们希望系统中的某部分改变不会影响其他部分。所以需要将变化的部分与不变的部分隔离开。</p>
 <p>在本例中，即将变化的部分抽取新的类，对新的类使用组合关系，以代替原来的继承重写的关系。Duck类中的大部分信息趋于稳定，但Fly动作一直在变，因此只将Fly的部分抽象出一个虚类，Duck仍然具体实现。</p>
 <p>修改效果：</p>
-<pre class="mermaid">    classDiagram
-        Duck<|--MallardDuck
-        Duck<|--RubberDuck
-        Duck*--FlyBehavior
-        FlyBehavior<|..FlyWithWings
-        FlyBehavior<|..FlyNoWay
-        class Duck {
-            FlyBehavior flyBehavior
-            SetFlyBehavior()
-            PerformFly()
-        }
-        class MallardDuck {
-            FlyBehavior flyBehavior
-        }
-        class RubberDuck {
-            FlyBehavior flyBehavior
-        }
-        class FlyBehavior {
-            <<interface>>
-            fly()
-        }
-        class FlyWithWings {
-            fly()
-        }
-        class FlyNoWay {
-            fly() do nothing
-        }</pre>
+<pre class="mermaid">classDiagram
+    Duck<|--MallardDuck
+    Duck<|--RubberDuck
+    Duck*--FlyBehavior
+    FlyBehavior<|..FlyWithWings
+    FlyBehavior<|..FlyNoWay
+    class Duck {
+        FlyBehavior flyBehavior
+        SetFlyBehavior()
+        PerformFly()
+    }
+    class MallardDuck {
+        FlyBehavior flyBehavior
+    }
+    class RubberDuck {
+        FlyBehavior flyBehavior
+    }
+    class FlyBehavior {
+        <<interface>>
+        fly()
+    }
+    class FlyWithWings {
+        fly()
+    }
+    class FlyNoWay {
+        fly() do nothing
+    }</pre>
 
 <h2 id="原则：针对接口编程，而不是针对实现"><a href="#原则：针对接口编程，而不是针对实现" class="headerlink" title="原则：针对接口编程，而不是针对实现"></a>原则：针对接口编程，而不是针对实现</h2><p>针对实现：动作在父类实现，子类进行重写；或者子类继承接口，动作在子类中实现。</p>
 <p>针对接口：动作的实现不绑定于父类。利用多态针对超类型编程，例如针对抽象类或接口编程，执行时根据实际情况指定真正的行为。</p>
@@ -449,6 +449,7 @@
 <p>在拉数据的观察者模式中，Subject不需要再维护Observer队列，而要实现对数据的getter方法；Observer仍然维护自己所订阅的mySubject，通过getter自行获取自己需要的数据。订阅和取消订阅的方法变成Observer类中对mySubject的setter。</p>
 <h2 id="经验：jdk内置的观察者模式"><a href="#经验：jdk内置的观察者模式" class="headerlink" title="经验：jdk内置的观察者模式"></a>经验：jdk内置的观察者模式</h2><p>java.util包中实现了内置的Observable类（可观察类，即Subject）和Oberver接口，继承这两个接口实现。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Observable;</span><br><span class="line"><span class="keyword">import</span> java.util.Observer;</span><br></pre></td></tr></table></figure>
+
 <p>Observable是一个类，类的不可多重继承特点就限制了Obervable的复用能力。违反了<strong>针对接口编程</strong>和<strong>多用组合，少用继承</strong>的原则。</p>
 
     </div>
