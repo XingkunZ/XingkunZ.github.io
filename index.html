@@ -242,7 +242,7 @@
                 
               
 
-              <time title="Created: 2021-10-21 22:10:02 / Modified: 22:32:39" itemprop="dateCreated datePublished" datetime="2021-10-21T22:10:02+08:00">2021-10-21</time>
+              <time title="Created: 2021-10-21 22:10:02 / Modified: 22:35:57" itemprop="dateCreated datePublished" datetime="2021-10-21T22:10:02+08:00">2021-10-21</time>
             </span>
           
             
@@ -296,21 +296,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="第一章-入门–duck类设计"><a href="#第一章-入门–duck类设计" class="headerlink" title="第一章 入门–duck类设计"></a>第一章 入门–duck类设计</h1><pre class="mermaid">    classDiagram
-        Duck<|--MallardDuck
-        Duck<|--RubberDuck
-        class Duck {
-            ...
-            fly()
-        }
-        class MallardDuck {
-            ...
-            fly()
-        }
-        class RubberDuck {
-            ...
-            fly()cannot fly
-        }</pre>
+          <h1 id="第一章-入门–duck类设计"><a href="#第一章-入门–duck类设计" class="headerlink" title="第一章 入门–duck类设计"></a>第一章 入门–duck类设计</h1><pre class="mermaid">classDiagram
+    Duck<|--MallardDuck
+    Duck<|--RubberDuck
+    class Duck {
+        ...
+        fly()
+    }
+    class MallardDuck {
+        ...
+        fly()
+    }
+    class RubberDuck {
+        ...
+        fly()cannot fly
+    }</pre>
 
 <p>典型问题：想要为个别子类添加fly动作，直接添加在父类会导致对个别子类出现多余的修改。继承关系的写死导致软件难以应对变化，改动父类牵一发而动全身，容易违反开闭原则。</p>
 <p>不论子类重写父类方法，还是提取父类接口由子类实现，子类之间重复的代码都不方便复用，修改代价大。</p>
