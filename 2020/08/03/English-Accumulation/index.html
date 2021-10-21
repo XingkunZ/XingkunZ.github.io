@@ -649,7 +649,7 @@
 <p>well-planned  良好计划过的</p>
 <p>注意这句中的并列</p>
 </blockquote>
-<p>Owain James, the president of the National Union of Students(NUS), <strong>argued that</strong> the increase is evidence of student hardship – young people are <strong>being forced into earning money</strong> before finishing their education. </p>
+<p>Owain James, the president of the National Union of Students(NUS), <strong>argued that</strong> the increase is evidence of student hardship — young people are <strong>being forced into earning money</strong> before finishing their education. </p>
 <blockquote>
 <p>argue that 主张、声称</p>
 <p>be forced into doing sth.  被迫做某事    <em>注意这里的 正在进行时+被动语态</em></p>
@@ -821,6 +821,13 @@
   <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.4.1</div>
 
 
+  <script src='https://unpkg.com/mermaid@/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
         
 
 
@@ -867,6 +874,19 @@
 
 
 
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme: 'forest',
+      logLevel: 3,
+      flowchart: { curve: 'linear' },
+      gantt: { axisFormat: '%m/%d/%Y' },
+      sequence: { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
 
 
 

@@ -328,7 +328,7 @@
 <li>管理三级存储设备：安装和卸载设备媒介；为进程互斥使用而分配和释放设备；将数据从二级存储移动到三级存储。</li>
 </ul>
 <h2 id="高速缓存：高速缓存管理和置换策略"><a href="#高速缓存：高速缓存管理和置换策略" class="headerlink" title="高速缓存：高速缓存管理和置换策略"></a>高速缓存：高速缓存管理和置换策略</h2><ul>
-<li>CPU–高速缓存–内存</li>
+<li>CPU—高速缓存—内存</li>
 <li>可编程的内部存储器：寄存器分配与寄存器替换算法</li>
 <li>硬件实现的高速缓存</li>
 <li>内存可以看作外存的高速缓存</li>
@@ -505,6 +505,13 @@
   <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.4.1</div>
 
 
+  <script src='https://unpkg.com/mermaid@/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
         
 
 
@@ -551,6 +558,19 @@
 
 
 
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme: 'forest',
+      logLevel: 3,
+      flowchart: { curve: 'linear' },
+      gantt: { axisFormat: '%m/%d/%Y' },
+      sequence: { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
 
 
 

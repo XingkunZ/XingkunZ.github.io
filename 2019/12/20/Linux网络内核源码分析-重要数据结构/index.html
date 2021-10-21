@@ -327,30 +327,21 @@
 
 
 
-
-
-
 <p>sk_buff是套接字缓冲区类型，用来管理网络数据包，为发/收的网络数据提供存储区域和操作方法。</p>
 <p>sk_buff_head管理一个双向链表，来组织sk_buff。</p>
 <img src="/2019/12/20/Linux网络内核源码分析-重要数据结构/image-20191220134051960.png">
-
 <p>sk_buff与数据存储</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="comment">//struct sk_buff</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">char</span> *head,<span class="comment">//缓冲区头指针</span></span><br><span class="line">		*data,<span class="comment">//数据块头指针</span></span><br><span class="line">		*tail,<span class="comment">//数据块尾指针</span></span><br><span class="line">		*end;<span class="comment">//缓冲区尾指针</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <img src="/2019/12/20/Linux网络内核源码分析-重要数据结构/image-20191220141837701.png">
-
 <p>sk_buff用union定义的三个协议头部指针：h, nh, mac。每个union有一个用于初始化的raw指针。采用tcp协议的数据包从第三层递交到第四层时指针的变化情况。</p>
 <img src="/2019/12/20/Linux网络内核源码分析-重要数据结构/image-20191220143237080.png">
-
 <p>sk_buff-&gt;end指针指向数据报分片信息，数据包分片由struct skb_shared_info管理。</p>
 <h2 id="alloc-skb"><a href="#alloc-skb" class="headerlink" title="alloc_skb()"></a>alloc_skb()</h2><blockquote>
 <p>skbuff.c</p>
 </blockquote>
 <p>创建套接字缓冲区并初始化，建立了sk_buff和struct skb_shared_info的关系。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="comment">//alloc_skb</span></span><br><span class="line">    <span class="comment">//分配一个struct sk_buff结构体</span></span><br><span class="line">	skb = kmem_cache_alloc(skbuff_head_cache,</span><br><span class="line">			       gfp_mask &amp; ~__GFP_DMA);</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">	<span class="comment">// 初始化数据区指针</span></span><br><span class="line">	skb-&gt;head = data;</span><br><span class="line">	skb-&gt;data = data;</span><br><span class="line">	skb-&gt;tail = data;</span><br><span class="line">	skb-&gt;end  = data + size;</span><br><span class="line">	<span class="comment">// 初始化struct skb_shared_info结构内容</span></span><br><span class="line">	<span class="comment">// #define skb_shinfo(SKB) ((struct skb_shared_info *)((SKB)-&gt;end))</span></span><br><span class="line">	atomic_set(&amp;(skb_shinfo(skb)-&gt;dataref), <span class="number">1</span>);</span><br><span class="line">	skb_shinfo(skb)-&gt;nr_frags  = <span class="number">0</span>;</span><br><span class="line">	skb_shinfo(skb)-&gt;tso_size = <span class="number">0</span>;</span><br><span class="line">	skb_shinfo(skb)-&gt;tso_segs = <span class="number">0</span>;</span><br><span class="line">	skb_shinfo(skb)-&gt;frag_list = <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <img src="/2019/12/20/Linux网络内核源码分析-重要数据结构/image-20191220170347859.png">
-
 <h2 id="skb-put-skb-trim-skb-push-skb-pull-skb-reserve"><a href="#skb-put-skb-trim-skb-push-skb-pull-skb-reserve" class="headerlink" title="skb_put(), skb_trim(), skb_push(), skb_pull(), skb_reserve()"></a>skb_put(), skb_trim(), skb_push(), skb_pull(), skb_reserve()</h2><blockquote>
 <p>skbuff.h</p>
 </blockquote>
@@ -360,22 +351,20 @@
 <p>skb_pull()用来去掉数据包的协议头部；调整data，减少len。</p>
 <p>skb_reserve()用来在数据区创建存储协议头部的空间。应用：方便skb_push添加头部；调整数据区大小。</p>
 <img src="/2019/12/20/Linux网络内核源码分析-重要数据结构/image-20191220174418888.png">
-
 <h2 id="skb-queue-head-skb-queue-tail"><a href="#skb-queue-head-skb-queue-tail" class="headerlink" title="skb_queue_head(), skb_queue_tail()"></a>skb_queue_head(), skb_queue_tail()</h2><blockquote>
 <p>skbuff.h</p>
 </blockquote>
-<p>skb_queue_head() –&gt; _skb_queue_head()，在套接字缓冲区链表头部添加一个缓冲区。</p>
-<p>skb_dequeue() –&gt; _skb_dequeue()，把排在头部的缓冲区从套接字缓冲区链表中移走，返回该缓冲区。</p>
-<p>skb_queue_tail() –&gt; _skb_queue_tail()，在套接字缓冲区链表尾部添加一个缓冲区。</p>
-<p>skb_dequeue_tail() –&gt; _skb_dequeue_tail()，从套接字缓冲区链表尾部移走一个缓冲区。</p>
-<p>其中，套接字缓冲区链表即struct sk_buff_head *list，涉及增加操作时参数有待增加缓冲区struct sk_buff *newsk。</p>
+<p>skb_queue_head() —&gt; _skb_queue_head()，在套接字缓冲区链表头部添加一个缓冲区。</p>
+<p>skb_dequeue() —&gt; _skb_dequeue()，把排在头部的缓冲区从套接字缓冲区链表中移走，返回该缓冲区。</p>
+<p>skb_queue_tail() —&gt; _skb_queue_tail()，在套接字缓冲区链表尾部添加一个缓冲区。</p>
+<p>skb_dequeue_tail() —&gt; _skb_dequeue_tail()，从套接字缓冲区链表尾部移走一个缓冲区。</p>
+<p>其中，套接字缓冲区链表即struct sk_buff_head <em>list，涉及增加操作时参数有待增加缓冲区struct sk_buff </em>newsk。</p>
 <h1 id="网络设备"><a href="#网络设备" class="headerlink" title="网络设备"></a>网络设备</h1><h2 id="struct-net-device"><a href="#struct-net-device" class="headerlink" title="struct net_device"></a>struct net_device</h2><p>管理网络设备的数据结构。含：通用字段、硬件配置字段、网络层数据字段、物理层数据字段、设备驱动程序中的函数。</p>
 <blockquote>
 <p>include/linux/netdevice.h</p>
 </blockquote>
 <p><strong>通用字段</strong>：设备名称、next指针指向下一个net_device、设备状态state、网络设备索引值ifindex(用来标志网络设备以便快速定位，设备被创建后由dev_get_index函数分配)、refcnt表示网络设备的引用次数。</p>
 <img src="/2019/12/20/Linux网络内核源码分析-重要数据结构/image-20191229180604542.png">
-
 <p><strong>硬件配置字段</strong>：内存共享字段（描述网络适配器与内核共享的内存空间，指定发送包和接受包所在的区域）、I/O基地址（用于驱动程序搜索设备）、设备使用的中断号irq、分配给设备的DMA通道号、多端口设备使用的不同端口if_port（网络介质类型决定）。</p>
 <p><strong>物理层数据字段</strong>：指定2层协议头部长度、最大传输单元mtu（以太网1500byte）、网络设备输出队列的最大长度、网络设备类型type、地址字段（广播地址、多播地址表等）。</p>
 <p><strong>网络层数据字段</strong>：协议信息字段（xxx_ptr，指向xxx协议信息）、网络地址信息字段（协议地址族family例如AF_INET、协议地址长度、网络设备地址pa_addr）等。</p>
@@ -388,7 +377,6 @@
 <li>…</li>
 </ul>
 <h2 id="网络设备的创建和注册过程"><a href="#网络设备的创建和注册过程" class="headerlink" title="网络设备的创建和注册过程"></a>网络设备的创建和注册过程</h2><img src="/2019/12/20/Linux网络内核源码分析-重要数据结构/image-20191229181906396.png">
-
 <p>一个网络设备被使用前，需要先被创建成为一个struct net_device并注册。下面描述注册过程：</p>
 <p>设备驱动被编译成模块，内核在加载模块时进行初始化，调用init_module。init_module依次调用alloc_etherdev、do_netcard_probe、register_netdev。</p>
 <p>alloc_etherdev创建一个以太网设备，返回管理该设备的struct net_device，其中alloc_netdev函数为新创建的网络设备分配struct net_device结构空间，ether_setup初始化与以太网相关的设备信息并将协议相关的函数指针添加到struct net_device结构中。</p>
@@ -403,14 +391,14 @@
 <h2 id="网络设备的开启与关闭"><a href="#网络设备的开启与关闭" class="headerlink" title="网络设备的开启与关闭"></a>网络设备的开启与关闭</h2><blockquote>
 <p>net/core/dev.c</p>
 </blockquote>
-<p>*<em>开启网络设备函数dev_open(struct net_device <em>dev)</em></em>。如果网络设备已经激活或者它尚未被注册，函数返回错误信息。</p>
+<p><strong>开启网络设备函数dev_open(struct net_device *dev)</strong>。如果网络设备已经激活或者它尚未被注册，函数返回错误信息。</p>
 <ul>
 <li>判断设备是否激活；</li>
 <li>使用set_bit函数修改设备状态为<strong>__LINK_STATE_START</strong>，调用net_device中的open指向函数设置该设备；</li>
 <li>激活网络设备的队列和调度器；</li>
 <li>将事件(<strong>NETDEV_UP</strong>)登记到通知链：notifier_call_chain(&amp;netdev_chain,事件,dev)。</li>
 </ul>
-<p>*<em>关闭网络设备函数dev_close(struct net_device <em>dev)</em></em>。</p>
+<p><strong>关闭网络设备函数dev_close(struct net_device *dev)</strong>。</p>
 <ul>
 <li>如果网络设备未被激活，则不需要关闭；</li>
 <li>将事件(NETDEV_GOING_DOWN)登记到通知链：notifier_call_chain(&amp;netdev_chain,事件名,dev)；</li>
@@ -423,10 +411,9 @@
 </blockquote>
 <p><strong>struct notifier_block</strong>类型定义了通知链中每个元素的结构。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">notifier_block</span>&#123;</span></span><br><span class="line">    <span class="comment">//表示这个元素所记录的函数</span></span><br><span class="line">    <span class="keyword">int</span> (*notifier_call)(struct notifier_block *self,<span class="keyword">unsigned</span> <span class="keyword">long</span>,<span class="keyword">void</span> *);</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">notifier_block</span> *<span class="title">next</span>;</span><span class="comment">//指向下一个元素</span></span><br><span class="line">    <span class="keyword">int</span> priority;<span class="comment">//描述优先级</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p><strong>通知链注册事件函数notifier_chain_register(**notifier_block列表,notifier_block待登记块</strong>)**。可以向通知链中等级一个事件，事件发生时可以从notifier_block链表中找到该事件对应的元素，执行记录的函数。</p>
-<p><strong>通知链注销事件函数notifier_chain_unregister(**notifier_block列表,notifier_block待注销块</strong>)**。可以向通知链中注销一个事件。</p>
-<p>事件发生时，使用*<em>notifier_call_chain(通知链名，事件名，void</em>)<strong>。向某个通知链表发送消息，按顺序</strong>调用链表块中记录的函数**。</p>
+<p><strong>通知链注册事件函数notifier_chain_register(</strong>notifier_block列表,notifier_block待登记块<strong>)</strong>。可以向通知链中等级一个事件，事件发生时可以从notifier_block链表中找到该事件对应的元素，执行记录的函数。</p>
+<p><strong>通知链注销事件函数notifier_chain_unregister(</strong>notifier_block列表,notifier_block待注销块<strong>)</strong>。可以向通知链中注销一个事件。</p>
+<p>事件发生时，使用<strong>notifier_call_chain(通知链名，事件名，void*)</strong>。向某个通知链表发送消息，按顺序<strong>调用链表块中记录的函数</strong>。</p>
 
     </div>
 
@@ -598,6 +585,13 @@
   <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.4.1</div>
 
 
+  <script src='https://unpkg.com/mermaid@/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
         
 
 
@@ -644,6 +638,19 @@
 
 
 
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme: 'forest',
+      logLevel: 3,
+      flowchart: { curve: 'linear' },
+      gantt: { axisFormat: '%m/%d/%Y' },
+      sequence: { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
 
 
 

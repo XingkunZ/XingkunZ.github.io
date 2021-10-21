@@ -312,7 +312,7 @@
             fly()cannot fly
         }</pre>
 
-<p><a href="https://xingkunz.github.io/2021/02/24/%E3%80%8A%E9%87%8D%E6%9E%84%E3%80%8B-%E7%AC%AC%E5%9B%9B%E7%AF%87-%E4%BB%A3%E7%A0%81%E7%9A%84%E5%9D%8F%E5%91%B3%E9%81%93/#616fe2a6e4378370b74e5e13">@Anonymous</a> , 典型问题：想要为个别子类添加fly动作，直接添加在父类会导致对个别子类出现多余的修改。继承关系的写死导致软件难以应对变化，改动父类牵一发而动全身，容易违反开闭原则。</p>
+<p><a href="https://xingkunz.github.io/2021/02/24/《重构》-第四篇-代码的坏味道/#616fe2a6e4378370b74e5e13">@Anonymous</a> , 典型问题：想要为个别子类添加fly动作，直接添加在父类会导致对个别子类出现多余的修改。继承关系的写死导致软件难以应对变化，改动父类牵一发而动全身，容易违反开闭原则。</p>
 <p>不论子类重写父类方法，还是提取父类接口由子类实现，子类之间重复的代码都不方便复用，修改代价大。</p>
 <p>使用设计模式是希望软件在不断面对变化时的修改代价尽可能小。</p>
 <h2 id="原则：分离变化-不变的部分"><a href="#原则：分离变化-不变的部分" class="headerlink" title="原则：分离变化/不变的部分"></a>原则：分离变化/不变的部分</h2><p>我们希望系统中的某部分改变不会影响其他部分。所以需要将变化的部分与不变的部分隔离开。</p>
@@ -444,7 +444,6 @@
 <p>在拉数据的观察者模式中，Subject不需要再维护Observer队列，而要实现对数据的getter方法；Observer仍然维护自己所订阅的mySubject，通过getter自行获取自己需要的数据。订阅和取消订阅的方法变成Observer类中对mySubject的setter。</p>
 <h2 id="经验：jdk内置的观察者模式"><a href="#经验：jdk内置的观察者模式" class="headerlink" title="经验：jdk内置的观察者模式"></a>经验：jdk内置的观察者模式</h2><p>java.util包中实现了内置的Observable类（可观察类，即Subject）和Oberver接口，继承这两个接口实现。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Observable;</span><br><span class="line"><span class="keyword">import</span> java.util.Observer;</span><br></pre></td></tr></table></figure>
-
 <p>Observable是一个类，类的不可多重继承特点就限制了Obervable的复用能力。违反了<strong>针对接口编程</strong>和<strong>多用组合，少用继承</strong>的原则。</p>
 
         
@@ -1677,6 +1676,13 @@
   <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.4.1</div>
 
 
+  <script src='https://unpkg.com/mermaid@/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
         
 
 
@@ -1723,6 +1729,19 @@
 
 
 
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme: 'forest',
+      logLevel: 3,
+      flowchart: { curve: 'linear' },
+      gantt: { axisFormat: '%m/%d/%Y' },
+      sequence: { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
 
 
 
