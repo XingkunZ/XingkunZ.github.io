@@ -316,16 +316,14 @@
 
 
 
-
 <p>定义对象udp_protocol，用<code>inet_add_protocol()</code>添加。</p>
 <p>内核还提供了UDP传输层操作集：<code>struct proto udp_prot{...}</code>，用<code>proto_register()</code>注册。</p>
-<h1 id="UDP模块处理流程"><a href="#UDP模块处理流程" class="headerlink" title="UDP模块处理流程"></a>UDP模块处理流程</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>回顾套接字发送数据的流程，见<a href="https://xingkunz.github.io/2020/01/09/Linux%E7%BD%91%E7%BB%9C%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%A5%97%E6%8E%A5%E5%AD%97%E4%B9%8B%E6%94%B6%E5%8F%91%E6%95%B0%E6%8D%AE%E3%80%81%E7%9B%91%E5%90%AC%E3%80%81%E8%BF%9E%E6%8E%A5%E3%80%81%E7%BB%91%E5%AE%9A/#more">套接字之收发数据、监听、连接、绑定</a>：</p>
+<h1 id="UDP模块处理流程"><a href="#UDP模块处理流程" class="headerlink" title="UDP模块处理流程"></a>UDP模块处理流程</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>回顾套接字发送数据的流程，见<a href="https://xingkunz.github.io/2020/01/09/Linux网络内核源码分析-套接字之收发数据、监听、连接、绑定/#more">套接字之收发数据、监听、连接、绑定</a>：</p>
 <p><code>send()|write()|sendto() → sys_send() → sys_sendto() → sock_sendmsg() → __sock_sendmsg() → sock-&gt;prot-&gt;sendmsg() → sk-&gt;sk_prot-&gt;sendmsg()</code></p>
 <p>UDP采用SOCK_DGRAM类型的INET套接字，所以查询函数集后，最后两步具体调用的函数是：</p>
-<p><code>→ inet_sendmsg() → udp_sendmsg() </code></p>
+<p><code>→ inet_sendmsg() → udp_sendmsg()</code></p>
 <p>自此，网络数据包从应用程序的发送函数开始，已经过套接字接口，应用程序把应用层数据内容置入内核，并通知内核的<strong>UDP协议模块</strong>继续发送数据。下面主要关注UDP协议模块中的处理流程，直到UDP协议模块将数据包交给IP层协议模块。</p>
 <img src="/2020/02/16/Linux网络内核源码分析-传输层之UDP处理过程/UDP模块处理流程.png" title="UDP模块处理流程">
-
 <p>如果在应用层调用发送函数，若采用SOCK_DGRAM套接字，会触发内核<code>udp_sendmsg</code>调用，查找路由信息后，调用<code>ip_append_data</code>对数据做分片处理，然后调用<code>udp_push_pending_frames</code>进行UDP包封装，并把数据包交给IP层处理。</p>
 <p>如果在应用层调用接收函数，IP层取出数据内容后，函数<code>ip_local_deliver_finish</code>会调用UDP模块的<code>udp_rcv</code>函数。数据包会被加入套接字队列，再由函数<code>udp_recvmsg</code>取出，并通知应用程序函数读取数据。</p>
 <h2 id="UDP包的发送"><a href="#UDP包的发送" class="headerlink" title="UDP包的发送"></a>UDP包的发送</h2><p>应用层采用SOCK_DGRAM套接字发送数据，会触发内核<code>udp_sendmsg</code>调用。</p>
@@ -343,10 +341,12 @@
 <li>若套接字已连接，则不需要查询路由，从套接字管理信息中返回路由表信息，并记录到rtable中。</li>
 <li>若套接字无路由信息(rt==NULL)，则调用<code>ip_route_output_flow()</code>查询路由表。</li>
 <li>cork the socket: inet-&gt;cork.fl的赋值。</li>
-<li><code>ip_append_data</code>()：对UDP数据包进行分片处理，为IP层分片处理做好准备</li>
+<li><code>ip_append_data</code>()：对UDP数据包进行分片处理，为IP层分片处理做好准备<ol>
 <li>若设置了corkreq，则需要调用<code>lock_sock()</code>获取套接字锁，之后再发送数据包，<code>ip_append_data()</code>会将数据加入缓冲区，不立即传输，之后第调用<code>udp_push_pending_frames(sk, up)</code>来完成传输。</li>
 <li>出错则：<code>udp_flush_pending_frames(sk)→ip_flush_pending_frames()</code>，清空所有等待传输的SKB;</li>
 <li>没有出错且corkreq=0(不使用缓冲机制)则：<code>udp_push_pending_frames(sk, up)</code>; </li>
+</ol>
+</li>
 <li>一些结束处理。标签out和do_confirm。</li>
 </ol>
 <h3 id="ip-append-data-ip-output-c"><a href="#ip-append-data-ip-output-c" class="headerlink" title="ip_append_data ip_output.c"></a>ip_append_data <code>ip_output.c</code></h3><p>创建套接字缓冲区sk_buff，为IP层数据分片做好准备；该函数根据路由查询得到的接口MTU，把超过MTU长度的数据分片保存在多个套接字缓冲区中，并插入套接字的发送队列sk_write_queue中（对于较大的数据包，该函数可能循环多次）。</p>
@@ -388,7 +388,6 @@
 </ol>
 <h3 id="udp-push-pending-frames-sk-up-udp-c"><a href="#udp-push-pending-frames-sk-up-udp-c" class="headerlink" title="udp_push_pending_frames(sk,*up) udp.c"></a>udp_push_pending_frames(sk,*up) <code>udp.c</code></h3><p>传入参数*up为struct udp_opt型。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">udp_opt</span> &#123;</span></span><br><span class="line">	<span class="keyword">int</span>		pending;<span class="comment">// Any pending frames ?</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span>	corkflag;<span class="comment">// Cork is required</span></span><br><span class="line">  	__u16	encap_type;<span class="comment">// Is this an Encapsulation socket?</span></span><br><span class="line">	<span class="comment">// Following member retains the infomation to create a UDP header</span></span><br><span class="line">	<span class="comment">// when the socket is uncorked.</span></span><br><span class="line">	__u16	len;<span class="comment">// total length of pending frames</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
 <p>该函数具体执行：</p>
 <ol>
 <li>一些变量的声明。其中：<ol>
@@ -408,7 +407,6 @@
 <h3 id="udp-rcv-skb-udp-c"><a href="#udp-rcv-skb-udp-c" class="headerlink" title="udp_rcv(skb) udp.c"></a>udp_rcv(skb) <code>udp.c</code></h3><p>被注册为接收UDP数据包的方法。</p>
 <p>UDP初始化时，内核通过struct net_protocol udp_protocol注册接收UDP数据包的方法。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">net_protocol</span> <span class="title">udp_protocol</span> = &#123;</span></span><br><span class="line">	.handler = udp_rcv,</span><br></pre></td></tr></table></figure>
-
 <p>udp_rcv函数具体内容：</p>
 <ol>
 <li>判断套接字缓冲区中是否存在一个UDP头部长度的存储区。<ol>
@@ -450,7 +448,7 @@
 <li>skb-&gt;sk指针指向当前套接字结构sk，<code>skb_set_owner_r(skb,sk)</code>。</li>
 </ol>
 </li>
-<li>插入套接字接收队列的尾部，<code>  skb_queue_tail(&amp;sk-&gt;sk_receive_queue, skb);</code>。</li>
+<li>插入套接字接收队列的尾部，<code>skb_queue_tail(&amp;sk-&gt;sk_receive_queue, skb);</code>。</li>
 <li>通知被阻塞的操作：套接字接收队列中已有数据就绪，<code>sock_flag()</code>。</li>
 </ol>
 <h3 id="udp-recvmsg-udp-c"><a href="#udp-recvmsg-udp-c" class="headerlink" title="udp_recvmsg() udp.c"></a>udp_recvmsg() <code>udp.c</code></h3><p>应用程序通过套接字调用接收函数时，会调用内核函数<code>udp_recvmsg()</code>。该函数从套接字队列中取出数据，并通过struct msghdr结构把其中的数据和地址信息复制给用户程序。</p>
