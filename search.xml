@@ -1,221 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Leetcode刷题意识流经验</title>
-    <url>/2021/08/24/Leetcode%E5%88%B7%E9%A2%98%E6%84%8F%E8%AF%86%E6%B5%81%E7%BB%8F%E9%AA%8C/</url>
-    <content><![CDATA[<ol>
-<li>观察哪个变量可以使用大数组描述。</li>
-<li>考虑使用排序对数据进行预处理。</li>
-<li>多条件排序的问题考虑使用qsort。</li>
-<li>考虑使用位运算来原地处理数据、节省空间。</li>
-<li>考虑使用位移运算替代除法、取余、乘法，提升性能。</li>
-<li>永远考虑是否有负值、大小写、取值范围问题需要处理。</li>
-<li>利用好字符串的字典序比较。</li>
-<li>输出字符串的问题，要考虑是否加’\0’。</li>
-<li>遍历输入更新最优答案时，减除没有必要的遍历。例：</li>
-</ol><a id="more"></a>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; length &amp;&amp; maxDist &lt; length - i - <span class="number">1</span>; i++) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <title>《Head First 设计模式》读书笔记</title>
+    <url>/2021/10/21/%E3%80%8AHead-First-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h1 id="第一章-入门–duck类设计"><a href="#第一章-入门–duck类设计" class="headerlink" title="第一章 入门–duck类设计"></a>第一章 入门–duck类设计</h1><pre class="mermaid">    classDiagram
+        Duck<|--MallardDuck
+        Duck<|--RubberDuck
+        class Duck {
+            ...
+            fly()
+        }
+        class MallardDuck {
+            ...
+            fly()
+        }
+        class RubberDuck {
+            ...
+            fly()cannot fly
+        }</pre>
 
-]]></content>
-      <tags>
-        <tag>刷题</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《重构》| 第四篇 代码的坏味道和应对的重构方法</title>
-    <url>/2021/02/24/%E3%80%8A%E9%87%8D%E6%9E%84%E3%80%8B-%E7%AC%AC%E5%9B%9B%E7%AF%87-%E4%BB%A3%E7%A0%81%E7%9A%84%E5%9D%8F%E5%91%B3%E9%81%93/</url>
-    <content><![CDATA[<h2 id="闻到坏味道，就应当去重构"><a href="#闻到坏味道，就应当去重构" class="headerlink" title="闻到坏味道，就应当去重构"></a>闻到坏味道，就应当去重构</h2><p><strong>何时重构及何时停止和直到重构机制如何运转一样重要。</strong>当闻到代码的坏味道，就应当去重构，而这个近乎直觉的习惯需要开发者长期培养。</p><h2 id="坏味道与对应的重构手法"><a href="#坏味道与对应的重构手法" class="headerlink" title="坏味道与对应的重构手法"></a>坏味道与对应的重构手法</h2><a id="more"></a>
-<h3 id="糟糕的命名"><a href="#糟糕的命名" class="headerlink" title="糟糕的命名"></a>糟糕的命名</h3><blockquote>
-<p>命名是编程中最难的两件事之一。</p>
-</blockquote>
-<p>编程时要深思熟虑给函数、模块、变量和类命名。另外，如果想不出一个好名字，说明背后可能有潜藏的设计问题。</p>
-<p><strong>重构手法</strong>：改名</p>
-<ol>
-<li>改变函数声明</li>
-<li>变量改名</li>
-<li>字段改名</li>
-</ol>
-<h3 id="重复代码"><a href="#重复代码" class="headerlink" title="重复代码"></a>重复代码</h3><p>要修改重复代码时，要将全部的重复代码都找出来，对比其间差异，合二为一。</p>
-<p><strong>重构手法</strong></p>
-<ol>
-<li>提炼函数：将代码中多处重复的部分提炼出一个新的函数。</li>
-<li>移动语句：重组代码顺序 ，把相似的部分放在一起以便提炼。结合提炼函数的方法。</li>
-<li>函数上移：如果重复代码出现在同父的多子类之中，使用此方法来避免在子类之间相互调用。</li>
-</ol>
-<h3 id="过长函数"><a href="#过长函数" class="headerlink" title="过长函数"></a>过长函数</h3><p>过长的函数难以理解、复用性差。<strong>短小的函数具有更好的阐释力、更易于分享、提供更多的使用选择。</strong>好的程序善用短小的函数。这一点也要仰仗于函数良好的命名，使开发者通过函数名直接了解函数作用。</p>
-<p><strong>重构思路</strong></p>
-<p>积极地分解函数：每当感觉要以注释来说明时，就考虑封装一个独立的函数，并以用途命名。关键不在于函数的长度，而在于函数“做什么”和“如何做”之间的语义距离。</p>
-<p><strong>重构手法</strong></p>
-<ol>
-<li>提炼函数：拆分大函数。</li>
-<li>以查询取代临时变量：当大函数的参数和局部变量过多，对提炼函数有障碍时，考虑以查询获取数据的方法取代临时变量。</li>
-<li>引入参数对象：将多个数据封装成一个数据结构。这种方法会催生代码的深层次改变。</li>
-<li>保持对象完整：传递一个结构的多个值给一个函数，不如直接传递整个结构。常发生在引入参数对象的手法之后。</li>
-<li>以命令取代函数：采用上述手法后仍然有大量参数和临时变量，可采用此方法。</li>
-<li>分解条件表达式：例如，对switch的每个分支处理提炼函数。</li>
-<li>以多态取代条件表达式：多个switch语句基于同一个条件进行分支选择时，可以将每个分支的逻辑创建一个类，用多态来承载各个类型特有的行为，从而去除重复的分支逻辑。</li>
-<li>拆分循环：每个循环只做一件事情。先保证结构优化，再考虑性能。<ol>
-<li>将循环本身和循环内的代码提炼到一个独立的函数中；</li>
-<li>将循环中多个动作分发到不同的循环中，然后运用<code>提炼函数</code>的手法。</li>
-</ol>
-</li>
-</ol>
-<h3 id="过长参数列表"><a href="#过长参数列表" class="headerlink" title="过长参数列表"></a>过长参数列表</h3><p><strong>重构思路</strong></p>
-<p>总之不要指望靠全局变量能解决这个问题！</p>
-<p><strong>重构手法</strong></p>
-<ol>
-<li>以查询取代参数：向某个参数发起查询来获取另一个参数。</li>
-<li>保持对象完整：传递一个结构的多个值给一个函数，不如直接传递整个结构。</li>
-<li>引入参数对象：将多个数据封装成一个数据结构。</li>
-<li>移除标记参数：<ol>
-<li>函数指望一种标记参数来指示自己执行哪一条逻辑，不如将每条逻辑拆成单独的函数。</li>
-<li>注意区分标记参数，它影响了函数内部的控制流，并非函数内部实现。</li>
-<li>bool类型的标记参数无法表明确切含义。</li>
-</ol>
-</li>
-<li>函数组合成类：多个函数有同样的几个参数，可以引入类，将一些方法和数据绑定在一起。<ol>
-<li>类能明确地给函数提供一个共用的环境，在类的内部，函数参数会减少很多。</li>
-<li>类可以更方便地传递给其他系统。</li>
-</ol>
-</li>
-</ol>
-<h3 id="全局数据"><a href="#全局数据" class="headerlink" title="全局数据"></a>全局数据</h3><p><strong>重构思路</strong></p>
-<p>全局数据：全局变量、类变量、单例等。</p>
-<p>全局数据会造成诡异的bug，思路就是要控制它的作用域。</p>
-<p><strong>重构手法</strong></p>
-<ol>
-<li>封装变量：将对全局数据的修改封装起来，开始控制它，将这个函数搬移到一个类或模块当中，以限制其作用域。</li>
-</ol>
-]]></content>
-      <categories>
-        <category>重构</category>
-      </categories>
-      <tags>
-        <tag>重构</tag>
-        <tag>《重构 改善既有代码的设计》</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《重构》| 第三篇 重构对架构、性能的影响</title>
-    <url>/2021/02/19/%E3%80%8A%E9%87%8D%E6%9E%84%E3%80%8B-%E7%AC%AC%E4%B8%89%E7%AF%87-%E9%87%8D%E6%9E%84%E5%AF%B9%E6%9E%B6%E6%9E%84%E3%80%81%E6%80%A7%E8%83%BD%E7%9A%84%E5%BD%B1%E5%93%8D/</url>
-    <content><![CDATA[<h2 id="重构改变软件架构方式"><a href="#重构改变软件架构方式" class="headerlink" title="重构改变软件架构方式"></a>重构改变软件架构方式</h2><p><strong>重构打破了软件一旦开发完毕就会日渐腐败的行业陈规。</strong>我们在<a href="https://xingkunz.github.io/2021/02/11/%E3%80%8A%E9%87%8D%E6%9E%84%E3%80%8B-%E9%87%8D%E6%9E%84%E7%9A%84%E5%AE%9A%E4%B9%89%E3%80%81%E6%84%8F%E4%B9%89%E5%92%8C%E4%B8%80%E6%AC%A1%E7%A4%BA%E4%BE%8B/">重构的定义、意义和一次示例</a>当中就学习到“设计耐久性假说”这一观点，即重构可以修改调整老代码的结构从而延长软件的生命周期。</p><a id="more"></a>
-<p>通过重构，开发人员可以应对不断变化的需求，因而不再拘泥于“编码前必须完成架构”的观点。</p>
-<h3 id="引入灵活性机制"><a href="#引入灵活性机制" class="headerlink" title="引入灵活性机制"></a>引入灵活性机制</h3><p>为了应对不断变化的需求，要在软件里植入灵活性机制。例如，在编写函数时提前为函数参数做打算，预留几个参数迎接未来可能的需求，来提升函数的通用性。</p>
-<p>可是，我们预测的需求往往和实际不符。这时候应该发挥重构的优势：<strong>按照当前需求将软件的设计质量做得很高，随着用户需求的不断累积，及时对架构进行重构。</strong></p>
-<p><strong>考虑是否值得引入灵活性机制</strong>：能够应对需求且不会增加复杂度，可以引入灵活性机制；能够预测未来此处会变的难以重构时，现在就值得引入灵活性机制。</p>
-<h3 id="YAGNI（You-aren’t-going-to-need-it）"><a href="#YAGNI（You-aren’t-going-to-need-it）" class="headerlink" title="YAGNI（You aren’t going to need it）"></a>YAGNI（You aren’t going to need it）</h3><p>上述的开发和决策过程被成为YAGNI方法，是一种将架构、设计与开发过程融合的工作方式，需要有重构作为基础。</p>
-<p>YAGNI可以理解为：<strong>编码前的架构仍要足够完善，但不必尽善尽美，等到对问题的理解更为充分时，再着手解决。</strong>即一种演进式架构。</p>
-<h2 id="重构对性能的影响：可读性vs性能"><a href="#重构对性能的影响：可读性vs性能" class="headerlink" title="重构对性能的影响：可读性vs性能"></a>重构对性能的影响：可读性vs性能</h2><p>绝不能为了提高设计质量而忽视性能，也绝对不能寄托于高速的硬件。有时，我们为了照顾软件的可读性，往往会牺牲软件的性能，这一点可以理解为：<strong>虽然重构使软件运行更慢，但是它使软件的性能优化更容易。</strong></p>
-<p>所以，可读性和性能的平衡点在于，<strong>先写出方便调优的软件，再调优它以获得足够的性能。</strong>短期看来，重构可能使软件变慢，但是它使优化阶段的软件性能调优更加容易，长期看来，重构对程序的性能有好处。</p>
-<p>对于性能，有一件有趣的事情：<strong>一大半时间都耗费在一小半代码上</strong>。所以，一视同仁的优化所有代码，则效率非常低，90%的工作都是白费。针对这一现象，我们在编写代码时，只关注创造良好的程序，但是到开发后期——进入性能优化阶段时，可以善用<strong>性能度量工具</strong>来筛出耗费大量时间和空间的代码，<strong>集中关注这些性能热点</strong>进行性能优化。</p>
-]]></content>
-      <categories>
-        <category>重构</category>
-      </categories>
-      <tags>
-        <tag>重构</tag>
-        <tag>《重构 改善既有代码的设计》</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《重构》| 第二篇 重构的时机、挑战</title>
-    <url>/2021/02/14/%E3%80%8A%E9%87%8D%E6%9E%84%E3%80%8B-%E7%AC%AC%E4%BA%8C%E7%AF%87-%E9%87%8D%E6%9E%84%E7%9A%84%E6%97%B6%E6%9C%BA%E3%80%81%E6%8C%91%E6%88%98/</url>
-    <content><![CDATA[<h2 id="重构的时机"><a href="#重构的时机" class="headerlink" title="重构的时机"></a>重构的时机</h2><blockquote>
-<p>三次法则、事不过三：第一次做某件事时只管去做；第二次做类似的事会产生方案，但无论如何还是可以去做；第三次在做类似的事，你就应该重构。——Don Roberts</p>
-</blockquote><a id="more"></a>
-<h3 id="预备性重构：使添加新代码更加容易"><a href="#预备性重构：使添加新代码更加容易" class="headerlink" title="预备性重构：使添加新代码更加容易"></a>预备性重构：使添加新代码更加容易</h3><p><strong>重构的最佳时机是在添加新功能前：</strong>对代码做一点调整，使得添加新功能更加容易。</p>
-<p>具体体现：利用和改造已有的代码，避免添加增添代码。而且，可能在合并相似功能的过程中，简化某些bug的复杂度，使得bug更容易找到并解决。</p>
-<p>几个函数有类似的功能，可以使用<strong>函数参数化</strong>的方式合并一些类似功能。</p>
-<h3 id="帮助理解的重构：使代码更加易懂"><a href="#帮助理解的重构：使代码更加易懂" class="headerlink" title="帮助理解的重构：使代码更加易懂"></a>帮助理解的重构：使代码更加易懂</h3><p><strong>重构前要理解代码在做什么。</strong>通过重构，要把脑袋里对代码的理解转化为代码本身。</p>
-<p>糟糕的代码理解起来要花费更多时间；好的代码不需要那么多的精力去理解，并且不需要额外花费时间去记忆，因为它本身承载了足够多的信息。通过一次重构将代码转化为容易理解的代码，会让后续其他开发人员（或自己）添加代码更加方便，节省更多的时间。</p>
-<p>研读代码时，重构会引领我们获得更高层面的理解，如果只是阅读代码很难有此领悟。——Ralph Johnson</p>
-<h3 id="捡垃圾式重构"><a href="#捡垃圾式重构" class="headerlink" title="捡垃圾式重构"></a>捡垃圾式重构</h3><p><strong>已经理解代码在做什么，并知道代码中存在垃圾，重构掉这些垃圾会更容易增加代码。</strong>也可以在没事的时候捡捡这些垃圾。</p>
-<p>重构的妙处在于什么时候捡垃圾、捡多少都不会影响软件功能。</p>
-<h3 id="有计划的重构和见机行事的重构"><a href="#有计划的重构和见机行事的重构" class="headerlink" title="有计划的重构和见机行事的重构"></a>有计划的重构和见机行事的重构</h3><p>与前面三种不同，这次是主动重构。<strong>不只是垃圾代码需要重构，漂亮代码也需要重构，只是漂亮的代码重构起来更加容易。</strong></p>
-<p>添加新功能最快的方法是先修改现有代码，使新功能容易被加入。所以，有计划的重构是有好处的，但是大部分的重构还是见机行事的。</p>
-<p>重构可以单独放在一个分支上做，但是重构一般和添加新功能密不可分，因为这样才能感受到重构的价值。如果独立重构的分支也有好处，那就独立。</p>
-<blockquote>
-<p>每次要修改时，首先令修改很容易（警告：这件事有时会很难），然后在进行这次容易的修改。——Kent Beck</p>
-</blockquote>
-<h3 id="长期重构"><a href="#长期重构" class="headerlink" title="长期重构"></a>长期重构</h3><p>有些大型重构需要花很长的时间。</p>
-<p>例如，如果想替换掉一个正在使用的库，可以先引入一层新的抽象，使其兼容新旧两个库的接口。一旦调用方已经完全改为使用这层抽象，替换下面的库就会容易得多。——Branch By Abstraction</p>
-<h3 id="复审代码时重构"><a href="#复审代码时重构" class="headerlink" title="复审代码时重构"></a>复审代码时重构</h3><p><strong>把重构作为code review的一种方式。</strong>这样可以对代码进行更高层次的复审，也能够提出更有价值的检视意见。</p>
-<p>与原作者一起浏览代码并重构是最好的，这种工作方式叫做<strong>结对编程</strong>。</p>
-<blockquote>
-<p>思考：把重构作为一种检视方法，可以归类为“以输出的方式输入”的方法（费曼学习法）。我们读书、思考并总结出自己的知识点，写成了博客分享给别人，是同理的。</p>
-</blockquote>
-<h3 id="重构的其他情况"><a href="#重构的其他情况" class="headerlink" title="重构的其他情况"></a>重构的其他情况</h3><p>部分经理、客户不具备足够的技术意识，不认同重构对于代码的长期意义。这种情况下，<strong>干脆不要告诉经理自己要重构！</strong>作为软件开发人员，只是选择了一种快速开发的方法而已，采用具体什么方式对于上层管理者是不可见的。</p>
-<h4 id="不合适重构的情况"><a href="#不合适重构的情况" class="headerlink" title="不合适重构的情况"></a>不合适重构的情况</h4><ol>
-<li>一块垃圾代码不需要修改时，没必要去重构。</li>
-<li>重构的效率还没有重写的效率高时，没必要去重构。<strong>一切工作的导向是开发效率。</strong></li>
-</ol>
-<h2 id="重构的挑战"><a href="#重构的挑战" class="headerlink" title="重构的挑战"></a>重构的挑战</h2><h3 id="重构延缓新功能的开发"><a href="#重构延缓新功能的开发" class="headerlink" title="重构延缓新功能的开发"></a>重构延缓新功能的开发</h3><p><strong>重构的唯一目的就是开发更快，用更少的工作量创造更大的价值。</strong>所以要不要重构是需要权衡和决策的。</p>
-<p>事实是，行业中大部分情况是重构不足。合理判断何时应该重构、何时应该暂时不重构，这样的判断力需要多年经验积累，毕竟重构还是由经济利益驱动的，如果认为重构有价值，应当懂得说服其他人——本次重构对于经济成本的节约等等。</p>
-<h3 id="代码所有权"><a href="#代码所有权" class="headerlink" title="代码所有权"></a>代码所有权</h3><p>（待续）</p>
-]]></content>
-      <categories>
-        <category>重构</category>
-      </categories>
-      <tags>
-        <tag>重构</tag>
-        <tag>《重构 改善既有代码的设计》</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《重构》| 第一篇 重构的定义、意义和一次示例</title>
-    <url>/2021/02/11/%E3%80%8A%E9%87%8D%E6%9E%84%E3%80%8B-%E7%AC%AC%E4%B8%80%E7%AF%87-%E9%87%8D%E6%9E%84%E7%9A%84%E5%AE%9A%E4%B9%89%E3%80%81%E6%84%8F%E4%B9%89%E5%92%8C%E4%B8%80%E6%AC%A1%E7%A4%BA%E4%BE%8B/</url>
-    <content><![CDATA[<h2 id="重构的定义"><a href="#重构的定义" class="headerlink" title="重构的定义"></a>重构的定义</h2><p><strong>重构的定义</strong>：在不改变软件<strong>可观察行为</strong>的前提下，调整其结构，提高其可理解性，降低其修改成本。</p><p><strong>重构的关键</strong>在于运用<strong>大量微小</strong>且<strong>保持软件行为</strong>的步骤，一步一步完成大规模的修改。即使重构没有完成，也可以随时停下来，保证代码的运作。</p><a id="more"></a>
+<p><a href="https://xingkunz.github.io/2021/02/24/%E3%80%8A%E9%87%8D%E6%9E%84%E3%80%8B-%E7%AC%AC%E5%9B%9B%E7%AF%87-%E4%BB%A3%E7%A0%81%E7%9A%84%E5%9D%8F%E5%91%B3%E9%81%93/#616fe2a6e4378370b74e5e13">@Anonymous</a> , 典型问题：想要为个别子类添加fly动作，直接添加在父类会导致对个别子类出现多余的修改。继承关系的写死导致软件难以应对变化，改动父类牵一发而动全身，容易违反开闭原则。</p>
+<p>不论子类重写父类方法，还是提取父类接口由子类实现，子类之间重复的代码都不方便复用，修改代价大。</p>
+<p>使用设计模式是希望软件在不断面对变化时的修改代价尽可能小。</p>
+<h2 id="原则：分离变化-不变的部分"><a href="#原则：分离变化-不变的部分" class="headerlink" title="原则：分离变化/不变的部分"></a>原则：分离变化/不变的部分</h2><p>我们希望系统中的某部分改变不会影响其他部分。所以需要将变化的部分与不变的部分隔离开。</p>
+<p>在本例中，即将变化的部分抽取新的类，对新的类使用组合关系，以代替原来的继承重写的关系。Duck类中的大部分信息趋于稳定，但Fly动作一直在变，因此只将Fly的部分抽象出一个虚类，Duck仍然具体实现。</p>
+<p>修改效果：</p>
+<pre class="mermaid">    classDiagram
+        Duck<|--MallardDuck
+        Duck<|--RubberDuck
+        Duck*--FlyBehavior
+        FlyBehavior<|..FlyWithWings
+        FlyBehavior<|..FlyNoWay
+        class Duck {
+            FlyBehavior flyBehavior
+            SetFlyBehavior()
+            PerformFly()
+        }
+        class MallardDuck {
+            FlyBehavior flyBehavior
+        }
+        class RubberDuck {
+            FlyBehavior flyBehavior
+        }
+        class FlyBehavior {
+            <<interface>>
+            fly()
+        }
+        class FlyWithWings {
+            fly()
+        }
+        class FlyNoWay {
+            fly() do nothing
+        }</pre>
 
-<p><strong>对于“可观察行为”的理解</strong>：从用户所关心的角度而言，重构前后的软件表现应当一致。如果重构前有bug，重构后应该保留bug。但是重构所带来的性能提升、接口改变、调用栈改变甚至潜在bug的优化都不放在“可观察”的范围内。</p>
-<h2 id="重构的意义"><a href="#重构的意义" class="headerlink" title="重构的意义"></a>重构的意义</h2><ul>
-<li><strong>改进软件的设计。</strong>消除重复代码。</li>
-<li><strong>使软件更容易理解。</strong>代码的读者不只是机器，还有人。一次将所理解的内容表达清楚，就避免了下一个人浪费时间重新理解。</li>
-<li><strong>帮助找到bug。</strong>重构时需要试图理解代码，并将新的理解反映在新代码当中，这个过程使bug暴露。</li>
-<li><strong>（最终意义）提高编程速度。</strong>不及时做重构的团队在添加新功能时，软件的质量会越来越差，添加代码会非常困难。而及时重构的团队能够利用已有功能快速构建新功能，<strong>好的代码更容易理解、更容易修改</strong>。</li>
+<h2 id="原则：针对接口编程，而不是针对实现"><a href="#原则：针对接口编程，而不是针对实现" class="headerlink" title="原则：针对接口编程，而不是针对实现"></a>原则：针对接口编程，而不是针对实现</h2><p>针对实现：动作在父类实现，子类进行重写；或者子类继承接口，动作在子类中实现。</p>
+<p>针对接口：动作的实现不绑定于父类。利用多态针对超类型编程，例如针对抽象类或接口编程，执行时根据实际情况指定真正的行为。</p>
+<p>针对接口编程使得原来的类、提取出的接口可以各自独立变化，作为两个生命周期去发展，在彼此需要时进行注入。</p>
+<h2 id="模式：策略模式"><a href="#模式：策略模式" class="headerlink" title="模式：策略模式"></a>模式：策略模式</h2><p>duck类将飞行行为委托给FlyBehavior超类实现，提取出的这个行为类相当于一个算法族，即采取策略模式。duck使用该算法族的实例，可以灵活地指定采用哪个算法。</p>
+<h2 id="原则：多用组合，少用继承"><a href="#原则：多用组合，少用继承" class="headerlink" title="原则：多用组合，少用继承"></a>原则：多用组合，少用继承</h2><p>duck使用该算法族的实例，即组合关系，可以对算法实现setter以便动态更换算法。相比于继承关系的静态实现（写死），组合关系更加灵活。</p>
+<h2 id="经验：使用设计模式"><a href="#经验：使用设计模式" class="headerlink" title="经验：使用设计模式"></a>经验：使用设计模式</h2><ul>
+<li>模式让开发人员之间有共享词汇，方便沟通。</li>
+<li>使用设计模式可以建造出具有良好OO设计质量（具备可复用、可扩充、可维护性）的系统。</li>
+<li>不要过度使用设计模式，遵循简单设计原则。模式应着力于软件变化的问题。</li>
 </ul>
-<p>行业陈规认为，良好的设计必须在开始编程之前完成，编程时设计只会逐渐腐败。新的观念认为，先做好设计，然后在编码和重构中不断改善它——<strong>“设计耐久性假说”：投入精力改善内部设计，可以延长软件的耐久性</strong>。</p>
-<blockquote>
-<p>两顶帽子：“添加新功能”的帽子、“重构”的帽子。在开发程序的过程中会换帽子：添加功能时，我发现代码结构需要稍微调整调整，于是换上重构的帽子，重构完成后，继续添加新功能。</p>
-</blockquote>
-<h2 id="重构的示例"><a href="#重构的示例" class="headerlink" title="重构的示例"></a>重构的示例</h2><p>现在需要添加新特性，但是发现代码结构性差，因而需要重构。重构后，代码会便于添加特性。下面是一次重构的示例。</p>
-<ol>
-<li>首先，需要一个可靠的测试集：可以<strong>自我检测</strong>（自己对比运行结果的不同）</li>
-<li>分解一个大函数<ol>
-<li>提炼函数（copy出来）<ol>
-<li>考虑：那些变量离开了作用域？两种处理：<ol>
-<li>会被新函数使用但不会被修改，则可作为传入参数；会被修改，则可作为返回值。</li>
-<li>可在新函数中初始化</li>
-</ol>
+<h1 id="第二章-观察者模式"><a href="#第二章-观察者模式" class="headerlink" title="第二章 观察者模式"></a>第二章 观察者模式</h1><h2 id="模式：观察者模式"><a href="#模式：观察者模式" class="headerlink" title="模式：观察者模式"></a>模式：观察者模式</h2><p><strong>定义</strong>：观察者模式定义了对象之间的一对多依赖，当一个对象改变状态时，它的所有依赖者都会收到通知并自动更新。</p>
+<p><strong>通俗解释</strong>：报社更新报纸后，会把报纸发放给订阅报纸的用户；用户们会在报纸更新时收到新报纸，用户可以选择订阅或不订阅报社的报纸。报社是主题对象，用户们是观察者对象。</p>
+<pre class="mermaid">classDiagram
+    class Subject {
+        <<interface>>
+        - objList : List<Observer*>
+        NotifyObservers()
+        RegisterObserver(Observer *o)
+        RemoveObserver(Observer *o)
+    }
+    class Newspaper {
+        - data<DataType> 
+        GetState(DataType data)
+        SetState(DataType data)
+    }
+    class Observer {
+        <<interface>>
+        - subject<Subject *>
+        Update(DataType data)
+    }
+    class Customer {
+        Update(DataType data)
+        Display(DataType data)
+    }
+    Subject<|..Newspaper
+    Observer<|..Customer
+    %% Subject..>Observer:obsv->Update(this)
+    %% Customer..>Newspaper:this.state=sbj->GetState()</pre>
+
+<p>主题拥有一份数据/状态，观察者们作为主题的依赖者使用这些数据/状态，从而产生一对多的依赖关系，这种一对多通知的形式要比多个人控制一份数据的形式更好控制变化。</p>
+<p>观察者模式对原则的体现：</p>
+<ul>
+<li><strong>分离变化</strong>：Subject的状态在变化，Observer的订阅在变化，互不影响。</li>
+<li><strong>针对接口编程</strong>：Subject和Observer都使用接口与彼此交互。</li>
+<li><strong>多用组合，少用继承</strong>：Subject通过组合的方式加入Observer的订阅。</li>
+</ul>
+<h2 id="原则：松耦合设计"><a href="#原则：松耦合设计" class="headerlink" title="原则：松耦合设计"></a>原则：松耦合设计</h2><p>两个对象可以交互，但是不清楚彼此的细节。对象之间的互相依赖降到最低，从而建立有弹性的OO系统。</p>
+<p>在观察者模式中，观察者实现了一个接口，主题对象使用这个接口但不清楚观察者具体有谁，实现了主题和观察者的松耦合，主题和观察者可以独立变化。</p>
+<h2 id="练习：气象站与布告板的设计"><a href="#练习：气象站与布告板的设计" class="headerlink" title="练习：气象站与布告板的设计"></a>练习：气象站与布告板的设计</h2><p>从气象站获取数据，设计WeatherData对象，更新目前状况、气象统计、天气预报的布告板。</p>
+<pre class="mermaid">classDiagram
+    class Subject {
+        <<interface>>
+        observerList : List<Observer *>
+        + RegisterObserver()
+        + RemoveObserver()
+        + NotifyObservers()
+    }
+    class WeatherData {
+        - temperature : float
+        - humidity ： float
+        - pressure : float
+        MeasureChanged()call notify
+    }
+    class Observer {
+        <<interface>>
+        - mySubject<Subject *>
+        Update()
+    }
+    class DisplayBehavior {
+        <<interface>>
+        Display()
+    }
+    class CurrentConditionBoard {
+        - temperature : float
+        - humidity ： float
+        - pressure : float
+        Update(float temperature, ...)
+        Display()
+    }
+    class SomeBoard
+    Subject <|.. WeatherData
+    Observer<|..CurrentConditionBoard
+    DisplayBehavior<|..CurrentConditionBoard
+    Observer<|..SomeBoard
+    DisplayBehavior<|..SomeBoard</pre>
+
+<ul>
+<li><p>Subject需要维护一个Observer队列，表示已注册的观察者；在Observer中保存Subject，方便取消注册。</p>
 </li>
-<li><strong>编译、测试、提交。</strong>之后每一个小操作之后都要小步提交，论小步修改的重要性。</li>
-</ol>
+<li><p>Subject的NotifyObservers()会遍历通知自己保存的observerList进行数据更新。</p>
 </li>
-<li>提升代码的表达能力：针对新函数<ol>
-<li>优化命名：<strong>起最好的名字</strong>，起最好的函数名配合返回值result使用</li>
-<li>将函数的返回值命名为result。</li>
-<li>参数命名：a/an+类型名。</li>
-</ol>
+<li><p>WeatherData的构造器可以直接传入observerList；CurrentConditionBoard的构造器可以直接传入要订阅的subject并执行订阅。</p>
+<p>这种方式是Subject给Observer通知数据（push），也可以实现Observer通过Subject的getter方法去自行获取数据(pull)。</p>
 </li>
-<li>移除不必要的参数<ol>
-<li>原函数：以查询取代临时变量。（函数代替变量）<ol>
-<li><strong>内联消除变量</strong>：构造一个新的用于查询的函数，以函数调用返回值作为参数，删除临时变量。</li>
-<li>以查询取代临时变量，需要先将功能相关的代码都集中到一起，拆分循环。</li>
-</ol>
-</li>
-<li>新函数<strong>精简参数</strong>：调用新函数替代传入参数；删掉传入参数，删掉调用方的传入参数；</li>
-</ol>
-</li>
-<li>重复上面三步。</li>
-</ol>
-</li>
-</ol>
+</ul>
+<p>在拉数据的观察者模式中，Subject不需要再维护Observer队列，而要实现对数据的getter方法；Observer仍然维护自己所订阅的mySubject，通过getter自行获取自己需要的数据。订阅和取消订阅的方法变成Observer类中对mySubject的setter。</p>
+<h2 id="经验：jdk内置的观察者模式"><a href="#经验：jdk内置的观察者模式" class="headerlink" title="经验：jdk内置的观察者模式"></a>经验：jdk内置的观察者模式</h2><p>java.util包中实现了内置的Observable类（可观察类，即Subject）和Oberver接口，继承这两个接口实现。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Observable;</span><br><span class="line"><span class="keyword">import</span> java.util.Observer;</span><br></pre></td></tr></table></figure>
+
+<p>Observable是一个类，类的不可多重继承特点就限制了Obervable的复用能力。违反了<strong>针对接口编程</strong>和<strong>多用组合，少用继承</strong>的原则。</p>
 ]]></content>
       <categories>
-        <category>重构</category>
+        <category>设计模式</category>
       </categories>
       <tags>
-        <tag>重构</tag>
-        <tag>《重构 改善既有代码的设计》</tag>
+        <tag>设计模式</tag>
       </tags>
   </entry>
   <entry>
