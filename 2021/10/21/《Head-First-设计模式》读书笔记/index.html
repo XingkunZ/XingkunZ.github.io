@@ -64,7 +64,7 @@
 <meta property="og:site_name" content="kun">
 <meta property="og:description" content="第一章 入门–duck类设计classDiagram     Duck">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-10-21T14:54:41.060Z">
+<meta property="og:updated_time" content="2021-10-21T15:11:57.227Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《Head First 设计模式》读书笔记">
 <meta name="twitter:description" content="第一章 入门–duck类设计classDiagram     Duck">
@@ -247,7 +247,7 @@
                 
               
 
-              <time title="Created: 2021-10-21 22:10:02 / Modified: 22:54:41" itemprop="dateCreated datePublished" datetime="2021-10-21T22:10:02+08:00">2021-10-21</time>
+              <time title="Created: 2021-10-21 22:10:02 / Modified: 23:11:57" itemprop="dateCreated datePublished" datetime="2021-10-21T22:10:02+08:00">2021-10-21</time>
             </span>
           
             
@@ -324,11 +324,6 @@
 <p>在本例中，即将变化的部分抽取新的类，对新的类使用组合关系，以代替原来的继承重写的关系。Duck类中的大部分信息趋于稳定，但Fly动作一直在变，因此只将Fly的部分抽象出一个虚类，Duck仍然具体实现。</p>
 <p>修改效果：</p>
 <pre class="mermaid">classDiagram
-    Duck<|--MallardDuck
-    Duck<|--RubberDuck
-    Duck*--FlyBehavior
-    FlyBehavior<|..FlyWithWings
-    FlyBehavior<|..FlyNoWay
     class Duck {
         FlyBehavior flyBehavior
         SetFlyBehavior()
@@ -349,7 +344,12 @@
     }
     class FlyNoWay {
         fly() do nothing
-    }</pre>
+    }
+    Duck<|--MallardDuck
+    Duck<|--RubberDuck
+    Duck*--FlyBehavior
+    FlyBehavior<|..FlyWithWings
+    FlyBehavior<|..FlyNoWay</pre>
 
 <h2 id="原则：针对接口编程，而不是针对实现"><a href="#原则：针对接口编程，而不是针对实现" class="headerlink" title="原则：针对接口编程，而不是针对实现"></a>原则：针对接口编程，而不是针对实现</h2><p>针对实现：动作在父类实现，子类进行重写；或者子类继承接口，动作在子类中实现。</p>
 <p>针对接口：动作的实现不绑定于父类。利用多态针对超类型编程，例如针对抽象类或接口编程，执行时根据实际情况指定真正的行为。</p>
@@ -431,7 +431,7 @@
         Display()
     }
     class SomeBoard
-    Subject <|.. WeatherData
+    Subject<|..WeatherData
     Observer<|..CurrentConditionBoard
     DisplayBehavior<|..CurrentConditionBoard
     Observer<|..SomeBoard
@@ -449,6 +449,7 @@
 <p>在拉数据的观察者模式中，Subject不需要再维护Observer队列，而要实现对数据的getter方法；Observer仍然维护自己所订阅的mySubject，通过getter自行获取自己需要的数据。订阅和取消订阅的方法变成Observer类中对mySubject的setter。</p>
 <h2 id="经验：jdk内置的观察者模式"><a href="#经验：jdk内置的观察者模式" class="headerlink" title="经验：jdk内置的观察者模式"></a>经验：jdk内置的观察者模式</h2><p>java.util包中实现了内置的Observable类（可观察类，即Subject）和Oberver接口，继承这两个接口实现。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Observable;</span><br><span class="line"><span class="keyword">import</span> java.util.Observer;</span><br></pre></td></tr></table></figure>
+
 <p>Observable是一个类，类的不可多重继承特点就限制了Obervable的复用能力。违反了<strong>针对接口编程</strong>和<strong>多用组合，少用继承</strong>的原则。</p>
 
     </div>
