@@ -329,263 +329,6 @@
   
   
   <div class="post-block home">
-    <link itemprop="mainEntityOfPage" href="https://xingkunz.github.io/2021/10/21/《Head-First-设计模式》读书笔记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="XingkunZ">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="kun">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2021/10/21/《Head-First-设计模式》读书笔记/" class="post-title-link" itemprop="url">《Head First 设计模式》读书笔记</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              
-                
-              
-
-              <time title="Created: 2021-10-21 22:10:02 / Modified: 23:11:57" itemprop="dateCreated datePublished" datetime="2021-10-21T22:10:02+08:00">2021-10-21</time>
-            </span>
-          
-            
-
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/设计模式/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            <span id="/2021/10/21/《Head-First-设计模式》读书笔记/" class="post-meta-item leancloud_visitors" data-flag-title="《Head First 设计模式》读书笔记" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-        
-      
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2021/10/21/《Head-First-设计模式》读书笔记/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2021/10/21/《Head-First-设计模式》读书笔记/" itemprop="commentCount"></span></a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="第一章-入门–duck类设计"><a href="#第一章-入门–duck类设计" class="headerlink" title="第一章 入门–duck类设计"></a>第一章 入门–duck类设计</h1><pre class="mermaid">classDiagram
-    Duck<|--MallardDuck
-    Duck<|--RubberDuck
-    class Duck {
-        ...
-        fly()
-    }
-    class MallardDuck {
-        ...
-        fly()
-    }
-    class RubberDuck {
-        ...
-        fly()cannot fly
-    }</pre>
-
-<p>典型问题：想要为个别子类添加fly动作，直接添加在父类会导致对个别子类出现多余的修改。继承关系的写死导致软件难以应对变化，改动父类牵一发而动全身，容易违反开闭原则。</p>
-<p>不论子类重写父类方法，还是提取父类接口由子类实现，子类之间重复的代码都不方便复用，修改代价大。</p>
-<p>使用设计模式是希望软件在不断面对变化时的修改代价尽可能小。</p>
-<h2 id="原则：分离变化-不变的部分"><a href="#原则：分离变化-不变的部分" class="headerlink" title="原则：分离变化/不变的部分"></a>原则：分离变化/不变的部分</h2><p>我们希望系统中的某部分改变不会影响其他部分。所以需要将变化的部分与不变的部分隔离开。</p>
-<p>在本例中，即将变化的部分抽取新的类，对新的类使用组合关系，以代替原来的继承重写的关系。Duck类中的大部分信息趋于稳定，但Fly动作一直在变，因此只将Fly的部分抽象出一个虚类，Duck仍然具体实现。</p>
-<p>修改效果：</p>
-<pre class="mermaid">classDiagram
-    class Duck {
-        FlyBehavior flyBehavior
-        SetFlyBehavior()
-        PerformFly()
-    }
-    class MallardDuck {
-        FlyBehavior flyBehavior
-    }
-    class RubberDuck {
-        FlyBehavior flyBehavior
-    }
-    class FlyBehavior {
-        <<interface>>
-        fly()
-    }
-    class FlyWithWings {
-        fly()
-    }
-    class FlyNoWay {
-        fly() do nothing
-    }
-    Duck<|--MallardDuck
-    Duck<|--RubberDuck
-    Duck*--FlyBehavior
-    FlyBehavior<|..FlyWithWings
-    FlyBehavior<|..FlyNoWay</pre>
-
-<h2 id="原则：针对接口编程，而不是针对实现"><a href="#原则：针对接口编程，而不是针对实现" class="headerlink" title="原则：针对接口编程，而不是针对实现"></a>原则：针对接口编程，而不是针对实现</h2><p>针对实现：动作在父类实现，子类进行重写；或者子类继承接口，动作在子类中实现。</p>
-<p>针对接口：动作的实现不绑定于父类。利用多态针对超类型编程，例如针对抽象类或接口编程，执行时根据实际情况指定真正的行为。</p>
-<p>针对接口编程使得原来的类、提取出的接口可以各自独立变化，作为两个生命周期去发展，在彼此需要时进行注入。</p>
-<h2 id="模式：策略模式"><a href="#模式：策略模式" class="headerlink" title="模式：策略模式"></a>模式：策略模式</h2><p>duck类将飞行行为委托给FlyBehavior超类实现，提取出的这个行为类相当于一个算法族，即采取策略模式。duck使用该算法族的实例，可以灵活地指定采用哪个算法。</p>
-<h2 id="原则：多用组合，少用继承"><a href="#原则：多用组合，少用继承" class="headerlink" title="原则：多用组合，少用继承"></a>原则：多用组合，少用继承</h2><p>duck使用该算法族的实例，即组合关系，可以对算法实现setter以便动态更换算法。相比于继承关系的静态实现（写死），组合关系更加灵活。</p>
-<h2 id="经验：使用设计模式"><a href="#经验：使用设计模式" class="headerlink" title="经验：使用设计模式"></a>经验：使用设计模式</h2><ul>
-<li>模式让开发人员之间有共享词汇，方便沟通。</li>
-<li>使用设计模式可以建造出具有良好OO设计质量（具备可复用、可扩充、可维护性）的系统。</li>
-<li>不要过度使用设计模式，遵循简单设计原则。模式应着力于软件变化的问题。</li>
-</ul>
-<h1 id="第二章-观察者模式"><a href="#第二章-观察者模式" class="headerlink" title="第二章 观察者模式"></a>第二章 观察者模式</h1><h2 id="模式：观察者模式"><a href="#模式：观察者模式" class="headerlink" title="模式：观察者模式"></a>模式：观察者模式</h2><p><strong>定义</strong>：观察者模式定义了对象之间的一对多依赖，当一个对象改变状态时，它的所有依赖者都会收到通知并自动更新。</p>
-<p><strong>通俗解释</strong>：报社更新报纸后，会把报纸发放给订阅报纸的用户；用户们会在报纸更新时收到新报纸，用户可以选择订阅或不订阅报社的报纸。报社是主题对象，用户们是观察者对象。</p>
-<pre class="mermaid">classDiagram
-    class Subject {
-        <<interface>>
-        - objList : List<Observer*>
-        NotifyObservers()
-        RegisterObserver(Observer *o)
-        RemoveObserver(Observer *o)
-    }
-    class Newspaper {
-        - data<DataType> 
-        GetState(DataType data)
-        SetState(DataType data)
-    }
-    class Observer {
-        <<interface>>
-        - subject<Subject *>
-        Update(DataType data)
-    }
-    class Customer {
-        Update(DataType data)
-        Display(DataType data)
-    }
-    Subject<|..Newspaper
-    Observer<|..Customer
-    %% Subject..>Observer:obsv->Update(this)
-    %% Customer..>Newspaper:this.state=sbj->GetState()</pre>
-
-<p>主题拥有一份数据/状态，观察者们作为主题的依赖者使用这些数据/状态，从而产生一对多的依赖关系，这种一对多通知的形式要比多个人控制一份数据的形式更好控制变化。</p>
-<p>观察者模式对原则的体现：</p>
-<ul>
-<li><strong>分离变化</strong>：Subject的状态在变化，Observer的订阅在变化，互不影响。</li>
-<li><strong>针对接口编程</strong>：Subject和Observer都使用接口与彼此交互。</li>
-<li><strong>多用组合，少用继承</strong>：Subject通过组合的方式加入Observer的订阅。</li>
-</ul>
-<h2 id="原则：松耦合设计"><a href="#原则：松耦合设计" class="headerlink" title="原则：松耦合设计"></a>原则：松耦合设计</h2><p>两个对象可以交互，但是不清楚彼此的细节。对象之间的互相依赖降到最低，从而建立有弹性的OO系统。</p>
-<p>在观察者模式中，观察者实现了一个接口，主题对象使用这个接口但不清楚观察者具体有谁，实现了主题和观察者的松耦合，主题和观察者可以独立变化。</p>
-<h2 id="练习：气象站与布告板的设计"><a href="#练习：气象站与布告板的设计" class="headerlink" title="练习：气象站与布告板的设计"></a>练习：气象站与布告板的设计</h2><p>从气象站获取数据，设计WeatherData对象，更新目前状况、气象统计、天气预报的布告板。</p>
-<pre class="mermaid">classDiagram
-    class Subject {
-        <<interface>>
-        observerList : List<Observer *>
-        + RegisterObserver()
-        + RemoveObserver()
-        + NotifyObservers()
-    }
-    class WeatherData {
-        - temperature : float
-        - humidity ： float
-        - pressure : float
-        MeasureChanged()call notify
-    }
-    class Observer {
-        <<interface>>
-        - mySubject<Subject *>
-        Update()
-    }
-    class DisplayBehavior {
-        <<interface>>
-        Display()
-    }
-    class CurrentConditionBoard {
-        - temperature : float
-        - humidity ： float
-        - pressure : float
-        Update(float temperature, ...)
-        Display()
-    }
-    class SomeBoard
-    Subject<|..WeatherData
-    Observer<|..CurrentConditionBoard
-    DisplayBehavior<|..CurrentConditionBoard
-    Observer<|..SomeBoard
-    DisplayBehavior<|..SomeBoard</pre>
-
-<ul>
-<li><p>Subject需要维护一个Observer队列，表示已注册的观察者；在Observer中保存Subject，方便取消注册。</p>
-</li>
-<li><p>Subject的NotifyObservers()会遍历通知自己保存的observerList进行数据更新。</p>
-</li>
-<li><p>WeatherData的构造器可以直接传入observerList；CurrentConditionBoard的构造器可以直接传入要订阅的subject并执行订阅。</p>
-<p>这种方式是Subject给Observer通知数据（push），也可以实现Observer通过Subject的getter方法去自行获取数据(pull)。</p>
-</li>
-</ul>
-<p>在拉数据的观察者模式中，Subject不需要再维护Observer队列，而要实现对数据的getter方法；Observer仍然维护自己所订阅的mySubject，通过getter自行获取自己需要的数据。订阅和取消订阅的方法变成Observer类中对mySubject的setter。</p>
-<h2 id="经验：jdk内置的观察者模式"><a href="#经验：jdk内置的观察者模式" class="headerlink" title="经验：jdk内置的观察者模式"></a>经验：jdk内置的观察者模式</h2><p>java.util包中实现了内置的Observable类（可观察类，即Subject）和Oberver接口，继承这两个接口实现。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Observable;</span><br><span class="line"><span class="keyword">import</span> java.util.Observer;</span><br></pre></td></tr></table></figure>
-
-<p>Observable是一个类，类的不可多重继承特点就限制了Obervable的复用能力。违反了<strong>针对接口编程</strong>和<strong>多用组合，少用继承</strong>的原则。</p>
-
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-        <article itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block home">
     <link itemprop="mainEntityOfPage" href="https://xingkunz.github.io/2020/08/03/English-Accumulation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1557,6 +1300,130 @@
   </article>
 
     
+        <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block home">
+    <link itemprop="mainEntityOfPage" href="https://xingkunz.github.io/2020/02/07/计科学生找工作的简洁指南/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="XingkunZ">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kun">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2020/02/07/计科学生找工作的简洁指南/" class="post-title-link" itemprop="url">计科学生找工作的简洁指南</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              
+                
+              
+
+              <time title="Created: 2020-02-07 21:14:10" itemprop="dateCreated datePublished" datetime="2020-02-07T21:14:10+08:00">2020-02-07</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-06-26 16:32:20" itemprop="dateModified" datetime="2020-06-26T16:32:20+08:00">2020-06-26</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/杂谈/" itemprop="url" rel="index"><span itemprop="name">杂谈</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span id="/2020/02/07/计科学生找工作的简洁指南/" class="post-meta-item leancloud_visitors" data-flag-title="计科学生找工作的简洁指南" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2020/02/07/计科学生找工作的简洁指南/#comments" itemprop="discussionUrl"><span class="post-comments-count valine-comment-count" data-xid="/2020/02/07/计科学生找工作的简洁指南/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="做简历"><a href="#做简历" class="headerlink" title="做简历"></a>做简历</h2><p><strong>简历信息的筛选原则（建议）</strong>：挑重点写，设置在简历上的内容都是为了体现自己的品质和能力。</p><p><strong>措辞方面</strong>：表达简洁、清晰、诚实，尽量规避使用”精通”和”熟练”，重点可加粗。</p>
+          <!--noindex-->
+          
+            <div class="post-button">
+              <a class="btn" href="/2020/02/07/计科学生找工作的简洁指南/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
   </div>
 
   
@@ -1605,7 +1472,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">22</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1618,7 +1485,7 @@
             <a href="/categories/">
           
         
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">categories</span>
         </a>
       </div>
@@ -1631,7 +1498,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">tags</span>
         </a>
       </div>
@@ -1760,9 +1627,9 @@ if (document.querySelectorAll('pre.mermaid').length) {
       
     
       
-    
-      
         
+      
+    
       
     
   
