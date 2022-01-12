@@ -1057,9 +1057,9 @@
       </categories>
       <tags>
         <tag>Linux</tag>
-        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -1228,9 +1228,9 @@
       </categories>
       <tags>
         <tag>Linux</tag>
-        <tag>UDP</tag>
         <tag>网络</tag>
         <tag>源码</tag>
+        <tag>UDP</tag>
       </tags>
   </entry>
   <entry>
@@ -1577,9 +1577,9 @@
       </categories>
       <tags>
         <tag>Linux</tag>
+        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>
@@ -1761,9 +1761,9 @@
       </categories>
       <tags>
         <tag>Linux</tag>
+        <tag>套接字</tag>
         <tag>网络</tag>
         <tag>源码</tag>
-        <tag>套接字</tag>
       </tags>
   </entry>
   <entry>
@@ -2534,10 +2534,10 @@
         <category>杂谈</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
-        <tag>教程</tag>
         <tag>博客</tag>
+        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>教程</tag>
       </tags>
   </entry>
 </search>
