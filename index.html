@@ -242,7 +242,7 @@
                 
               
 
-              <time title="Created: 2022-03-15 21:59:27 / Modified: 22:20:21" itemprop="dateCreated datePublished" datetime="2022-03-15T21:59:27+08:00">2022-03-15</time>
+              <time title="Created: 2022-03-15 21:59:27 / Modified: 22:31:24" itemprop="dateCreated datePublished" datetime="2022-03-15T21:59:27+08:00">2022-03-15</time>
             </span>
           
             
@@ -300,20 +300,20 @@
 <p>《Head First 设计模式》</p>
 </blockquote>
 <h1 id="第一章-策略模式——灵活替换算法"><a href="#第一章-策略模式——灵活替换算法" class="headerlink" title="第一章 策略模式——灵活替换算法"></a>第一章 策略模式——灵活替换算法</h1><h2 id="引子：duck类设计"><a href="#引子：duck类设计" class="headerlink" title="引子：duck类设计"></a>引子：duck类设计</h2><pre class="mermaid">classDiagram
-        Duck<|--MallardDuck
-        Duck<|--RubberDuck
-        class Duck {
-            ...
-            fly()
-        }
-        class MallardDuck {
-            ...
-            fly()
-        }
-        class RubberDuck {
-            ...
-            fly()cannot fly
-        }</pre>
+    Duck<|--MallardDuck
+    Duck<|--RubberDuck
+    class Duck {
+        ...
+        fly()
+    }
+    class MallardDuck {
+        ...
+        fly()
+    }
+    class RubberDuck {
+        ...
+        fly()cannot fly
+    }</pre>
 
 <p>典型问题：想要为个别子类添加fly动作，直接添加在父类会导致对个别子类出现多余的修改。继承关系的写死导致软件难以应对变化，改动父类牵一发而动全身，容易违反开闭原则。</p>
 <p>不论子类重写父类方法，还是提取父类接口由子类实现，子类之间重复的代码都不方便复用，修改代价大。</p>
@@ -623,6 +623,8 @@
 <p>总店OrderPizza调用CreatePizza来创建具体Pizza，具体创建哪种Pizza要看具体哪家披萨店，创建后再调用Pizza的cut、box等操作。即将创建隔离出来，并将处理流程实现复用。</p>
 <p><strong>好处</strong>：解耦了实现和使用。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Pizza PizzaStore::OrderPizza() &#123;    <span class="comment">// 披萨来自不同的分店，总店不可见</span></span><br><span class="line">pizza = CreatePizza();    <span class="comment">// 总店统一的制作流水线，可见</span></span><br><span class="line">pizza.Bake();</span><br><span class="line">pizza.Cut();</span><br><span class="line">pizza.Box();&#125;</span><br></pre></td></tr></table></figure>
+
+<br>
 
 <h2 id="原则：依赖倒置原则"><a href="#原则：依赖倒置原则" class="headerlink" title="原则：依赖倒置原则"></a>原则：依赖倒置原则</h2><p>要依赖抽象，不要依赖具体类。不能让高层组件依赖底层组件；不论高低，组件都应该依赖于抽象。</p>
 <p><strong>通俗解释</strong>：当PizzaStore（高层）直接根据要求生产具体的披萨（低层）时，如果披萨有变动，必然要修改PizzaStore，这时PizzaStore就依赖了Pizza的具体类，即高层依赖低层。如果采用工厂模式，PizzaStore和具体的披萨都依赖抽象的Pizza，这样变化更好控制。</p>
